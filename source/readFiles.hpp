@@ -1,8 +1,6 @@
 #ifndef READFILES_HPP
 #define READFILES_HPP
 
-#include <string>
-
 #include "types.hpp"
 #include "classifier.pb.h"
 

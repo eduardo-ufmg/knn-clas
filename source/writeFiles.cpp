@@ -5,8 +5,8 @@
 #include <sstream>
 #include <string>
 
-#include "classifier.pb.h"
 #include "types.hpp"
+#include "classifier.pb.h"
 
 using namespace std;
 
