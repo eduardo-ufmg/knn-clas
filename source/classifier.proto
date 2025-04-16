@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package classifierpb;
+
+message ClusterID {
+  oneof cluster_id {
+    int32 cluster_id_int = 1;
+    string cluster_id_str = 2;
+  }
+}
+
+message TrainingDatasetEntry {
+  repeated float features = 1;
+  ClusterID cluster_id = 2;
+}
+
+message TrainingDataset {
+  repeated TrainingDatasetEntry entries = 1;
+}
+
+message SupportVertexEntry {
+  int32 vertex_id = 1;
+  repeated float features = 2;
+  ClusterID cluster_id = 3;
+}
+
+message SupportVertices {
+  repeated SupportVertexEntry entries = 1;
+}
+
+message VertexToLabelEntry {
+  int32 vertex_id = 1;
+  repeated float features = 2;
+  ClusterID expected_cluster_id = 3;
+}
+
+message VerticesToLabel {
+  repeated VertexToLabelEntry entries = 1;
+}
+
+message LabeledVertexEntry {
+  int32 vertex_id = 1;
+  repeated float features = 2;
+  ClusterID cluster_id = 3;
+}
+
+message LabeledVertices {
+  repeated LabeledVertexEntry entries = 1;
+}
