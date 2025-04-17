@@ -3,6 +3,6 @@
 
 #include "types.hpp"
 
-const SupportVertices computeSVs(const Vertices& vertices);
+const SupportSamples computeSVs(const Samples& samples);
 
 #endif // COMPUTESVS_HPP

@@ -8,49 +8,49 @@
 
 using namespace std;
 
-bool emplace_unique(SupportVertices& Vertices, const Vertex& vertex);
+bool emplace_unique(SupportSamples& Samples, const Sample& sample);
 
-const SupportVertices computeSVs(const Vertices& vertices)
+const SupportSamples computeSVs(const Samples& samples)
 {
-  const size_t vertexqtty = vertices.size();
+  const size_t sampleqtty = samples.size();
 
-  SupportVertices supportVertices;
+  SupportSamples supportSamples;
 
-  for (size_t i = 0; i < vertexqtty; ++ i) {
-    for (size_t j = i + 1; j < vertexqtty; ++ j) {
+  for (size_t i = 0; i < sampleqtty; ++ i) {
+    for (size_t j = i + 1; j < sampleqtty; ++ j) {
       
-      const Vertex& vi = vertices[i];
-      const Vertex& vj = vertices[j];
+      const Sample& vi = samples[i];
+      const Sample& vj = samples[j];
 
       if (vi.cluster == vj.cluster) {
         continue;
       }
 
-      bool isGE = isGabrielEdge(vertices, vi, vj, vertexqtty);
+      bool isGE = isGabrielEdge(samples, vi, vj, sampleqtty);
 
       if (isGE) {
 
 
-        emplace_unique(supportVertices, vi);
-        emplace_unique(supportVertices, vj);
+        emplace_unique(supportSamples, vi);
+        emplace_unique(supportSamples, vj);
       }
 
     }
   }
 
-  return supportVertices;
+  return supportSamples;
 }
 
-bool emplace_unique(SupportVertices& Vertices, const Vertex& vertex)
+bool emplace_unique(SupportSamples& Samples, const Sample& sample)
 {
-  auto it = find_if(Vertices.begin(), Vertices.end(), [&vertex](const SupportVertex& v) {
-    return v.id == vertex.id;
+  auto it = find_if(Samples.begin(), Samples.end(), [&sample](const SupportSample& v) {
+    return v.id == sample.id;
   });
 
-  if (it != Vertices.end()) {
+  if (it != Samples.end()) {
     return false;
   }
 
-  Vertices.emplace_back(vertex.id, vertex.coordinates, vertex.cluster->id);
+  Samples.emplace_back(sample.id, sample.coordinates, sample.cluster->id);
   return true;
 }

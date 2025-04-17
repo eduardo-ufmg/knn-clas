@@ -45,67 +45,67 @@ struct TableStruct_classifier_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_classifier_2eproto;
 namespace classifierpb {
-class ClusterID;
-struct ClusterIDDefaultTypeInternal;
-extern ClusterIDDefaultTypeInternal _ClusterID_default_instance_;
-class LabeledVertexEntry;
-struct LabeledVertexEntryDefaultTypeInternal;
-extern LabeledVertexEntryDefaultTypeInternal _LabeledVertexEntry_default_instance_;
-class LabeledVertices;
-struct LabeledVerticesDefaultTypeInternal;
-extern LabeledVerticesDefaultTypeInternal _LabeledVertices_default_instance_;
-class SupportVertexEntry;
-struct SupportVertexEntryDefaultTypeInternal;
-extern SupportVertexEntryDefaultTypeInternal _SupportVertexEntry_default_instance_;
-class SupportVertices;
-struct SupportVerticesDefaultTypeInternal;
-extern SupportVerticesDefaultTypeInternal _SupportVertices_default_instance_;
-class TrainingDataset;
-struct TrainingDatasetDefaultTypeInternal;
-extern TrainingDatasetDefaultTypeInternal _TrainingDataset_default_instance_;
-class TrainingDatasetEntry;
-struct TrainingDatasetEntryDefaultTypeInternal;
-extern TrainingDatasetEntryDefaultTypeInternal _TrainingDatasetEntry_default_instance_;
-class VertexToLabelEntry;
-struct VertexToLabelEntryDefaultTypeInternal;
-extern VertexToLabelEntryDefaultTypeInternal _VertexToLabelEntry_default_instance_;
-class VerticesToLabel;
-struct VerticesToLabelDefaultTypeInternal;
-extern VerticesToLabelDefaultTypeInternal _VerticesToLabel_default_instance_;
+class Dataset;
+struct DatasetDefaultTypeInternal;
+extern DatasetDefaultTypeInternal _Dataset_default_instance_;
+class DatasetEntry;
+struct DatasetEntryDefaultTypeInternal;
+extern DatasetEntryDefaultTypeInternal _DatasetEntry_default_instance_;
+class PredictedSampleEntry;
+struct PredictedSampleEntryDefaultTypeInternal;
+extern PredictedSampleEntryDefaultTypeInternal _PredictedSampleEntry_default_instance_;
+class PredictedSamples;
+struct PredictedSamplesDefaultTypeInternal;
+extern PredictedSamplesDefaultTypeInternal _PredictedSamples_default_instance_;
+class SupportSampleEntry;
+struct SupportSampleEntryDefaultTypeInternal;
+extern SupportSampleEntryDefaultTypeInternal _SupportSampleEntry_default_instance_;
+class SupportSamples;
+struct SupportSamplesDefaultTypeInternal;
+extern SupportSamplesDefaultTypeInternal _SupportSamples_default_instance_;
+class Target;
+struct TargetDefaultTypeInternal;
+extern TargetDefaultTypeInternal _Target_default_instance_;
+class TestSampleEntry;
+struct TestSampleEntryDefaultTypeInternal;
+extern TestSampleEntryDefaultTypeInternal _TestSampleEntry_default_instance_;
+class TestSamples;
+struct TestSamplesDefaultTypeInternal;
+extern TestSamplesDefaultTypeInternal _TestSamples_default_instance_;
 }  // namespace classifierpb
 PROTOBUF_NAMESPACE_OPEN
-template<> ::classifierpb::ClusterID* Arena::CreateMaybeMessage<::classifierpb::ClusterID>(Arena*);
-template<> ::classifierpb::LabeledVertexEntry* Arena::CreateMaybeMessage<::classifierpb::LabeledVertexEntry>(Arena*);
-template<> ::classifierpb::LabeledVertices* Arena::CreateMaybeMessage<::classifierpb::LabeledVertices>(Arena*);
-template<> ::classifierpb::SupportVertexEntry* Arena::CreateMaybeMessage<::classifierpb::SupportVertexEntry>(Arena*);
-template<> ::classifierpb::SupportVertices* Arena::CreateMaybeMessage<::classifierpb::SupportVertices>(Arena*);
-template<> ::classifierpb::TrainingDataset* Arena::CreateMaybeMessage<::classifierpb::TrainingDataset>(Arena*);
-template<> ::classifierpb::TrainingDatasetEntry* Arena::CreateMaybeMessage<::classifierpb::TrainingDatasetEntry>(Arena*);
-template<> ::classifierpb::VertexToLabelEntry* Arena::CreateMaybeMessage<::classifierpb::VertexToLabelEntry>(Arena*);
-template<> ::classifierpb::VerticesToLabel* Arena::CreateMaybeMessage<::classifierpb::VerticesToLabel>(Arena*);
+template<> ::classifierpb::Dataset* Arena::CreateMaybeMessage<::classifierpb::Dataset>(Arena*);
+template<> ::classifierpb::DatasetEntry* Arena::CreateMaybeMessage<::classifierpb::DatasetEntry>(Arena*);
+template<> ::classifierpb::PredictedSampleEntry* Arena::CreateMaybeMessage<::classifierpb::PredictedSampleEntry>(Arena*);
+template<> ::classifierpb::PredictedSamples* Arena::CreateMaybeMessage<::classifierpb::PredictedSamples>(Arena*);
+template<> ::classifierpb::SupportSampleEntry* Arena::CreateMaybeMessage<::classifierpb::SupportSampleEntry>(Arena*);
+template<> ::classifierpb::SupportSamples* Arena::CreateMaybeMessage<::classifierpb::SupportSamples>(Arena*);
+template<> ::classifierpb::Target* Arena::CreateMaybeMessage<::classifierpb::Target>(Arena*);
+template<> ::classifierpb::TestSampleEntry* Arena::CreateMaybeMessage<::classifierpb::TestSampleEntry>(Arena*);
+template<> ::classifierpb::TestSamples* Arena::CreateMaybeMessage<::classifierpb::TestSamples>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace classifierpb {
 
 // ===================================================================
 
-class ClusterID final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.ClusterID) */ {
+class Target final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.Target) */ {
  public:
-  inline ClusterID() : ClusterID(nullptr) {}
-  ~ClusterID() override;
-  explicit PROTOBUF_CONSTEXPR ClusterID(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline Target() : Target(nullptr) {}
+  ~Target() override;
+  explicit PROTOBUF_CONSTEXPR Target(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  ClusterID(const ClusterID& from);
-  ClusterID(ClusterID&& from) noexcept
-    : ClusterID() {
+  Target(const Target& from);
+  Target(Target&& from) noexcept
+    : Target() {
     *this = ::std::move(from);
   }
 
-  inline ClusterID& operator=(const ClusterID& from) {
+  inline Target& operator=(const Target& from) {
     CopyFrom(from);
     return *this;
   }
-  inline ClusterID& operator=(ClusterID&& from) noexcept {
+  inline Target& operator=(Target&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -128,26 +128,26 @@ class ClusterID final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const ClusterID& default_instance() {
+  static const Target& default_instance() {
     return *internal_default_instance();
   }
-  enum ClusterIdCase {
-    kClusterIdInt = 1,
-    kClusterIdStr = 2,
-    CLUSTER_ID_NOT_SET = 0,
+  enum TargetCase {
+    kTargetInt = 1,
+    kTargetStr = 2,
+    TARGET_NOT_SET = 0,
   };
 
-  static inline const ClusterID* internal_default_instance() {
-    return reinterpret_cast<const ClusterID*>(
-               &_ClusterID_default_instance_);
+  static inline const Target* internal_default_instance() {
+    return reinterpret_cast<const Target*>(
+               &_Target_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     0;
 
-  friend void swap(ClusterID& a, ClusterID& b) {
+  friend void swap(Target& a, Target& b) {
     a.Swap(&b);
   }
-  inline void Swap(ClusterID* other) {
+  inline void Swap(Target* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -160,7 +160,7 @@ class ClusterID final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(ClusterID* other) {
+  void UnsafeArenaSwap(Target* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -168,14 +168,14 @@ class ClusterID final :
 
   // implements Message ----------------------------------------------
 
-  ClusterID* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<ClusterID>(arena);
+  Target* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Target>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const ClusterID& from);
+  void CopyFrom(const Target& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const ClusterID& from) {
-    ClusterID::MergeImpl(*this, from);
+  void MergeFrom( const Target& from) {
+    Target::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -193,15 +193,15 @@ class ClusterID final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(ClusterID* other);
+  void InternalSwap(Target* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "classifierpb.ClusterID";
+    return "classifierpb.Target";
   }
   protected:
-  explicit ClusterID(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit Target(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -215,61 +215,61 @@ class ClusterID final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kClusterIdIntFieldNumber = 1,
-    kClusterIdStrFieldNumber = 2,
+    kTargetIntFieldNumber = 1,
+    kTargetStrFieldNumber = 2,
   };
-  // int32 cluster_id_int = 1;
-  bool has_cluster_id_int() const;
+  // int32 target_int = 1;
+  bool has_target_int() const;
   private:
-  bool _internal_has_cluster_id_int() const;
+  bool _internal_has_target_int() const;
   public:
-  void clear_cluster_id_int();
-  int32_t cluster_id_int() const;
-  void set_cluster_id_int(int32_t value);
+  void clear_target_int();
+  int32_t target_int() const;
+  void set_target_int(int32_t value);
   private:
-  int32_t _internal_cluster_id_int() const;
-  void _internal_set_cluster_id_int(int32_t value);
+  int32_t _internal_target_int() const;
+  void _internal_set_target_int(int32_t value);
   public:
 
-  // string cluster_id_str = 2;
-  bool has_cluster_id_str() const;
+  // string target_str = 2;
+  bool has_target_str() const;
   private:
-  bool _internal_has_cluster_id_str() const;
+  bool _internal_has_target_str() const;
   public:
-  void clear_cluster_id_str();
-  const std::string& cluster_id_str() const;
+  void clear_target_str();
+  const std::string& target_str() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_cluster_id_str(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_cluster_id_str();
-  PROTOBUF_NODISCARD std::string* release_cluster_id_str();
-  void set_allocated_cluster_id_str(std::string* cluster_id_str);
+  void set_target_str(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_target_str();
+  PROTOBUF_NODISCARD std::string* release_target_str();
+  void set_allocated_target_str(std::string* target_str);
   private:
-  const std::string& _internal_cluster_id_str() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_cluster_id_str(const std::string& value);
-  std::string* _internal_mutable_cluster_id_str();
+  const std::string& _internal_target_str() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_target_str(const std::string& value);
+  std::string* _internal_mutable_target_str();
   public:
 
-  void clear_cluster_id();
-  ClusterIdCase cluster_id_case() const;
-  // @@protoc_insertion_point(class_scope:classifierpb.ClusterID)
+  void clear_target();
+  TargetCase target_case() const;
+  // @@protoc_insertion_point(class_scope:classifierpb.Target)
  private:
   class _Internal;
-  void set_has_cluster_id_int();
-  void set_has_cluster_id_str();
+  void set_has_target_int();
+  void set_has_target_str();
 
-  inline bool has_cluster_id() const;
-  inline void clear_has_cluster_id();
+  inline bool has_target() const;
+  inline void clear_has_target();
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    union ClusterIdUnion {
-      constexpr ClusterIdUnion() : _constinit_{} {}
+    union TargetUnion {
+      constexpr TargetUnion() : _constinit_{} {}
         ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized _constinit_;
-      int32_t cluster_id_int_;
-      ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr cluster_id_str_;
-    } cluster_id_;
+      int32_t target_int_;
+      ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr target_str_;
+    } target_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     uint32_t _oneof_case_[1];
 
@@ -279,24 +279,24 @@ class ClusterID final :
 };
 // -------------------------------------------------------------------
 
-class TrainingDatasetEntry final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.TrainingDatasetEntry) */ {
+class DatasetEntry final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.DatasetEntry) */ {
  public:
-  inline TrainingDatasetEntry() : TrainingDatasetEntry(nullptr) {}
-  ~TrainingDatasetEntry() override;
-  explicit PROTOBUF_CONSTEXPR TrainingDatasetEntry(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline DatasetEntry() : DatasetEntry(nullptr) {}
+  ~DatasetEntry() override;
+  explicit PROTOBUF_CONSTEXPR DatasetEntry(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  TrainingDatasetEntry(const TrainingDatasetEntry& from);
-  TrainingDatasetEntry(TrainingDatasetEntry&& from) noexcept
-    : TrainingDatasetEntry() {
+  DatasetEntry(const DatasetEntry& from);
+  DatasetEntry(DatasetEntry&& from) noexcept
+    : DatasetEntry() {
     *this = ::std::move(from);
   }
 
-  inline TrainingDatasetEntry& operator=(const TrainingDatasetEntry& from) {
+  inline DatasetEntry& operator=(const DatasetEntry& from) {
     CopyFrom(from);
     return *this;
   }
-  inline TrainingDatasetEntry& operator=(TrainingDatasetEntry&& from) noexcept {
+  inline DatasetEntry& operator=(DatasetEntry&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -319,20 +319,20 @@ class TrainingDatasetEntry final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const TrainingDatasetEntry& default_instance() {
+  static const DatasetEntry& default_instance() {
     return *internal_default_instance();
   }
-  static inline const TrainingDatasetEntry* internal_default_instance() {
-    return reinterpret_cast<const TrainingDatasetEntry*>(
-               &_TrainingDatasetEntry_default_instance_);
+  static inline const DatasetEntry* internal_default_instance() {
+    return reinterpret_cast<const DatasetEntry*>(
+               &_DatasetEntry_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     1;
 
-  friend void swap(TrainingDatasetEntry& a, TrainingDatasetEntry& b) {
+  friend void swap(DatasetEntry& a, DatasetEntry& b) {
     a.Swap(&b);
   }
-  inline void Swap(TrainingDatasetEntry* other) {
+  inline void Swap(DatasetEntry* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -345,7 +345,7 @@ class TrainingDatasetEntry final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(TrainingDatasetEntry* other) {
+  void UnsafeArenaSwap(DatasetEntry* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -353,14 +353,14 @@ class TrainingDatasetEntry final :
 
   // implements Message ----------------------------------------------
 
-  TrainingDatasetEntry* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<TrainingDatasetEntry>(arena);
+  DatasetEntry* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<DatasetEntry>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const TrainingDatasetEntry& from);
+  void CopyFrom(const DatasetEntry& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const TrainingDatasetEntry& from) {
-    TrainingDatasetEntry::MergeImpl(*this, from);
+  void MergeFrom( const DatasetEntry& from) {
+    DatasetEntry::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -378,15 +378,15 @@ class TrainingDatasetEntry final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(TrainingDatasetEntry* other);
+  void InternalSwap(DatasetEntry* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "classifierpb.TrainingDatasetEntry";
+    return "classifierpb.DatasetEntry";
   }
   protected:
-  explicit TrainingDatasetEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit DatasetEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -401,7 +401,7 @@ class TrainingDatasetEntry final :
 
   enum : int {
     kFeaturesFieldNumber = 1,
-    kClusterIdFieldNumber = 2,
+    kTargetFieldNumber = 2,
   };
   // repeated float features = 1;
   int features_size() const;
@@ -425,25 +425,25 @@ class TrainingDatasetEntry final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
       mutable_features();
 
-  // .classifierpb.ClusterID cluster_id = 2;
-  bool has_cluster_id() const;
+  // .classifierpb.Target target = 2;
+  bool has_target() const;
   private:
-  bool _internal_has_cluster_id() const;
+  bool _internal_has_target() const;
   public:
-  void clear_cluster_id();
-  const ::classifierpb::ClusterID& cluster_id() const;
-  PROTOBUF_NODISCARD ::classifierpb::ClusterID* release_cluster_id();
-  ::classifierpb::ClusterID* mutable_cluster_id();
-  void set_allocated_cluster_id(::classifierpb::ClusterID* cluster_id);
+  void clear_target();
+  const ::classifierpb::Target& target() const;
+  PROTOBUF_NODISCARD ::classifierpb::Target* release_target();
+  ::classifierpb::Target* mutable_target();
+  void set_allocated_target(::classifierpb::Target* target);
   private:
-  const ::classifierpb::ClusterID& _internal_cluster_id() const;
-  ::classifierpb::ClusterID* _internal_mutable_cluster_id();
+  const ::classifierpb::Target& _internal_target() const;
+  ::classifierpb::Target* _internal_mutable_target();
   public:
-  void unsafe_arena_set_allocated_cluster_id(
-      ::classifierpb::ClusterID* cluster_id);
-  ::classifierpb::ClusterID* unsafe_arena_release_cluster_id();
+  void unsafe_arena_set_allocated_target(
+      ::classifierpb::Target* target);
+  ::classifierpb::Target* unsafe_arena_release_target();
 
-  // @@protoc_insertion_point(class_scope:classifierpb.TrainingDatasetEntry)
+  // @@protoc_insertion_point(class_scope:classifierpb.DatasetEntry)
  private:
   class _Internal;
 
@@ -452,7 +452,7 @@ class TrainingDatasetEntry final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > features_;
-    ::classifierpb::ClusterID* cluster_id_;
+    ::classifierpb::Target* target_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -460,24 +460,24 @@ class TrainingDatasetEntry final :
 };
 // -------------------------------------------------------------------
 
-class TrainingDataset final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.TrainingDataset) */ {
+class Dataset final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.Dataset) */ {
  public:
-  inline TrainingDataset() : TrainingDataset(nullptr) {}
-  ~TrainingDataset() override;
-  explicit PROTOBUF_CONSTEXPR TrainingDataset(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline Dataset() : Dataset(nullptr) {}
+  ~Dataset() override;
+  explicit PROTOBUF_CONSTEXPR Dataset(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  TrainingDataset(const TrainingDataset& from);
-  TrainingDataset(TrainingDataset&& from) noexcept
-    : TrainingDataset() {
+  Dataset(const Dataset& from);
+  Dataset(Dataset&& from) noexcept
+    : Dataset() {
     *this = ::std::move(from);
   }
 
-  inline TrainingDataset& operator=(const TrainingDataset& from) {
+  inline Dataset& operator=(const Dataset& from) {
     CopyFrom(from);
     return *this;
   }
-  inline TrainingDataset& operator=(TrainingDataset&& from) noexcept {
+  inline Dataset& operator=(Dataset&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -500,20 +500,20 @@ class TrainingDataset final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const TrainingDataset& default_instance() {
+  static const Dataset& default_instance() {
     return *internal_default_instance();
   }
-  static inline const TrainingDataset* internal_default_instance() {
-    return reinterpret_cast<const TrainingDataset*>(
-               &_TrainingDataset_default_instance_);
+  static inline const Dataset* internal_default_instance() {
+    return reinterpret_cast<const Dataset*>(
+               &_Dataset_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     2;
 
-  friend void swap(TrainingDataset& a, TrainingDataset& b) {
+  friend void swap(Dataset& a, Dataset& b) {
     a.Swap(&b);
   }
-  inline void Swap(TrainingDataset* other) {
+  inline void Swap(Dataset* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -526,7 +526,7 @@ class TrainingDataset final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(TrainingDataset* other) {
+  void UnsafeArenaSwap(Dataset* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -534,14 +534,14 @@ class TrainingDataset final :
 
   // implements Message ----------------------------------------------
 
-  TrainingDataset* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<TrainingDataset>(arena);
+  Dataset* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Dataset>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const TrainingDataset& from);
+  void CopyFrom(const Dataset& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const TrainingDataset& from) {
-    TrainingDataset::MergeImpl(*this, from);
+  void MergeFrom( const Dataset& from) {
+    Dataset::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -559,15 +559,15 @@ class TrainingDataset final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(TrainingDataset* other);
+  void InternalSwap(Dataset* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "classifierpb.TrainingDataset";
+    return "classifierpb.Dataset";
   }
   protected:
-  explicit TrainingDataset(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit Dataset(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -583,25 +583,25 @@ class TrainingDataset final :
   enum : int {
     kEntriesFieldNumber = 1,
   };
-  // repeated .classifierpb.TrainingDatasetEntry entries = 1;
+  // repeated .classifierpb.DatasetEntry entries = 1;
   int entries_size() const;
   private:
   int _internal_entries_size() const;
   public:
   void clear_entries();
-  ::classifierpb::TrainingDatasetEntry* mutable_entries(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::TrainingDatasetEntry >*
+  ::classifierpb::DatasetEntry* mutable_entries(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::DatasetEntry >*
       mutable_entries();
   private:
-  const ::classifierpb::TrainingDatasetEntry& _internal_entries(int index) const;
-  ::classifierpb::TrainingDatasetEntry* _internal_add_entries();
+  const ::classifierpb::DatasetEntry& _internal_entries(int index) const;
+  ::classifierpb::DatasetEntry* _internal_add_entries();
   public:
-  const ::classifierpb::TrainingDatasetEntry& entries(int index) const;
-  ::classifierpb::TrainingDatasetEntry* add_entries();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::TrainingDatasetEntry >&
+  const ::classifierpb::DatasetEntry& entries(int index) const;
+  ::classifierpb::DatasetEntry* add_entries();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::DatasetEntry >&
       entries() const;
 
-  // @@protoc_insertion_point(class_scope:classifierpb.TrainingDataset)
+  // @@protoc_insertion_point(class_scope:classifierpb.Dataset)
  private:
   class _Internal;
 
@@ -609,7 +609,7 @@ class TrainingDataset final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::TrainingDatasetEntry > entries_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::DatasetEntry > entries_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -617,24 +617,24 @@ class TrainingDataset final :
 };
 // -------------------------------------------------------------------
 
-class SupportVertexEntry final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.SupportVertexEntry) */ {
+class SupportSampleEntry final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.SupportSampleEntry) */ {
  public:
-  inline SupportVertexEntry() : SupportVertexEntry(nullptr) {}
-  ~SupportVertexEntry() override;
-  explicit PROTOBUF_CONSTEXPR SupportVertexEntry(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline SupportSampleEntry() : SupportSampleEntry(nullptr) {}
+  ~SupportSampleEntry() override;
+  explicit PROTOBUF_CONSTEXPR SupportSampleEntry(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  SupportVertexEntry(const SupportVertexEntry& from);
-  SupportVertexEntry(SupportVertexEntry&& from) noexcept
-    : SupportVertexEntry() {
+  SupportSampleEntry(const SupportSampleEntry& from);
+  SupportSampleEntry(SupportSampleEntry&& from) noexcept
+    : SupportSampleEntry() {
     *this = ::std::move(from);
   }
 
-  inline SupportVertexEntry& operator=(const SupportVertexEntry& from) {
+  inline SupportSampleEntry& operator=(const SupportSampleEntry& from) {
     CopyFrom(from);
     return *this;
   }
-  inline SupportVertexEntry& operator=(SupportVertexEntry&& from) noexcept {
+  inline SupportSampleEntry& operator=(SupportSampleEntry&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -657,20 +657,20 @@ class SupportVertexEntry final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const SupportVertexEntry& default_instance() {
+  static const SupportSampleEntry& default_instance() {
     return *internal_default_instance();
   }
-  static inline const SupportVertexEntry* internal_default_instance() {
-    return reinterpret_cast<const SupportVertexEntry*>(
-               &_SupportVertexEntry_default_instance_);
+  static inline const SupportSampleEntry* internal_default_instance() {
+    return reinterpret_cast<const SupportSampleEntry*>(
+               &_SupportSampleEntry_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     3;
 
-  friend void swap(SupportVertexEntry& a, SupportVertexEntry& b) {
+  friend void swap(SupportSampleEntry& a, SupportSampleEntry& b) {
     a.Swap(&b);
   }
-  inline void Swap(SupportVertexEntry* other) {
+  inline void Swap(SupportSampleEntry* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -683,7 +683,7 @@ class SupportVertexEntry final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(SupportVertexEntry* other) {
+  void UnsafeArenaSwap(SupportSampleEntry* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -691,14 +691,14 @@ class SupportVertexEntry final :
 
   // implements Message ----------------------------------------------
 
-  SupportVertexEntry* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<SupportVertexEntry>(arena);
+  SupportSampleEntry* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SupportSampleEntry>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const SupportVertexEntry& from);
+  void CopyFrom(const SupportSampleEntry& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const SupportVertexEntry& from) {
-    SupportVertexEntry::MergeImpl(*this, from);
+  void MergeFrom( const SupportSampleEntry& from) {
+    SupportSampleEntry::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -716,15 +716,15 @@ class SupportVertexEntry final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(SupportVertexEntry* other);
+  void InternalSwap(SupportSampleEntry* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "classifierpb.SupportVertexEntry";
+    return "classifierpb.SupportSampleEntry";
   }
   protected:
-  explicit SupportVertexEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit SupportSampleEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -739,8 +739,8 @@ class SupportVertexEntry final :
 
   enum : int {
     kFeaturesFieldNumber = 2,
-    kClusterIdFieldNumber = 3,
-    kVertexIdFieldNumber = 1,
+    kTargetFieldNumber = 3,
+    kSampleIdFieldNumber = 1,
   };
   // repeated float features = 2;
   int features_size() const;
@@ -764,34 +764,34 @@ class SupportVertexEntry final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
       mutable_features();
 
-  // .classifierpb.ClusterID cluster_id = 3;
-  bool has_cluster_id() const;
+  // .classifierpb.Target target = 3;
+  bool has_target() const;
   private:
-  bool _internal_has_cluster_id() const;
+  bool _internal_has_target() const;
   public:
-  void clear_cluster_id();
-  const ::classifierpb::ClusterID& cluster_id() const;
-  PROTOBUF_NODISCARD ::classifierpb::ClusterID* release_cluster_id();
-  ::classifierpb::ClusterID* mutable_cluster_id();
-  void set_allocated_cluster_id(::classifierpb::ClusterID* cluster_id);
+  void clear_target();
+  const ::classifierpb::Target& target() const;
+  PROTOBUF_NODISCARD ::classifierpb::Target* release_target();
+  ::classifierpb::Target* mutable_target();
+  void set_allocated_target(::classifierpb::Target* target);
   private:
-  const ::classifierpb::ClusterID& _internal_cluster_id() const;
-  ::classifierpb::ClusterID* _internal_mutable_cluster_id();
+  const ::classifierpb::Target& _internal_target() const;
+  ::classifierpb::Target* _internal_mutable_target();
   public:
-  void unsafe_arena_set_allocated_cluster_id(
-      ::classifierpb::ClusterID* cluster_id);
-  ::classifierpb::ClusterID* unsafe_arena_release_cluster_id();
+  void unsafe_arena_set_allocated_target(
+      ::classifierpb::Target* target);
+  ::classifierpb::Target* unsafe_arena_release_target();
 
-  // int32 vertex_id = 1;
-  void clear_vertex_id();
-  int32_t vertex_id() const;
-  void set_vertex_id(int32_t value);
+  // int32 sample_id = 1;
+  void clear_sample_id();
+  int32_t sample_id() const;
+  void set_sample_id(int32_t value);
   private:
-  int32_t _internal_vertex_id() const;
-  void _internal_set_vertex_id(int32_t value);
+  int32_t _internal_sample_id() const;
+  void _internal_set_sample_id(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:classifierpb.SupportVertexEntry)
+  // @@protoc_insertion_point(class_scope:classifierpb.SupportSampleEntry)
  private:
   class _Internal;
 
@@ -800,8 +800,8 @@ class SupportVertexEntry final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > features_;
-    ::classifierpb::ClusterID* cluster_id_;
-    int32_t vertex_id_;
+    ::classifierpb::Target* target_;
+    int32_t sample_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -809,24 +809,24 @@ class SupportVertexEntry final :
 };
 // -------------------------------------------------------------------
 
-class SupportVertices final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.SupportVertices) */ {
+class SupportSamples final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.SupportSamples) */ {
  public:
-  inline SupportVertices() : SupportVertices(nullptr) {}
-  ~SupportVertices() override;
-  explicit PROTOBUF_CONSTEXPR SupportVertices(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline SupportSamples() : SupportSamples(nullptr) {}
+  ~SupportSamples() override;
+  explicit PROTOBUF_CONSTEXPR SupportSamples(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  SupportVertices(const SupportVertices& from);
-  SupportVertices(SupportVertices&& from) noexcept
-    : SupportVertices() {
+  SupportSamples(const SupportSamples& from);
+  SupportSamples(SupportSamples&& from) noexcept
+    : SupportSamples() {
     *this = ::std::move(from);
   }
 
-  inline SupportVertices& operator=(const SupportVertices& from) {
+  inline SupportSamples& operator=(const SupportSamples& from) {
     CopyFrom(from);
     return *this;
   }
-  inline SupportVertices& operator=(SupportVertices&& from) noexcept {
+  inline SupportSamples& operator=(SupportSamples&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -849,20 +849,20 @@ class SupportVertices final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const SupportVertices& default_instance() {
+  static const SupportSamples& default_instance() {
     return *internal_default_instance();
   }
-  static inline const SupportVertices* internal_default_instance() {
-    return reinterpret_cast<const SupportVertices*>(
-               &_SupportVertices_default_instance_);
+  static inline const SupportSamples* internal_default_instance() {
+    return reinterpret_cast<const SupportSamples*>(
+               &_SupportSamples_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     4;
 
-  friend void swap(SupportVertices& a, SupportVertices& b) {
+  friend void swap(SupportSamples& a, SupportSamples& b) {
     a.Swap(&b);
   }
-  inline void Swap(SupportVertices* other) {
+  inline void Swap(SupportSamples* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -875,7 +875,7 @@ class SupportVertices final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(SupportVertices* other) {
+  void UnsafeArenaSwap(SupportSamples* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -883,14 +883,14 @@ class SupportVertices final :
 
   // implements Message ----------------------------------------------
 
-  SupportVertices* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<SupportVertices>(arena);
+  SupportSamples* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SupportSamples>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const SupportVertices& from);
+  void CopyFrom(const SupportSamples& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const SupportVertices& from) {
-    SupportVertices::MergeImpl(*this, from);
+  void MergeFrom( const SupportSamples& from) {
+    SupportSamples::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -908,15 +908,15 @@ class SupportVertices final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(SupportVertices* other);
+  void InternalSwap(SupportSamples* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "classifierpb.SupportVertices";
+    return "classifierpb.SupportSamples";
   }
   protected:
-  explicit SupportVertices(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit SupportSamples(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -932,25 +932,25 @@ class SupportVertices final :
   enum : int {
     kEntriesFieldNumber = 1,
   };
-  // repeated .classifierpb.SupportVertexEntry entries = 1;
+  // repeated .classifierpb.SupportSampleEntry entries = 1;
   int entries_size() const;
   private:
   int _internal_entries_size() const;
   public:
   void clear_entries();
-  ::classifierpb::SupportVertexEntry* mutable_entries(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::SupportVertexEntry >*
+  ::classifierpb::SupportSampleEntry* mutable_entries(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::SupportSampleEntry >*
       mutable_entries();
   private:
-  const ::classifierpb::SupportVertexEntry& _internal_entries(int index) const;
-  ::classifierpb::SupportVertexEntry* _internal_add_entries();
+  const ::classifierpb::SupportSampleEntry& _internal_entries(int index) const;
+  ::classifierpb::SupportSampleEntry* _internal_add_entries();
   public:
-  const ::classifierpb::SupportVertexEntry& entries(int index) const;
-  ::classifierpb::SupportVertexEntry* add_entries();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::SupportVertexEntry >&
+  const ::classifierpb::SupportSampleEntry& entries(int index) const;
+  ::classifierpb::SupportSampleEntry* add_entries();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::SupportSampleEntry >&
       entries() const;
 
-  // @@protoc_insertion_point(class_scope:classifierpb.SupportVertices)
+  // @@protoc_insertion_point(class_scope:classifierpb.SupportSamples)
  private:
   class _Internal;
 
@@ -958,7 +958,7 @@ class SupportVertices final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::SupportVertexEntry > entries_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::SupportSampleEntry > entries_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -966,24 +966,24 @@ class SupportVertices final :
 };
 // -------------------------------------------------------------------
 
-class VertexToLabelEntry final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.VertexToLabelEntry) */ {
+class TestSampleEntry final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.TestSampleEntry) */ {
  public:
-  inline VertexToLabelEntry() : VertexToLabelEntry(nullptr) {}
-  ~VertexToLabelEntry() override;
-  explicit PROTOBUF_CONSTEXPR VertexToLabelEntry(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline TestSampleEntry() : TestSampleEntry(nullptr) {}
+  ~TestSampleEntry() override;
+  explicit PROTOBUF_CONSTEXPR TestSampleEntry(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  VertexToLabelEntry(const VertexToLabelEntry& from);
-  VertexToLabelEntry(VertexToLabelEntry&& from) noexcept
-    : VertexToLabelEntry() {
+  TestSampleEntry(const TestSampleEntry& from);
+  TestSampleEntry(TestSampleEntry&& from) noexcept
+    : TestSampleEntry() {
     *this = ::std::move(from);
   }
 
-  inline VertexToLabelEntry& operator=(const VertexToLabelEntry& from) {
+  inline TestSampleEntry& operator=(const TestSampleEntry& from) {
     CopyFrom(from);
     return *this;
   }
-  inline VertexToLabelEntry& operator=(VertexToLabelEntry&& from) noexcept {
+  inline TestSampleEntry& operator=(TestSampleEntry&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1006,20 +1006,20 @@ class VertexToLabelEntry final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const VertexToLabelEntry& default_instance() {
+  static const TestSampleEntry& default_instance() {
     return *internal_default_instance();
   }
-  static inline const VertexToLabelEntry* internal_default_instance() {
-    return reinterpret_cast<const VertexToLabelEntry*>(
-               &_VertexToLabelEntry_default_instance_);
+  static inline const TestSampleEntry* internal_default_instance() {
+    return reinterpret_cast<const TestSampleEntry*>(
+               &_TestSampleEntry_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     5;
 
-  friend void swap(VertexToLabelEntry& a, VertexToLabelEntry& b) {
+  friend void swap(TestSampleEntry& a, TestSampleEntry& b) {
     a.Swap(&b);
   }
-  inline void Swap(VertexToLabelEntry* other) {
+  inline void Swap(TestSampleEntry* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1032,7 +1032,7 @@ class VertexToLabelEntry final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(VertexToLabelEntry* other) {
+  void UnsafeArenaSwap(TestSampleEntry* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1040,14 +1040,14 @@ class VertexToLabelEntry final :
 
   // implements Message ----------------------------------------------
 
-  VertexToLabelEntry* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<VertexToLabelEntry>(arena);
+  TestSampleEntry* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<TestSampleEntry>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const VertexToLabelEntry& from);
+  void CopyFrom(const TestSampleEntry& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const VertexToLabelEntry& from) {
-    VertexToLabelEntry::MergeImpl(*this, from);
+  void MergeFrom( const TestSampleEntry& from) {
+    TestSampleEntry::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -1065,15 +1065,15 @@ class VertexToLabelEntry final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(VertexToLabelEntry* other);
+  void InternalSwap(TestSampleEntry* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "classifierpb.VertexToLabelEntry";
+    return "classifierpb.TestSampleEntry";
   }
   protected:
-  explicit VertexToLabelEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit TestSampleEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -1088,8 +1088,8 @@ class VertexToLabelEntry final :
 
   enum : int {
     kFeaturesFieldNumber = 2,
-    kExpectedClusterIdFieldNumber = 3,
-    kVertexIdFieldNumber = 1,
+    kGroundTruthFieldNumber = 3,
+    kSampleIdFieldNumber = 1,
   };
   // repeated float features = 2;
   int features_size() const;
@@ -1113,34 +1113,34 @@ class VertexToLabelEntry final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
       mutable_features();
 
-  // .classifierpb.ClusterID expected_cluster_id = 3;
-  bool has_expected_cluster_id() const;
+  // .classifierpb.Target ground_truth = 3;
+  bool has_ground_truth() const;
   private:
-  bool _internal_has_expected_cluster_id() const;
+  bool _internal_has_ground_truth() const;
   public:
-  void clear_expected_cluster_id();
-  const ::classifierpb::ClusterID& expected_cluster_id() const;
-  PROTOBUF_NODISCARD ::classifierpb::ClusterID* release_expected_cluster_id();
-  ::classifierpb::ClusterID* mutable_expected_cluster_id();
-  void set_allocated_expected_cluster_id(::classifierpb::ClusterID* expected_cluster_id);
+  void clear_ground_truth();
+  const ::classifierpb::Target& ground_truth() const;
+  PROTOBUF_NODISCARD ::classifierpb::Target* release_ground_truth();
+  ::classifierpb::Target* mutable_ground_truth();
+  void set_allocated_ground_truth(::classifierpb::Target* ground_truth);
   private:
-  const ::classifierpb::ClusterID& _internal_expected_cluster_id() const;
-  ::classifierpb::ClusterID* _internal_mutable_expected_cluster_id();
+  const ::classifierpb::Target& _internal_ground_truth() const;
+  ::classifierpb::Target* _internal_mutable_ground_truth();
   public:
-  void unsafe_arena_set_allocated_expected_cluster_id(
-      ::classifierpb::ClusterID* expected_cluster_id);
-  ::classifierpb::ClusterID* unsafe_arena_release_expected_cluster_id();
+  void unsafe_arena_set_allocated_ground_truth(
+      ::classifierpb::Target* ground_truth);
+  ::classifierpb::Target* unsafe_arena_release_ground_truth();
 
-  // int32 vertex_id = 1;
-  void clear_vertex_id();
-  int32_t vertex_id() const;
-  void set_vertex_id(int32_t value);
+  // int32 sample_id = 1;
+  void clear_sample_id();
+  int32_t sample_id() const;
+  void set_sample_id(int32_t value);
   private:
-  int32_t _internal_vertex_id() const;
-  void _internal_set_vertex_id(int32_t value);
+  int32_t _internal_sample_id() const;
+  void _internal_set_sample_id(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:classifierpb.VertexToLabelEntry)
+  // @@protoc_insertion_point(class_scope:classifierpb.TestSampleEntry)
  private:
   class _Internal;
 
@@ -1149,8 +1149,8 @@ class VertexToLabelEntry final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > features_;
-    ::classifierpb::ClusterID* expected_cluster_id_;
-    int32_t vertex_id_;
+    ::classifierpb::Target* ground_truth_;
+    int32_t sample_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1158,24 +1158,24 @@ class VertexToLabelEntry final :
 };
 // -------------------------------------------------------------------
 
-class VerticesToLabel final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.VerticesToLabel) */ {
+class TestSamples final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.TestSamples) */ {
  public:
-  inline VerticesToLabel() : VerticesToLabel(nullptr) {}
-  ~VerticesToLabel() override;
-  explicit PROTOBUF_CONSTEXPR VerticesToLabel(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline TestSamples() : TestSamples(nullptr) {}
+  ~TestSamples() override;
+  explicit PROTOBUF_CONSTEXPR TestSamples(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  VerticesToLabel(const VerticesToLabel& from);
-  VerticesToLabel(VerticesToLabel&& from) noexcept
-    : VerticesToLabel() {
+  TestSamples(const TestSamples& from);
+  TestSamples(TestSamples&& from) noexcept
+    : TestSamples() {
     *this = ::std::move(from);
   }
 
-  inline VerticesToLabel& operator=(const VerticesToLabel& from) {
+  inline TestSamples& operator=(const TestSamples& from) {
     CopyFrom(from);
     return *this;
   }
-  inline VerticesToLabel& operator=(VerticesToLabel&& from) noexcept {
+  inline TestSamples& operator=(TestSamples&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1198,20 +1198,20 @@ class VerticesToLabel final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const VerticesToLabel& default_instance() {
+  static const TestSamples& default_instance() {
     return *internal_default_instance();
   }
-  static inline const VerticesToLabel* internal_default_instance() {
-    return reinterpret_cast<const VerticesToLabel*>(
-               &_VerticesToLabel_default_instance_);
+  static inline const TestSamples* internal_default_instance() {
+    return reinterpret_cast<const TestSamples*>(
+               &_TestSamples_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     6;
 
-  friend void swap(VerticesToLabel& a, VerticesToLabel& b) {
+  friend void swap(TestSamples& a, TestSamples& b) {
     a.Swap(&b);
   }
-  inline void Swap(VerticesToLabel* other) {
+  inline void Swap(TestSamples* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1224,7 +1224,7 @@ class VerticesToLabel final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(VerticesToLabel* other) {
+  void UnsafeArenaSwap(TestSamples* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1232,14 +1232,14 @@ class VerticesToLabel final :
 
   // implements Message ----------------------------------------------
 
-  VerticesToLabel* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<VerticesToLabel>(arena);
+  TestSamples* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<TestSamples>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const VerticesToLabel& from);
+  void CopyFrom(const TestSamples& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const VerticesToLabel& from) {
-    VerticesToLabel::MergeImpl(*this, from);
+  void MergeFrom( const TestSamples& from) {
+    TestSamples::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -1257,15 +1257,15 @@ class VerticesToLabel final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(VerticesToLabel* other);
+  void InternalSwap(TestSamples* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "classifierpb.VerticesToLabel";
+    return "classifierpb.TestSamples";
   }
   protected:
-  explicit VerticesToLabel(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit TestSamples(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -1281,25 +1281,25 @@ class VerticesToLabel final :
   enum : int {
     kEntriesFieldNumber = 1,
   };
-  // repeated .classifierpb.VertexToLabelEntry entries = 1;
+  // repeated .classifierpb.TestSampleEntry entries = 1;
   int entries_size() const;
   private:
   int _internal_entries_size() const;
   public:
   void clear_entries();
-  ::classifierpb::VertexToLabelEntry* mutable_entries(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::VertexToLabelEntry >*
+  ::classifierpb::TestSampleEntry* mutable_entries(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::TestSampleEntry >*
       mutable_entries();
   private:
-  const ::classifierpb::VertexToLabelEntry& _internal_entries(int index) const;
-  ::classifierpb::VertexToLabelEntry* _internal_add_entries();
+  const ::classifierpb::TestSampleEntry& _internal_entries(int index) const;
+  ::classifierpb::TestSampleEntry* _internal_add_entries();
   public:
-  const ::classifierpb::VertexToLabelEntry& entries(int index) const;
-  ::classifierpb::VertexToLabelEntry* add_entries();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::VertexToLabelEntry >&
+  const ::classifierpb::TestSampleEntry& entries(int index) const;
+  ::classifierpb::TestSampleEntry* add_entries();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::TestSampleEntry >&
       entries() const;
 
-  // @@protoc_insertion_point(class_scope:classifierpb.VerticesToLabel)
+  // @@protoc_insertion_point(class_scope:classifierpb.TestSamples)
  private:
   class _Internal;
 
@@ -1307,7 +1307,7 @@ class VerticesToLabel final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::VertexToLabelEntry > entries_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::TestSampleEntry > entries_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1315,24 +1315,24 @@ class VerticesToLabel final :
 };
 // -------------------------------------------------------------------
 
-class LabeledVertexEntry final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.LabeledVertexEntry) */ {
+class PredictedSampleEntry final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.PredictedSampleEntry) */ {
  public:
-  inline LabeledVertexEntry() : LabeledVertexEntry(nullptr) {}
-  ~LabeledVertexEntry() override;
-  explicit PROTOBUF_CONSTEXPR LabeledVertexEntry(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline PredictedSampleEntry() : PredictedSampleEntry(nullptr) {}
+  ~PredictedSampleEntry() override;
+  explicit PROTOBUF_CONSTEXPR PredictedSampleEntry(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  LabeledVertexEntry(const LabeledVertexEntry& from);
-  LabeledVertexEntry(LabeledVertexEntry&& from) noexcept
-    : LabeledVertexEntry() {
+  PredictedSampleEntry(const PredictedSampleEntry& from);
+  PredictedSampleEntry(PredictedSampleEntry&& from) noexcept
+    : PredictedSampleEntry() {
     *this = ::std::move(from);
   }
 
-  inline LabeledVertexEntry& operator=(const LabeledVertexEntry& from) {
+  inline PredictedSampleEntry& operator=(const PredictedSampleEntry& from) {
     CopyFrom(from);
     return *this;
   }
-  inline LabeledVertexEntry& operator=(LabeledVertexEntry&& from) noexcept {
+  inline PredictedSampleEntry& operator=(PredictedSampleEntry&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1355,20 +1355,20 @@ class LabeledVertexEntry final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const LabeledVertexEntry& default_instance() {
+  static const PredictedSampleEntry& default_instance() {
     return *internal_default_instance();
   }
-  static inline const LabeledVertexEntry* internal_default_instance() {
-    return reinterpret_cast<const LabeledVertexEntry*>(
-               &_LabeledVertexEntry_default_instance_);
+  static inline const PredictedSampleEntry* internal_default_instance() {
+    return reinterpret_cast<const PredictedSampleEntry*>(
+               &_PredictedSampleEntry_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     7;
 
-  friend void swap(LabeledVertexEntry& a, LabeledVertexEntry& b) {
+  friend void swap(PredictedSampleEntry& a, PredictedSampleEntry& b) {
     a.Swap(&b);
   }
-  inline void Swap(LabeledVertexEntry* other) {
+  inline void Swap(PredictedSampleEntry* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1381,7 +1381,7 @@ class LabeledVertexEntry final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(LabeledVertexEntry* other) {
+  void UnsafeArenaSwap(PredictedSampleEntry* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1389,14 +1389,14 @@ class LabeledVertexEntry final :
 
   // implements Message ----------------------------------------------
 
-  LabeledVertexEntry* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LabeledVertexEntry>(arena);
+  PredictedSampleEntry* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PredictedSampleEntry>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LabeledVertexEntry& from);
+  void CopyFrom(const PredictedSampleEntry& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const LabeledVertexEntry& from) {
-    LabeledVertexEntry::MergeImpl(*this, from);
+  void MergeFrom( const PredictedSampleEntry& from) {
+    PredictedSampleEntry::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -1414,15 +1414,15 @@ class LabeledVertexEntry final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(LabeledVertexEntry* other);
+  void InternalSwap(PredictedSampleEntry* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "classifierpb.LabeledVertexEntry";
+    return "classifierpb.PredictedSampleEntry";
   }
   protected:
-  explicit LabeledVertexEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit PredictedSampleEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -1437,8 +1437,8 @@ class LabeledVertexEntry final :
 
   enum : int {
     kFeaturesFieldNumber = 2,
-    kClusterIdFieldNumber = 3,
-    kVertexIdFieldNumber = 1,
+    kTargetFieldNumber = 3,
+    kSampleIdFieldNumber = 1,
   };
   // repeated float features = 2;
   int features_size() const;
@@ -1462,34 +1462,34 @@ class LabeledVertexEntry final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
       mutable_features();
 
-  // .classifierpb.ClusterID cluster_id = 3;
-  bool has_cluster_id() const;
+  // .classifierpb.Target target = 3;
+  bool has_target() const;
   private:
-  bool _internal_has_cluster_id() const;
+  bool _internal_has_target() const;
   public:
-  void clear_cluster_id();
-  const ::classifierpb::ClusterID& cluster_id() const;
-  PROTOBUF_NODISCARD ::classifierpb::ClusterID* release_cluster_id();
-  ::classifierpb::ClusterID* mutable_cluster_id();
-  void set_allocated_cluster_id(::classifierpb::ClusterID* cluster_id);
+  void clear_target();
+  const ::classifierpb::Target& target() const;
+  PROTOBUF_NODISCARD ::classifierpb::Target* release_target();
+  ::classifierpb::Target* mutable_target();
+  void set_allocated_target(::classifierpb::Target* target);
   private:
-  const ::classifierpb::ClusterID& _internal_cluster_id() const;
-  ::classifierpb::ClusterID* _internal_mutable_cluster_id();
+  const ::classifierpb::Target& _internal_target() const;
+  ::classifierpb::Target* _internal_mutable_target();
   public:
-  void unsafe_arena_set_allocated_cluster_id(
-      ::classifierpb::ClusterID* cluster_id);
-  ::classifierpb::ClusterID* unsafe_arena_release_cluster_id();
+  void unsafe_arena_set_allocated_target(
+      ::classifierpb::Target* target);
+  ::classifierpb::Target* unsafe_arena_release_target();
 
-  // int32 vertex_id = 1;
-  void clear_vertex_id();
-  int32_t vertex_id() const;
-  void set_vertex_id(int32_t value);
+  // int32 sample_id = 1;
+  void clear_sample_id();
+  int32_t sample_id() const;
+  void set_sample_id(int32_t value);
   private:
-  int32_t _internal_vertex_id() const;
-  void _internal_set_vertex_id(int32_t value);
+  int32_t _internal_sample_id() const;
+  void _internal_set_sample_id(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:classifierpb.LabeledVertexEntry)
+  // @@protoc_insertion_point(class_scope:classifierpb.PredictedSampleEntry)
  private:
   class _Internal;
 
@@ -1498,8 +1498,8 @@ class LabeledVertexEntry final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > features_;
-    ::classifierpb::ClusterID* cluster_id_;
-    int32_t vertex_id_;
+    ::classifierpb::Target* target_;
+    int32_t sample_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1507,24 +1507,24 @@ class LabeledVertexEntry final :
 };
 // -------------------------------------------------------------------
 
-class LabeledVertices final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.LabeledVertices) */ {
+class PredictedSamples final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.PredictedSamples) */ {
  public:
-  inline LabeledVertices() : LabeledVertices(nullptr) {}
-  ~LabeledVertices() override;
-  explicit PROTOBUF_CONSTEXPR LabeledVertices(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline PredictedSamples() : PredictedSamples(nullptr) {}
+  ~PredictedSamples() override;
+  explicit PROTOBUF_CONSTEXPR PredictedSamples(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  LabeledVertices(const LabeledVertices& from);
-  LabeledVertices(LabeledVertices&& from) noexcept
-    : LabeledVertices() {
+  PredictedSamples(const PredictedSamples& from);
+  PredictedSamples(PredictedSamples&& from) noexcept
+    : PredictedSamples() {
     *this = ::std::move(from);
   }
 
-  inline LabeledVertices& operator=(const LabeledVertices& from) {
+  inline PredictedSamples& operator=(const PredictedSamples& from) {
     CopyFrom(from);
     return *this;
   }
-  inline LabeledVertices& operator=(LabeledVertices&& from) noexcept {
+  inline PredictedSamples& operator=(PredictedSamples&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1547,20 +1547,20 @@ class LabeledVertices final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const LabeledVertices& default_instance() {
+  static const PredictedSamples& default_instance() {
     return *internal_default_instance();
   }
-  static inline const LabeledVertices* internal_default_instance() {
-    return reinterpret_cast<const LabeledVertices*>(
-               &_LabeledVertices_default_instance_);
+  static inline const PredictedSamples* internal_default_instance() {
+    return reinterpret_cast<const PredictedSamples*>(
+               &_PredictedSamples_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     8;
 
-  friend void swap(LabeledVertices& a, LabeledVertices& b) {
+  friend void swap(PredictedSamples& a, PredictedSamples& b) {
     a.Swap(&b);
   }
-  inline void Swap(LabeledVertices* other) {
+  inline void Swap(PredictedSamples* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1573,7 +1573,7 @@ class LabeledVertices final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(LabeledVertices* other) {
+  void UnsafeArenaSwap(PredictedSamples* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1581,14 +1581,14 @@ class LabeledVertices final :
 
   // implements Message ----------------------------------------------
 
-  LabeledVertices* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LabeledVertices>(arena);
+  PredictedSamples* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PredictedSamples>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LabeledVertices& from);
+  void CopyFrom(const PredictedSamples& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const LabeledVertices& from) {
-    LabeledVertices::MergeImpl(*this, from);
+  void MergeFrom( const PredictedSamples& from) {
+    PredictedSamples::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -1606,15 +1606,15 @@ class LabeledVertices final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(LabeledVertices* other);
+  void InternalSwap(PredictedSamples* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "classifierpb.LabeledVertices";
+    return "classifierpb.PredictedSamples";
   }
   protected:
-  explicit LabeledVertices(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit PredictedSamples(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -1630,25 +1630,25 @@ class LabeledVertices final :
   enum : int {
     kEntriesFieldNumber = 1,
   };
-  // repeated .classifierpb.LabeledVertexEntry entries = 1;
+  // repeated .classifierpb.PredictedSampleEntry entries = 1;
   int entries_size() const;
   private:
   int _internal_entries_size() const;
   public:
   void clear_entries();
-  ::classifierpb::LabeledVertexEntry* mutable_entries(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::LabeledVertexEntry >*
+  ::classifierpb::PredictedSampleEntry* mutable_entries(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::PredictedSampleEntry >*
       mutable_entries();
   private:
-  const ::classifierpb::LabeledVertexEntry& _internal_entries(int index) const;
-  ::classifierpb::LabeledVertexEntry* _internal_add_entries();
+  const ::classifierpb::PredictedSampleEntry& _internal_entries(int index) const;
+  ::classifierpb::PredictedSampleEntry* _internal_add_entries();
   public:
-  const ::classifierpb::LabeledVertexEntry& entries(int index) const;
-  ::classifierpb::LabeledVertexEntry* add_entries();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::LabeledVertexEntry >&
+  const ::classifierpb::PredictedSampleEntry& entries(int index) const;
+  ::classifierpb::PredictedSampleEntry* add_entries();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::PredictedSampleEntry >&
       entries() const;
 
-  // @@protoc_insertion_point(class_scope:classifierpb.LabeledVertices)
+  // @@protoc_insertion_point(class_scope:classifierpb.PredictedSamples)
  private:
   class _Internal;
 
@@ -1656,7 +1656,7 @@ class LabeledVertices final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::LabeledVertexEntry > entries_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::PredictedSampleEntry > entries_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1671,222 +1671,222 @@ class LabeledVertices final :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// ClusterID
+// Target
 
-// int32 cluster_id_int = 1;
-inline bool ClusterID::_internal_has_cluster_id_int() const {
-  return cluster_id_case() == kClusterIdInt;
+// int32 target_int = 1;
+inline bool Target::_internal_has_target_int() const {
+  return target_case() == kTargetInt;
 }
-inline bool ClusterID::has_cluster_id_int() const {
-  return _internal_has_cluster_id_int();
+inline bool Target::has_target_int() const {
+  return _internal_has_target_int();
 }
-inline void ClusterID::set_has_cluster_id_int() {
-  _impl_._oneof_case_[0] = kClusterIdInt;
+inline void Target::set_has_target_int() {
+  _impl_._oneof_case_[0] = kTargetInt;
 }
-inline void ClusterID::clear_cluster_id_int() {
-  if (_internal_has_cluster_id_int()) {
-    _impl_.cluster_id_.cluster_id_int_ = 0;
-    clear_has_cluster_id();
+inline void Target::clear_target_int() {
+  if (_internal_has_target_int()) {
+    _impl_.target_.target_int_ = 0;
+    clear_has_target();
   }
 }
-inline int32_t ClusterID::_internal_cluster_id_int() const {
-  if (_internal_has_cluster_id_int()) {
-    return _impl_.cluster_id_.cluster_id_int_;
+inline int32_t Target::_internal_target_int() const {
+  if (_internal_has_target_int()) {
+    return _impl_.target_.target_int_;
   }
   return 0;
 }
-inline void ClusterID::_internal_set_cluster_id_int(int32_t value) {
-  if (!_internal_has_cluster_id_int()) {
-    clear_cluster_id();
-    set_has_cluster_id_int();
+inline void Target::_internal_set_target_int(int32_t value) {
+  if (!_internal_has_target_int()) {
+    clear_target();
+    set_has_target_int();
   }
-  _impl_.cluster_id_.cluster_id_int_ = value;
+  _impl_.target_.target_int_ = value;
 }
-inline int32_t ClusterID::cluster_id_int() const {
-  // @@protoc_insertion_point(field_get:classifierpb.ClusterID.cluster_id_int)
-  return _internal_cluster_id_int();
+inline int32_t Target::target_int() const {
+  // @@protoc_insertion_point(field_get:classifierpb.Target.target_int)
+  return _internal_target_int();
 }
-inline void ClusterID::set_cluster_id_int(int32_t value) {
-  _internal_set_cluster_id_int(value);
-  // @@protoc_insertion_point(field_set:classifierpb.ClusterID.cluster_id_int)
+inline void Target::set_target_int(int32_t value) {
+  _internal_set_target_int(value);
+  // @@protoc_insertion_point(field_set:classifierpb.Target.target_int)
 }
 
-// string cluster_id_str = 2;
-inline bool ClusterID::_internal_has_cluster_id_str() const {
-  return cluster_id_case() == kClusterIdStr;
+// string target_str = 2;
+inline bool Target::_internal_has_target_str() const {
+  return target_case() == kTargetStr;
 }
-inline bool ClusterID::has_cluster_id_str() const {
-  return _internal_has_cluster_id_str();
+inline bool Target::has_target_str() const {
+  return _internal_has_target_str();
 }
-inline void ClusterID::set_has_cluster_id_str() {
-  _impl_._oneof_case_[0] = kClusterIdStr;
+inline void Target::set_has_target_str() {
+  _impl_._oneof_case_[0] = kTargetStr;
 }
-inline void ClusterID::clear_cluster_id_str() {
-  if (_internal_has_cluster_id_str()) {
-    _impl_.cluster_id_.cluster_id_str_.Destroy();
-    clear_has_cluster_id();
+inline void Target::clear_target_str() {
+  if (_internal_has_target_str()) {
+    _impl_.target_.target_str_.Destroy();
+    clear_has_target();
   }
 }
-inline const std::string& ClusterID::cluster_id_str() const {
-  // @@protoc_insertion_point(field_get:classifierpb.ClusterID.cluster_id_str)
-  return _internal_cluster_id_str();
+inline const std::string& Target::target_str() const {
+  // @@protoc_insertion_point(field_get:classifierpb.Target.target_str)
+  return _internal_target_str();
 }
 template <typename ArgT0, typename... ArgT>
-inline void ClusterID::set_cluster_id_str(ArgT0&& arg0, ArgT... args) {
-  if (!_internal_has_cluster_id_str()) {
-    clear_cluster_id();
-    set_has_cluster_id_str();
-    _impl_.cluster_id_.cluster_id_str_.InitDefault();
+inline void Target::set_target_str(ArgT0&& arg0, ArgT... args) {
+  if (!_internal_has_target_str()) {
+    clear_target();
+    set_has_target_str();
+    _impl_.target_.target_str_.InitDefault();
   }
-  _impl_.cluster_id_.cluster_id_str_.Set( static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:classifierpb.ClusterID.cluster_id_str)
+  _impl_.target_.target_str_.Set( static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:classifierpb.Target.target_str)
 }
-inline std::string* ClusterID::mutable_cluster_id_str() {
-  std::string* _s = _internal_mutable_cluster_id_str();
-  // @@protoc_insertion_point(field_mutable:classifierpb.ClusterID.cluster_id_str)
+inline std::string* Target::mutable_target_str() {
+  std::string* _s = _internal_mutable_target_str();
+  // @@protoc_insertion_point(field_mutable:classifierpb.Target.target_str)
   return _s;
 }
-inline const std::string& ClusterID::_internal_cluster_id_str() const {
-  if (_internal_has_cluster_id_str()) {
-    return _impl_.cluster_id_.cluster_id_str_.Get();
+inline const std::string& Target::_internal_target_str() const {
+  if (_internal_has_target_str()) {
+    return _impl_.target_.target_str_.Get();
   }
   return ::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited();
 }
-inline void ClusterID::_internal_set_cluster_id_str(const std::string& value) {
-  if (!_internal_has_cluster_id_str()) {
-    clear_cluster_id();
-    set_has_cluster_id_str();
-    _impl_.cluster_id_.cluster_id_str_.InitDefault();
+inline void Target::_internal_set_target_str(const std::string& value) {
+  if (!_internal_has_target_str()) {
+    clear_target();
+    set_has_target_str();
+    _impl_.target_.target_str_.InitDefault();
   }
-  _impl_.cluster_id_.cluster_id_str_.Set(value, GetArenaForAllocation());
+  _impl_.target_.target_str_.Set(value, GetArenaForAllocation());
 }
-inline std::string* ClusterID::_internal_mutable_cluster_id_str() {
-  if (!_internal_has_cluster_id_str()) {
-    clear_cluster_id();
-    set_has_cluster_id_str();
-    _impl_.cluster_id_.cluster_id_str_.InitDefault();
+inline std::string* Target::_internal_mutable_target_str() {
+  if (!_internal_has_target_str()) {
+    clear_target();
+    set_has_target_str();
+    _impl_.target_.target_str_.InitDefault();
   }
-  return _impl_.cluster_id_.cluster_id_str_.Mutable(      GetArenaForAllocation());
+  return _impl_.target_.target_str_.Mutable(      GetArenaForAllocation());
 }
-inline std::string* ClusterID::release_cluster_id_str() {
-  // @@protoc_insertion_point(field_release:classifierpb.ClusterID.cluster_id_str)
-  if (_internal_has_cluster_id_str()) {
-    clear_has_cluster_id();
-    return _impl_.cluster_id_.cluster_id_str_.Release();
+inline std::string* Target::release_target_str() {
+  // @@protoc_insertion_point(field_release:classifierpb.Target.target_str)
+  if (_internal_has_target_str()) {
+    clear_has_target();
+    return _impl_.target_.target_str_.Release();
   } else {
     return nullptr;
   }
 }
-inline void ClusterID::set_allocated_cluster_id_str(std::string* cluster_id_str) {
-  if (has_cluster_id()) {
-    clear_cluster_id();
+inline void Target::set_allocated_target_str(std::string* target_str) {
+  if (has_target()) {
+    clear_target();
   }
-  if (cluster_id_str != nullptr) {
-    set_has_cluster_id_str();
-    _impl_.cluster_id_.cluster_id_str_.InitAllocated(cluster_id_str, GetArenaForAllocation());
+  if (target_str != nullptr) {
+    set_has_target_str();
+    _impl_.target_.target_str_.InitAllocated(target_str, GetArenaForAllocation());
   }
-  // @@protoc_insertion_point(field_set_allocated:classifierpb.ClusterID.cluster_id_str)
+  // @@protoc_insertion_point(field_set_allocated:classifierpb.Target.target_str)
 }
 
-inline bool ClusterID::has_cluster_id() const {
-  return cluster_id_case() != CLUSTER_ID_NOT_SET;
+inline bool Target::has_target() const {
+  return target_case() != TARGET_NOT_SET;
 }
-inline void ClusterID::clear_has_cluster_id() {
-  _impl_._oneof_case_[0] = CLUSTER_ID_NOT_SET;
+inline void Target::clear_has_target() {
+  _impl_._oneof_case_[0] = TARGET_NOT_SET;
 }
-inline ClusterID::ClusterIdCase ClusterID::cluster_id_case() const {
-  return ClusterID::ClusterIdCase(_impl_._oneof_case_[0]);
+inline Target::TargetCase Target::target_case() const {
+  return Target::TargetCase(_impl_._oneof_case_[0]);
 }
 // -------------------------------------------------------------------
 
-// TrainingDatasetEntry
+// DatasetEntry
 
 // repeated float features = 1;
-inline int TrainingDatasetEntry::_internal_features_size() const {
+inline int DatasetEntry::_internal_features_size() const {
   return _impl_.features_.size();
 }
-inline int TrainingDatasetEntry::features_size() const {
+inline int DatasetEntry::features_size() const {
   return _internal_features_size();
 }
-inline void TrainingDatasetEntry::clear_features() {
+inline void DatasetEntry::clear_features() {
   _impl_.features_.Clear();
 }
-inline float TrainingDatasetEntry::_internal_features(int index) const {
+inline float DatasetEntry::_internal_features(int index) const {
   return _impl_.features_.Get(index);
 }
-inline float TrainingDatasetEntry::features(int index) const {
-  // @@protoc_insertion_point(field_get:classifierpb.TrainingDatasetEntry.features)
+inline float DatasetEntry::features(int index) const {
+  // @@protoc_insertion_point(field_get:classifierpb.DatasetEntry.features)
   return _internal_features(index);
 }
-inline void TrainingDatasetEntry::set_features(int index, float value) {
+inline void DatasetEntry::set_features(int index, float value) {
   _impl_.features_.Set(index, value);
-  // @@protoc_insertion_point(field_set:classifierpb.TrainingDatasetEntry.features)
+  // @@protoc_insertion_point(field_set:classifierpb.DatasetEntry.features)
 }
-inline void TrainingDatasetEntry::_internal_add_features(float value) {
+inline void DatasetEntry::_internal_add_features(float value) {
   _impl_.features_.Add(value);
 }
-inline void TrainingDatasetEntry::add_features(float value) {
+inline void DatasetEntry::add_features(float value) {
   _internal_add_features(value);
-  // @@protoc_insertion_point(field_add:classifierpb.TrainingDatasetEntry.features)
+  // @@protoc_insertion_point(field_add:classifierpb.DatasetEntry.features)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-TrainingDatasetEntry::_internal_features() const {
+DatasetEntry::_internal_features() const {
   return _impl_.features_;
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-TrainingDatasetEntry::features() const {
-  // @@protoc_insertion_point(field_list:classifierpb.TrainingDatasetEntry.features)
+DatasetEntry::features() const {
+  // @@protoc_insertion_point(field_list:classifierpb.DatasetEntry.features)
   return _internal_features();
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-TrainingDatasetEntry::_internal_mutable_features() {
+DatasetEntry::_internal_mutable_features() {
   return &_impl_.features_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-TrainingDatasetEntry::mutable_features() {
-  // @@protoc_insertion_point(field_mutable_list:classifierpb.TrainingDatasetEntry.features)
+DatasetEntry::mutable_features() {
+  // @@protoc_insertion_point(field_mutable_list:classifierpb.DatasetEntry.features)
   return _internal_mutable_features();
 }
 
-// .classifierpb.ClusterID cluster_id = 2;
-inline bool TrainingDatasetEntry::_internal_has_cluster_id() const {
-  return this != internal_default_instance() && _impl_.cluster_id_ != nullptr;
+// .classifierpb.Target target = 2;
+inline bool DatasetEntry::_internal_has_target() const {
+  return this != internal_default_instance() && _impl_.target_ != nullptr;
 }
-inline bool TrainingDatasetEntry::has_cluster_id() const {
-  return _internal_has_cluster_id();
+inline bool DatasetEntry::has_target() const {
+  return _internal_has_target();
 }
-inline void TrainingDatasetEntry::clear_cluster_id() {
-  if (GetArenaForAllocation() == nullptr && _impl_.cluster_id_ != nullptr) {
-    delete _impl_.cluster_id_;
+inline void DatasetEntry::clear_target() {
+  if (GetArenaForAllocation() == nullptr && _impl_.target_ != nullptr) {
+    delete _impl_.target_;
   }
-  _impl_.cluster_id_ = nullptr;
+  _impl_.target_ = nullptr;
 }
-inline const ::classifierpb::ClusterID& TrainingDatasetEntry::_internal_cluster_id() const {
-  const ::classifierpb::ClusterID* p = _impl_.cluster_id_;
-  return p != nullptr ? *p : reinterpret_cast<const ::classifierpb::ClusterID&>(
-      ::classifierpb::_ClusterID_default_instance_);
+inline const ::classifierpb::Target& DatasetEntry::_internal_target() const {
+  const ::classifierpb::Target* p = _impl_.target_;
+  return p != nullptr ? *p : reinterpret_cast<const ::classifierpb::Target&>(
+      ::classifierpb::_Target_default_instance_);
 }
-inline const ::classifierpb::ClusterID& TrainingDatasetEntry::cluster_id() const {
-  // @@protoc_insertion_point(field_get:classifierpb.TrainingDatasetEntry.cluster_id)
-  return _internal_cluster_id();
+inline const ::classifierpb::Target& DatasetEntry::target() const {
+  // @@protoc_insertion_point(field_get:classifierpb.DatasetEntry.target)
+  return _internal_target();
 }
-inline void TrainingDatasetEntry::unsafe_arena_set_allocated_cluster_id(
-    ::classifierpb::ClusterID* cluster_id) {
+inline void DatasetEntry::unsafe_arena_set_allocated_target(
+    ::classifierpb::Target* target) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.cluster_id_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.target_);
   }
-  _impl_.cluster_id_ = cluster_id;
-  if (cluster_id) {
+  _impl_.target_ = target;
+  if (target) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:classifierpb.TrainingDatasetEntry.cluster_id)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:classifierpb.DatasetEntry.target)
 }
-inline ::classifierpb::ClusterID* TrainingDatasetEntry::release_cluster_id() {
+inline ::classifierpb::Target* DatasetEntry::release_target() {
   
-  ::classifierpb::ClusterID* temp = _impl_.cluster_id_;
-  _impl_.cluster_id_ = nullptr;
+  ::classifierpb::Target* temp = _impl_.target_;
+  _impl_.target_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -1898,200 +1898,200 @@ inline ::classifierpb::ClusterID* TrainingDatasetEntry::release_cluster_id() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::classifierpb::ClusterID* TrainingDatasetEntry::unsafe_arena_release_cluster_id() {
-  // @@protoc_insertion_point(field_release:classifierpb.TrainingDatasetEntry.cluster_id)
+inline ::classifierpb::Target* DatasetEntry::unsafe_arena_release_target() {
+  // @@protoc_insertion_point(field_release:classifierpb.DatasetEntry.target)
   
-  ::classifierpb::ClusterID* temp = _impl_.cluster_id_;
-  _impl_.cluster_id_ = nullptr;
+  ::classifierpb::Target* temp = _impl_.target_;
+  _impl_.target_ = nullptr;
   return temp;
 }
-inline ::classifierpb::ClusterID* TrainingDatasetEntry::_internal_mutable_cluster_id() {
+inline ::classifierpb::Target* DatasetEntry::_internal_mutable_target() {
   
-  if (_impl_.cluster_id_ == nullptr) {
-    auto* p = CreateMaybeMessage<::classifierpb::ClusterID>(GetArenaForAllocation());
-    _impl_.cluster_id_ = p;
+  if (_impl_.target_ == nullptr) {
+    auto* p = CreateMaybeMessage<::classifierpb::Target>(GetArenaForAllocation());
+    _impl_.target_ = p;
   }
-  return _impl_.cluster_id_;
+  return _impl_.target_;
 }
-inline ::classifierpb::ClusterID* TrainingDatasetEntry::mutable_cluster_id() {
-  ::classifierpb::ClusterID* _msg = _internal_mutable_cluster_id();
-  // @@protoc_insertion_point(field_mutable:classifierpb.TrainingDatasetEntry.cluster_id)
+inline ::classifierpb::Target* DatasetEntry::mutable_target() {
+  ::classifierpb::Target* _msg = _internal_mutable_target();
+  // @@protoc_insertion_point(field_mutable:classifierpb.DatasetEntry.target)
   return _msg;
 }
-inline void TrainingDatasetEntry::set_allocated_cluster_id(::classifierpb::ClusterID* cluster_id) {
+inline void DatasetEntry::set_allocated_target(::classifierpb::Target* target) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.cluster_id_;
+    delete _impl_.target_;
   }
-  if (cluster_id) {
+  if (target) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(cluster_id);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(target);
     if (message_arena != submessage_arena) {
-      cluster_id = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, cluster_id, submessage_arena);
+      target = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, target, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.cluster_id_ = cluster_id;
-  // @@protoc_insertion_point(field_set_allocated:classifierpb.TrainingDatasetEntry.cluster_id)
+  _impl_.target_ = target;
+  // @@protoc_insertion_point(field_set_allocated:classifierpb.DatasetEntry.target)
 }
 
 // -------------------------------------------------------------------
 
-// TrainingDataset
+// Dataset
 
-// repeated .classifierpb.TrainingDatasetEntry entries = 1;
-inline int TrainingDataset::_internal_entries_size() const {
+// repeated .classifierpb.DatasetEntry entries = 1;
+inline int Dataset::_internal_entries_size() const {
   return _impl_.entries_.size();
 }
-inline int TrainingDataset::entries_size() const {
+inline int Dataset::entries_size() const {
   return _internal_entries_size();
 }
-inline void TrainingDataset::clear_entries() {
+inline void Dataset::clear_entries() {
   _impl_.entries_.Clear();
 }
-inline ::classifierpb::TrainingDatasetEntry* TrainingDataset::mutable_entries(int index) {
-  // @@protoc_insertion_point(field_mutable:classifierpb.TrainingDataset.entries)
+inline ::classifierpb::DatasetEntry* Dataset::mutable_entries(int index) {
+  // @@protoc_insertion_point(field_mutable:classifierpb.Dataset.entries)
   return _impl_.entries_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::TrainingDatasetEntry >*
-TrainingDataset::mutable_entries() {
-  // @@protoc_insertion_point(field_mutable_list:classifierpb.TrainingDataset.entries)
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::DatasetEntry >*
+Dataset::mutable_entries() {
+  // @@protoc_insertion_point(field_mutable_list:classifierpb.Dataset.entries)
   return &_impl_.entries_;
 }
-inline const ::classifierpb::TrainingDatasetEntry& TrainingDataset::_internal_entries(int index) const {
+inline const ::classifierpb::DatasetEntry& Dataset::_internal_entries(int index) const {
   return _impl_.entries_.Get(index);
 }
-inline const ::classifierpb::TrainingDatasetEntry& TrainingDataset::entries(int index) const {
-  // @@protoc_insertion_point(field_get:classifierpb.TrainingDataset.entries)
+inline const ::classifierpb::DatasetEntry& Dataset::entries(int index) const {
+  // @@protoc_insertion_point(field_get:classifierpb.Dataset.entries)
   return _internal_entries(index);
 }
-inline ::classifierpb::TrainingDatasetEntry* TrainingDataset::_internal_add_entries() {
+inline ::classifierpb::DatasetEntry* Dataset::_internal_add_entries() {
   return _impl_.entries_.Add();
 }
-inline ::classifierpb::TrainingDatasetEntry* TrainingDataset::add_entries() {
-  ::classifierpb::TrainingDatasetEntry* _add = _internal_add_entries();
-  // @@protoc_insertion_point(field_add:classifierpb.TrainingDataset.entries)
+inline ::classifierpb::DatasetEntry* Dataset::add_entries() {
+  ::classifierpb::DatasetEntry* _add = _internal_add_entries();
+  // @@protoc_insertion_point(field_add:classifierpb.Dataset.entries)
   return _add;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::TrainingDatasetEntry >&
-TrainingDataset::entries() const {
-  // @@protoc_insertion_point(field_list:classifierpb.TrainingDataset.entries)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::DatasetEntry >&
+Dataset::entries() const {
+  // @@protoc_insertion_point(field_list:classifierpb.Dataset.entries)
   return _impl_.entries_;
 }
 
 // -------------------------------------------------------------------
 
-// SupportVertexEntry
+// SupportSampleEntry
 
-// int32 vertex_id = 1;
-inline void SupportVertexEntry::clear_vertex_id() {
-  _impl_.vertex_id_ = 0;
+// int32 sample_id = 1;
+inline void SupportSampleEntry::clear_sample_id() {
+  _impl_.sample_id_ = 0;
 }
-inline int32_t SupportVertexEntry::_internal_vertex_id() const {
-  return _impl_.vertex_id_;
+inline int32_t SupportSampleEntry::_internal_sample_id() const {
+  return _impl_.sample_id_;
 }
-inline int32_t SupportVertexEntry::vertex_id() const {
-  // @@protoc_insertion_point(field_get:classifierpb.SupportVertexEntry.vertex_id)
-  return _internal_vertex_id();
+inline int32_t SupportSampleEntry::sample_id() const {
+  // @@protoc_insertion_point(field_get:classifierpb.SupportSampleEntry.sample_id)
+  return _internal_sample_id();
 }
-inline void SupportVertexEntry::_internal_set_vertex_id(int32_t value) {
+inline void SupportSampleEntry::_internal_set_sample_id(int32_t value) {
   
-  _impl_.vertex_id_ = value;
+  _impl_.sample_id_ = value;
 }
-inline void SupportVertexEntry::set_vertex_id(int32_t value) {
-  _internal_set_vertex_id(value);
-  // @@protoc_insertion_point(field_set:classifierpb.SupportVertexEntry.vertex_id)
+inline void SupportSampleEntry::set_sample_id(int32_t value) {
+  _internal_set_sample_id(value);
+  // @@protoc_insertion_point(field_set:classifierpb.SupportSampleEntry.sample_id)
 }
 
 // repeated float features = 2;
-inline int SupportVertexEntry::_internal_features_size() const {
+inline int SupportSampleEntry::_internal_features_size() const {
   return _impl_.features_.size();
 }
-inline int SupportVertexEntry::features_size() const {
+inline int SupportSampleEntry::features_size() const {
   return _internal_features_size();
 }
-inline void SupportVertexEntry::clear_features() {
+inline void SupportSampleEntry::clear_features() {
   _impl_.features_.Clear();
 }
-inline float SupportVertexEntry::_internal_features(int index) const {
+inline float SupportSampleEntry::_internal_features(int index) const {
   return _impl_.features_.Get(index);
 }
-inline float SupportVertexEntry::features(int index) const {
-  // @@protoc_insertion_point(field_get:classifierpb.SupportVertexEntry.features)
+inline float SupportSampleEntry::features(int index) const {
+  // @@protoc_insertion_point(field_get:classifierpb.SupportSampleEntry.features)
   return _internal_features(index);
 }
-inline void SupportVertexEntry::set_features(int index, float value) {
+inline void SupportSampleEntry::set_features(int index, float value) {
   _impl_.features_.Set(index, value);
-  // @@protoc_insertion_point(field_set:classifierpb.SupportVertexEntry.features)
+  // @@protoc_insertion_point(field_set:classifierpb.SupportSampleEntry.features)
 }
-inline void SupportVertexEntry::_internal_add_features(float value) {
+inline void SupportSampleEntry::_internal_add_features(float value) {
   _impl_.features_.Add(value);
 }
-inline void SupportVertexEntry::add_features(float value) {
+inline void SupportSampleEntry::add_features(float value) {
   _internal_add_features(value);
-  // @@protoc_insertion_point(field_add:classifierpb.SupportVertexEntry.features)
+  // @@protoc_insertion_point(field_add:classifierpb.SupportSampleEntry.features)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-SupportVertexEntry::_internal_features() const {
+SupportSampleEntry::_internal_features() const {
   return _impl_.features_;
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-SupportVertexEntry::features() const {
-  // @@protoc_insertion_point(field_list:classifierpb.SupportVertexEntry.features)
+SupportSampleEntry::features() const {
+  // @@protoc_insertion_point(field_list:classifierpb.SupportSampleEntry.features)
   return _internal_features();
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-SupportVertexEntry::_internal_mutable_features() {
+SupportSampleEntry::_internal_mutable_features() {
   return &_impl_.features_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-SupportVertexEntry::mutable_features() {
-  // @@protoc_insertion_point(field_mutable_list:classifierpb.SupportVertexEntry.features)
+SupportSampleEntry::mutable_features() {
+  // @@protoc_insertion_point(field_mutable_list:classifierpb.SupportSampleEntry.features)
   return _internal_mutable_features();
 }
 
-// .classifierpb.ClusterID cluster_id = 3;
-inline bool SupportVertexEntry::_internal_has_cluster_id() const {
-  return this != internal_default_instance() && _impl_.cluster_id_ != nullptr;
+// .classifierpb.Target target = 3;
+inline bool SupportSampleEntry::_internal_has_target() const {
+  return this != internal_default_instance() && _impl_.target_ != nullptr;
 }
-inline bool SupportVertexEntry::has_cluster_id() const {
-  return _internal_has_cluster_id();
+inline bool SupportSampleEntry::has_target() const {
+  return _internal_has_target();
 }
-inline void SupportVertexEntry::clear_cluster_id() {
-  if (GetArenaForAllocation() == nullptr && _impl_.cluster_id_ != nullptr) {
-    delete _impl_.cluster_id_;
+inline void SupportSampleEntry::clear_target() {
+  if (GetArenaForAllocation() == nullptr && _impl_.target_ != nullptr) {
+    delete _impl_.target_;
   }
-  _impl_.cluster_id_ = nullptr;
+  _impl_.target_ = nullptr;
 }
-inline const ::classifierpb::ClusterID& SupportVertexEntry::_internal_cluster_id() const {
-  const ::classifierpb::ClusterID* p = _impl_.cluster_id_;
-  return p != nullptr ? *p : reinterpret_cast<const ::classifierpb::ClusterID&>(
-      ::classifierpb::_ClusterID_default_instance_);
+inline const ::classifierpb::Target& SupportSampleEntry::_internal_target() const {
+  const ::classifierpb::Target* p = _impl_.target_;
+  return p != nullptr ? *p : reinterpret_cast<const ::classifierpb::Target&>(
+      ::classifierpb::_Target_default_instance_);
 }
-inline const ::classifierpb::ClusterID& SupportVertexEntry::cluster_id() const {
-  // @@protoc_insertion_point(field_get:classifierpb.SupportVertexEntry.cluster_id)
-  return _internal_cluster_id();
+inline const ::classifierpb::Target& SupportSampleEntry::target() const {
+  // @@protoc_insertion_point(field_get:classifierpb.SupportSampleEntry.target)
+  return _internal_target();
 }
-inline void SupportVertexEntry::unsafe_arena_set_allocated_cluster_id(
-    ::classifierpb::ClusterID* cluster_id) {
+inline void SupportSampleEntry::unsafe_arena_set_allocated_target(
+    ::classifierpb::Target* target) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.cluster_id_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.target_);
   }
-  _impl_.cluster_id_ = cluster_id;
-  if (cluster_id) {
+  _impl_.target_ = target;
+  if (target) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:classifierpb.SupportVertexEntry.cluster_id)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:classifierpb.SupportSampleEntry.target)
 }
-inline ::classifierpb::ClusterID* SupportVertexEntry::release_cluster_id() {
+inline ::classifierpb::Target* SupportSampleEntry::release_target() {
   
-  ::classifierpb::ClusterID* temp = _impl_.cluster_id_;
-  _impl_.cluster_id_ = nullptr;
+  ::classifierpb::Target* temp = _impl_.target_;
+  _impl_.target_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -2103,200 +2103,200 @@ inline ::classifierpb::ClusterID* SupportVertexEntry::release_cluster_id() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::classifierpb::ClusterID* SupportVertexEntry::unsafe_arena_release_cluster_id() {
-  // @@protoc_insertion_point(field_release:classifierpb.SupportVertexEntry.cluster_id)
+inline ::classifierpb::Target* SupportSampleEntry::unsafe_arena_release_target() {
+  // @@protoc_insertion_point(field_release:classifierpb.SupportSampleEntry.target)
   
-  ::classifierpb::ClusterID* temp = _impl_.cluster_id_;
-  _impl_.cluster_id_ = nullptr;
+  ::classifierpb::Target* temp = _impl_.target_;
+  _impl_.target_ = nullptr;
   return temp;
 }
-inline ::classifierpb::ClusterID* SupportVertexEntry::_internal_mutable_cluster_id() {
+inline ::classifierpb::Target* SupportSampleEntry::_internal_mutable_target() {
   
-  if (_impl_.cluster_id_ == nullptr) {
-    auto* p = CreateMaybeMessage<::classifierpb::ClusterID>(GetArenaForAllocation());
-    _impl_.cluster_id_ = p;
+  if (_impl_.target_ == nullptr) {
+    auto* p = CreateMaybeMessage<::classifierpb::Target>(GetArenaForAllocation());
+    _impl_.target_ = p;
   }
-  return _impl_.cluster_id_;
+  return _impl_.target_;
 }
-inline ::classifierpb::ClusterID* SupportVertexEntry::mutable_cluster_id() {
-  ::classifierpb::ClusterID* _msg = _internal_mutable_cluster_id();
-  // @@protoc_insertion_point(field_mutable:classifierpb.SupportVertexEntry.cluster_id)
+inline ::classifierpb::Target* SupportSampleEntry::mutable_target() {
+  ::classifierpb::Target* _msg = _internal_mutable_target();
+  // @@protoc_insertion_point(field_mutable:classifierpb.SupportSampleEntry.target)
   return _msg;
 }
-inline void SupportVertexEntry::set_allocated_cluster_id(::classifierpb::ClusterID* cluster_id) {
+inline void SupportSampleEntry::set_allocated_target(::classifierpb::Target* target) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.cluster_id_;
+    delete _impl_.target_;
   }
-  if (cluster_id) {
+  if (target) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(cluster_id);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(target);
     if (message_arena != submessage_arena) {
-      cluster_id = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, cluster_id, submessage_arena);
+      target = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, target, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.cluster_id_ = cluster_id;
-  // @@protoc_insertion_point(field_set_allocated:classifierpb.SupportVertexEntry.cluster_id)
+  _impl_.target_ = target;
+  // @@protoc_insertion_point(field_set_allocated:classifierpb.SupportSampleEntry.target)
 }
 
 // -------------------------------------------------------------------
 
-// SupportVertices
+// SupportSamples
 
-// repeated .classifierpb.SupportVertexEntry entries = 1;
-inline int SupportVertices::_internal_entries_size() const {
+// repeated .classifierpb.SupportSampleEntry entries = 1;
+inline int SupportSamples::_internal_entries_size() const {
   return _impl_.entries_.size();
 }
-inline int SupportVertices::entries_size() const {
+inline int SupportSamples::entries_size() const {
   return _internal_entries_size();
 }
-inline void SupportVertices::clear_entries() {
+inline void SupportSamples::clear_entries() {
   _impl_.entries_.Clear();
 }
-inline ::classifierpb::SupportVertexEntry* SupportVertices::mutable_entries(int index) {
-  // @@protoc_insertion_point(field_mutable:classifierpb.SupportVertices.entries)
+inline ::classifierpb::SupportSampleEntry* SupportSamples::mutable_entries(int index) {
+  // @@protoc_insertion_point(field_mutable:classifierpb.SupportSamples.entries)
   return _impl_.entries_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::SupportVertexEntry >*
-SupportVertices::mutable_entries() {
-  // @@protoc_insertion_point(field_mutable_list:classifierpb.SupportVertices.entries)
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::SupportSampleEntry >*
+SupportSamples::mutable_entries() {
+  // @@protoc_insertion_point(field_mutable_list:classifierpb.SupportSamples.entries)
   return &_impl_.entries_;
 }
-inline const ::classifierpb::SupportVertexEntry& SupportVertices::_internal_entries(int index) const {
+inline const ::classifierpb::SupportSampleEntry& SupportSamples::_internal_entries(int index) const {
   return _impl_.entries_.Get(index);
 }
-inline const ::classifierpb::SupportVertexEntry& SupportVertices::entries(int index) const {
-  // @@protoc_insertion_point(field_get:classifierpb.SupportVertices.entries)
+inline const ::classifierpb::SupportSampleEntry& SupportSamples::entries(int index) const {
+  // @@protoc_insertion_point(field_get:classifierpb.SupportSamples.entries)
   return _internal_entries(index);
 }
-inline ::classifierpb::SupportVertexEntry* SupportVertices::_internal_add_entries() {
+inline ::classifierpb::SupportSampleEntry* SupportSamples::_internal_add_entries() {
   return _impl_.entries_.Add();
 }
-inline ::classifierpb::SupportVertexEntry* SupportVertices::add_entries() {
-  ::classifierpb::SupportVertexEntry* _add = _internal_add_entries();
-  // @@protoc_insertion_point(field_add:classifierpb.SupportVertices.entries)
+inline ::classifierpb::SupportSampleEntry* SupportSamples::add_entries() {
+  ::classifierpb::SupportSampleEntry* _add = _internal_add_entries();
+  // @@protoc_insertion_point(field_add:classifierpb.SupportSamples.entries)
   return _add;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::SupportVertexEntry >&
-SupportVertices::entries() const {
-  // @@protoc_insertion_point(field_list:classifierpb.SupportVertices.entries)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::SupportSampleEntry >&
+SupportSamples::entries() const {
+  // @@protoc_insertion_point(field_list:classifierpb.SupportSamples.entries)
   return _impl_.entries_;
 }
 
 // -------------------------------------------------------------------
 
-// VertexToLabelEntry
+// TestSampleEntry
 
-// int32 vertex_id = 1;
-inline void VertexToLabelEntry::clear_vertex_id() {
-  _impl_.vertex_id_ = 0;
+// int32 sample_id = 1;
+inline void TestSampleEntry::clear_sample_id() {
+  _impl_.sample_id_ = 0;
 }
-inline int32_t VertexToLabelEntry::_internal_vertex_id() const {
-  return _impl_.vertex_id_;
+inline int32_t TestSampleEntry::_internal_sample_id() const {
+  return _impl_.sample_id_;
 }
-inline int32_t VertexToLabelEntry::vertex_id() const {
-  // @@protoc_insertion_point(field_get:classifierpb.VertexToLabelEntry.vertex_id)
-  return _internal_vertex_id();
+inline int32_t TestSampleEntry::sample_id() const {
+  // @@protoc_insertion_point(field_get:classifierpb.TestSampleEntry.sample_id)
+  return _internal_sample_id();
 }
-inline void VertexToLabelEntry::_internal_set_vertex_id(int32_t value) {
+inline void TestSampleEntry::_internal_set_sample_id(int32_t value) {
   
-  _impl_.vertex_id_ = value;
+  _impl_.sample_id_ = value;
 }
-inline void VertexToLabelEntry::set_vertex_id(int32_t value) {
-  _internal_set_vertex_id(value);
-  // @@protoc_insertion_point(field_set:classifierpb.VertexToLabelEntry.vertex_id)
+inline void TestSampleEntry::set_sample_id(int32_t value) {
+  _internal_set_sample_id(value);
+  // @@protoc_insertion_point(field_set:classifierpb.TestSampleEntry.sample_id)
 }
 
 // repeated float features = 2;
-inline int VertexToLabelEntry::_internal_features_size() const {
+inline int TestSampleEntry::_internal_features_size() const {
   return _impl_.features_.size();
 }
-inline int VertexToLabelEntry::features_size() const {
+inline int TestSampleEntry::features_size() const {
   return _internal_features_size();
 }
-inline void VertexToLabelEntry::clear_features() {
+inline void TestSampleEntry::clear_features() {
   _impl_.features_.Clear();
 }
-inline float VertexToLabelEntry::_internal_features(int index) const {
+inline float TestSampleEntry::_internal_features(int index) const {
   return _impl_.features_.Get(index);
 }
-inline float VertexToLabelEntry::features(int index) const {
-  // @@protoc_insertion_point(field_get:classifierpb.VertexToLabelEntry.features)
+inline float TestSampleEntry::features(int index) const {
+  // @@protoc_insertion_point(field_get:classifierpb.TestSampleEntry.features)
   return _internal_features(index);
 }
-inline void VertexToLabelEntry::set_features(int index, float value) {
+inline void TestSampleEntry::set_features(int index, float value) {
   _impl_.features_.Set(index, value);
-  // @@protoc_insertion_point(field_set:classifierpb.VertexToLabelEntry.features)
+  // @@protoc_insertion_point(field_set:classifierpb.TestSampleEntry.features)
 }
-inline void VertexToLabelEntry::_internal_add_features(float value) {
+inline void TestSampleEntry::_internal_add_features(float value) {
   _impl_.features_.Add(value);
 }
-inline void VertexToLabelEntry::add_features(float value) {
+inline void TestSampleEntry::add_features(float value) {
   _internal_add_features(value);
-  // @@protoc_insertion_point(field_add:classifierpb.VertexToLabelEntry.features)
+  // @@protoc_insertion_point(field_add:classifierpb.TestSampleEntry.features)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-VertexToLabelEntry::_internal_features() const {
+TestSampleEntry::_internal_features() const {
   return _impl_.features_;
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-VertexToLabelEntry::features() const {
-  // @@protoc_insertion_point(field_list:classifierpb.VertexToLabelEntry.features)
+TestSampleEntry::features() const {
+  // @@protoc_insertion_point(field_list:classifierpb.TestSampleEntry.features)
   return _internal_features();
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-VertexToLabelEntry::_internal_mutable_features() {
+TestSampleEntry::_internal_mutable_features() {
   return &_impl_.features_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-VertexToLabelEntry::mutable_features() {
-  // @@protoc_insertion_point(field_mutable_list:classifierpb.VertexToLabelEntry.features)
+TestSampleEntry::mutable_features() {
+  // @@protoc_insertion_point(field_mutable_list:classifierpb.TestSampleEntry.features)
   return _internal_mutable_features();
 }
 
-// .classifierpb.ClusterID expected_cluster_id = 3;
-inline bool VertexToLabelEntry::_internal_has_expected_cluster_id() const {
-  return this != internal_default_instance() && _impl_.expected_cluster_id_ != nullptr;
+// .classifierpb.Target ground_truth = 3;
+inline bool TestSampleEntry::_internal_has_ground_truth() const {
+  return this != internal_default_instance() && _impl_.ground_truth_ != nullptr;
 }
-inline bool VertexToLabelEntry::has_expected_cluster_id() const {
-  return _internal_has_expected_cluster_id();
+inline bool TestSampleEntry::has_ground_truth() const {
+  return _internal_has_ground_truth();
 }
-inline void VertexToLabelEntry::clear_expected_cluster_id() {
-  if (GetArenaForAllocation() == nullptr && _impl_.expected_cluster_id_ != nullptr) {
-    delete _impl_.expected_cluster_id_;
+inline void TestSampleEntry::clear_ground_truth() {
+  if (GetArenaForAllocation() == nullptr && _impl_.ground_truth_ != nullptr) {
+    delete _impl_.ground_truth_;
   }
-  _impl_.expected_cluster_id_ = nullptr;
+  _impl_.ground_truth_ = nullptr;
 }
-inline const ::classifierpb::ClusterID& VertexToLabelEntry::_internal_expected_cluster_id() const {
-  const ::classifierpb::ClusterID* p = _impl_.expected_cluster_id_;
-  return p != nullptr ? *p : reinterpret_cast<const ::classifierpb::ClusterID&>(
-      ::classifierpb::_ClusterID_default_instance_);
+inline const ::classifierpb::Target& TestSampleEntry::_internal_ground_truth() const {
+  const ::classifierpb::Target* p = _impl_.ground_truth_;
+  return p != nullptr ? *p : reinterpret_cast<const ::classifierpb::Target&>(
+      ::classifierpb::_Target_default_instance_);
 }
-inline const ::classifierpb::ClusterID& VertexToLabelEntry::expected_cluster_id() const {
-  // @@protoc_insertion_point(field_get:classifierpb.VertexToLabelEntry.expected_cluster_id)
-  return _internal_expected_cluster_id();
+inline const ::classifierpb::Target& TestSampleEntry::ground_truth() const {
+  // @@protoc_insertion_point(field_get:classifierpb.TestSampleEntry.ground_truth)
+  return _internal_ground_truth();
 }
-inline void VertexToLabelEntry::unsafe_arena_set_allocated_expected_cluster_id(
-    ::classifierpb::ClusterID* expected_cluster_id) {
+inline void TestSampleEntry::unsafe_arena_set_allocated_ground_truth(
+    ::classifierpb::Target* ground_truth) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.expected_cluster_id_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.ground_truth_);
   }
-  _impl_.expected_cluster_id_ = expected_cluster_id;
-  if (expected_cluster_id) {
+  _impl_.ground_truth_ = ground_truth;
+  if (ground_truth) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:classifierpb.VertexToLabelEntry.expected_cluster_id)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:classifierpb.TestSampleEntry.ground_truth)
 }
-inline ::classifierpb::ClusterID* VertexToLabelEntry::release_expected_cluster_id() {
+inline ::classifierpb::Target* TestSampleEntry::release_ground_truth() {
   
-  ::classifierpb::ClusterID* temp = _impl_.expected_cluster_id_;
-  _impl_.expected_cluster_id_ = nullptr;
+  ::classifierpb::Target* temp = _impl_.ground_truth_;
+  _impl_.ground_truth_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -2308,200 +2308,200 @@ inline ::classifierpb::ClusterID* VertexToLabelEntry::release_expected_cluster_i
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::classifierpb::ClusterID* VertexToLabelEntry::unsafe_arena_release_expected_cluster_id() {
-  // @@protoc_insertion_point(field_release:classifierpb.VertexToLabelEntry.expected_cluster_id)
+inline ::classifierpb::Target* TestSampleEntry::unsafe_arena_release_ground_truth() {
+  // @@protoc_insertion_point(field_release:classifierpb.TestSampleEntry.ground_truth)
   
-  ::classifierpb::ClusterID* temp = _impl_.expected_cluster_id_;
-  _impl_.expected_cluster_id_ = nullptr;
+  ::classifierpb::Target* temp = _impl_.ground_truth_;
+  _impl_.ground_truth_ = nullptr;
   return temp;
 }
-inline ::classifierpb::ClusterID* VertexToLabelEntry::_internal_mutable_expected_cluster_id() {
+inline ::classifierpb::Target* TestSampleEntry::_internal_mutable_ground_truth() {
   
-  if (_impl_.expected_cluster_id_ == nullptr) {
-    auto* p = CreateMaybeMessage<::classifierpb::ClusterID>(GetArenaForAllocation());
-    _impl_.expected_cluster_id_ = p;
+  if (_impl_.ground_truth_ == nullptr) {
+    auto* p = CreateMaybeMessage<::classifierpb::Target>(GetArenaForAllocation());
+    _impl_.ground_truth_ = p;
   }
-  return _impl_.expected_cluster_id_;
+  return _impl_.ground_truth_;
 }
-inline ::classifierpb::ClusterID* VertexToLabelEntry::mutable_expected_cluster_id() {
-  ::classifierpb::ClusterID* _msg = _internal_mutable_expected_cluster_id();
-  // @@protoc_insertion_point(field_mutable:classifierpb.VertexToLabelEntry.expected_cluster_id)
+inline ::classifierpb::Target* TestSampleEntry::mutable_ground_truth() {
+  ::classifierpb::Target* _msg = _internal_mutable_ground_truth();
+  // @@protoc_insertion_point(field_mutable:classifierpb.TestSampleEntry.ground_truth)
   return _msg;
 }
-inline void VertexToLabelEntry::set_allocated_expected_cluster_id(::classifierpb::ClusterID* expected_cluster_id) {
+inline void TestSampleEntry::set_allocated_ground_truth(::classifierpb::Target* ground_truth) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.expected_cluster_id_;
+    delete _impl_.ground_truth_;
   }
-  if (expected_cluster_id) {
+  if (ground_truth) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(expected_cluster_id);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(ground_truth);
     if (message_arena != submessage_arena) {
-      expected_cluster_id = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, expected_cluster_id, submessage_arena);
+      ground_truth = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, ground_truth, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.expected_cluster_id_ = expected_cluster_id;
-  // @@protoc_insertion_point(field_set_allocated:classifierpb.VertexToLabelEntry.expected_cluster_id)
+  _impl_.ground_truth_ = ground_truth;
+  // @@protoc_insertion_point(field_set_allocated:classifierpb.TestSampleEntry.ground_truth)
 }
 
 // -------------------------------------------------------------------
 
-// VerticesToLabel
+// TestSamples
 
-// repeated .classifierpb.VertexToLabelEntry entries = 1;
-inline int VerticesToLabel::_internal_entries_size() const {
+// repeated .classifierpb.TestSampleEntry entries = 1;
+inline int TestSamples::_internal_entries_size() const {
   return _impl_.entries_.size();
 }
-inline int VerticesToLabel::entries_size() const {
+inline int TestSamples::entries_size() const {
   return _internal_entries_size();
 }
-inline void VerticesToLabel::clear_entries() {
+inline void TestSamples::clear_entries() {
   _impl_.entries_.Clear();
 }
-inline ::classifierpb::VertexToLabelEntry* VerticesToLabel::mutable_entries(int index) {
-  // @@protoc_insertion_point(field_mutable:classifierpb.VerticesToLabel.entries)
+inline ::classifierpb::TestSampleEntry* TestSamples::mutable_entries(int index) {
+  // @@protoc_insertion_point(field_mutable:classifierpb.TestSamples.entries)
   return _impl_.entries_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::VertexToLabelEntry >*
-VerticesToLabel::mutable_entries() {
-  // @@protoc_insertion_point(field_mutable_list:classifierpb.VerticesToLabel.entries)
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::TestSampleEntry >*
+TestSamples::mutable_entries() {
+  // @@protoc_insertion_point(field_mutable_list:classifierpb.TestSamples.entries)
   return &_impl_.entries_;
 }
-inline const ::classifierpb::VertexToLabelEntry& VerticesToLabel::_internal_entries(int index) const {
+inline const ::classifierpb::TestSampleEntry& TestSamples::_internal_entries(int index) const {
   return _impl_.entries_.Get(index);
 }
-inline const ::classifierpb::VertexToLabelEntry& VerticesToLabel::entries(int index) const {
-  // @@protoc_insertion_point(field_get:classifierpb.VerticesToLabel.entries)
+inline const ::classifierpb::TestSampleEntry& TestSamples::entries(int index) const {
+  // @@protoc_insertion_point(field_get:classifierpb.TestSamples.entries)
   return _internal_entries(index);
 }
-inline ::classifierpb::VertexToLabelEntry* VerticesToLabel::_internal_add_entries() {
+inline ::classifierpb::TestSampleEntry* TestSamples::_internal_add_entries() {
   return _impl_.entries_.Add();
 }
-inline ::classifierpb::VertexToLabelEntry* VerticesToLabel::add_entries() {
-  ::classifierpb::VertexToLabelEntry* _add = _internal_add_entries();
-  // @@protoc_insertion_point(field_add:classifierpb.VerticesToLabel.entries)
+inline ::classifierpb::TestSampleEntry* TestSamples::add_entries() {
+  ::classifierpb::TestSampleEntry* _add = _internal_add_entries();
+  // @@protoc_insertion_point(field_add:classifierpb.TestSamples.entries)
   return _add;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::VertexToLabelEntry >&
-VerticesToLabel::entries() const {
-  // @@protoc_insertion_point(field_list:classifierpb.VerticesToLabel.entries)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::TestSampleEntry >&
+TestSamples::entries() const {
+  // @@protoc_insertion_point(field_list:classifierpb.TestSamples.entries)
   return _impl_.entries_;
 }
 
 // -------------------------------------------------------------------
 
-// LabeledVertexEntry
+// PredictedSampleEntry
 
-// int32 vertex_id = 1;
-inline void LabeledVertexEntry::clear_vertex_id() {
-  _impl_.vertex_id_ = 0;
+// int32 sample_id = 1;
+inline void PredictedSampleEntry::clear_sample_id() {
+  _impl_.sample_id_ = 0;
 }
-inline int32_t LabeledVertexEntry::_internal_vertex_id() const {
-  return _impl_.vertex_id_;
+inline int32_t PredictedSampleEntry::_internal_sample_id() const {
+  return _impl_.sample_id_;
 }
-inline int32_t LabeledVertexEntry::vertex_id() const {
-  // @@protoc_insertion_point(field_get:classifierpb.LabeledVertexEntry.vertex_id)
-  return _internal_vertex_id();
+inline int32_t PredictedSampleEntry::sample_id() const {
+  // @@protoc_insertion_point(field_get:classifierpb.PredictedSampleEntry.sample_id)
+  return _internal_sample_id();
 }
-inline void LabeledVertexEntry::_internal_set_vertex_id(int32_t value) {
+inline void PredictedSampleEntry::_internal_set_sample_id(int32_t value) {
   
-  _impl_.vertex_id_ = value;
+  _impl_.sample_id_ = value;
 }
-inline void LabeledVertexEntry::set_vertex_id(int32_t value) {
-  _internal_set_vertex_id(value);
-  // @@protoc_insertion_point(field_set:classifierpb.LabeledVertexEntry.vertex_id)
+inline void PredictedSampleEntry::set_sample_id(int32_t value) {
+  _internal_set_sample_id(value);
+  // @@protoc_insertion_point(field_set:classifierpb.PredictedSampleEntry.sample_id)
 }
 
 // repeated float features = 2;
-inline int LabeledVertexEntry::_internal_features_size() const {
+inline int PredictedSampleEntry::_internal_features_size() const {
   return _impl_.features_.size();
 }
-inline int LabeledVertexEntry::features_size() const {
+inline int PredictedSampleEntry::features_size() const {
   return _internal_features_size();
 }
-inline void LabeledVertexEntry::clear_features() {
+inline void PredictedSampleEntry::clear_features() {
   _impl_.features_.Clear();
 }
-inline float LabeledVertexEntry::_internal_features(int index) const {
+inline float PredictedSampleEntry::_internal_features(int index) const {
   return _impl_.features_.Get(index);
 }
-inline float LabeledVertexEntry::features(int index) const {
-  // @@protoc_insertion_point(field_get:classifierpb.LabeledVertexEntry.features)
+inline float PredictedSampleEntry::features(int index) const {
+  // @@protoc_insertion_point(field_get:classifierpb.PredictedSampleEntry.features)
   return _internal_features(index);
 }
-inline void LabeledVertexEntry::set_features(int index, float value) {
+inline void PredictedSampleEntry::set_features(int index, float value) {
   _impl_.features_.Set(index, value);
-  // @@protoc_insertion_point(field_set:classifierpb.LabeledVertexEntry.features)
+  // @@protoc_insertion_point(field_set:classifierpb.PredictedSampleEntry.features)
 }
-inline void LabeledVertexEntry::_internal_add_features(float value) {
+inline void PredictedSampleEntry::_internal_add_features(float value) {
   _impl_.features_.Add(value);
 }
-inline void LabeledVertexEntry::add_features(float value) {
+inline void PredictedSampleEntry::add_features(float value) {
   _internal_add_features(value);
-  // @@protoc_insertion_point(field_add:classifierpb.LabeledVertexEntry.features)
+  // @@protoc_insertion_point(field_add:classifierpb.PredictedSampleEntry.features)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-LabeledVertexEntry::_internal_features() const {
+PredictedSampleEntry::_internal_features() const {
   return _impl_.features_;
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-LabeledVertexEntry::features() const {
-  // @@protoc_insertion_point(field_list:classifierpb.LabeledVertexEntry.features)
+PredictedSampleEntry::features() const {
+  // @@protoc_insertion_point(field_list:classifierpb.PredictedSampleEntry.features)
   return _internal_features();
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-LabeledVertexEntry::_internal_mutable_features() {
+PredictedSampleEntry::_internal_mutable_features() {
   return &_impl_.features_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-LabeledVertexEntry::mutable_features() {
-  // @@protoc_insertion_point(field_mutable_list:classifierpb.LabeledVertexEntry.features)
+PredictedSampleEntry::mutable_features() {
+  // @@protoc_insertion_point(field_mutable_list:classifierpb.PredictedSampleEntry.features)
   return _internal_mutable_features();
 }
 
-// .classifierpb.ClusterID cluster_id = 3;
-inline bool LabeledVertexEntry::_internal_has_cluster_id() const {
-  return this != internal_default_instance() && _impl_.cluster_id_ != nullptr;
+// .classifierpb.Target target = 3;
+inline bool PredictedSampleEntry::_internal_has_target() const {
+  return this != internal_default_instance() && _impl_.target_ != nullptr;
 }
-inline bool LabeledVertexEntry::has_cluster_id() const {
-  return _internal_has_cluster_id();
+inline bool PredictedSampleEntry::has_target() const {
+  return _internal_has_target();
 }
-inline void LabeledVertexEntry::clear_cluster_id() {
-  if (GetArenaForAllocation() == nullptr && _impl_.cluster_id_ != nullptr) {
-    delete _impl_.cluster_id_;
+inline void PredictedSampleEntry::clear_target() {
+  if (GetArenaForAllocation() == nullptr && _impl_.target_ != nullptr) {
+    delete _impl_.target_;
   }
-  _impl_.cluster_id_ = nullptr;
+  _impl_.target_ = nullptr;
 }
-inline const ::classifierpb::ClusterID& LabeledVertexEntry::_internal_cluster_id() const {
-  const ::classifierpb::ClusterID* p = _impl_.cluster_id_;
-  return p != nullptr ? *p : reinterpret_cast<const ::classifierpb::ClusterID&>(
-      ::classifierpb::_ClusterID_default_instance_);
+inline const ::classifierpb::Target& PredictedSampleEntry::_internal_target() const {
+  const ::classifierpb::Target* p = _impl_.target_;
+  return p != nullptr ? *p : reinterpret_cast<const ::classifierpb::Target&>(
+      ::classifierpb::_Target_default_instance_);
 }
-inline const ::classifierpb::ClusterID& LabeledVertexEntry::cluster_id() const {
-  // @@protoc_insertion_point(field_get:classifierpb.LabeledVertexEntry.cluster_id)
-  return _internal_cluster_id();
+inline const ::classifierpb::Target& PredictedSampleEntry::target() const {
+  // @@protoc_insertion_point(field_get:classifierpb.PredictedSampleEntry.target)
+  return _internal_target();
 }
-inline void LabeledVertexEntry::unsafe_arena_set_allocated_cluster_id(
-    ::classifierpb::ClusterID* cluster_id) {
+inline void PredictedSampleEntry::unsafe_arena_set_allocated_target(
+    ::classifierpb::Target* target) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.cluster_id_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.target_);
   }
-  _impl_.cluster_id_ = cluster_id;
-  if (cluster_id) {
+  _impl_.target_ = target;
+  if (target) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:classifierpb.LabeledVertexEntry.cluster_id)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:classifierpb.PredictedSampleEntry.target)
 }
-inline ::classifierpb::ClusterID* LabeledVertexEntry::release_cluster_id() {
+inline ::classifierpb::Target* PredictedSampleEntry::release_target() {
   
-  ::classifierpb::ClusterID* temp = _impl_.cluster_id_;
-  _impl_.cluster_id_ = nullptr;
+  ::classifierpb::Target* temp = _impl_.target_;
+  _impl_.target_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -2513,87 +2513,87 @@ inline ::classifierpb::ClusterID* LabeledVertexEntry::release_cluster_id() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::classifierpb::ClusterID* LabeledVertexEntry::unsafe_arena_release_cluster_id() {
-  // @@protoc_insertion_point(field_release:classifierpb.LabeledVertexEntry.cluster_id)
+inline ::classifierpb::Target* PredictedSampleEntry::unsafe_arena_release_target() {
+  // @@protoc_insertion_point(field_release:classifierpb.PredictedSampleEntry.target)
   
-  ::classifierpb::ClusterID* temp = _impl_.cluster_id_;
-  _impl_.cluster_id_ = nullptr;
+  ::classifierpb::Target* temp = _impl_.target_;
+  _impl_.target_ = nullptr;
   return temp;
 }
-inline ::classifierpb::ClusterID* LabeledVertexEntry::_internal_mutable_cluster_id() {
+inline ::classifierpb::Target* PredictedSampleEntry::_internal_mutable_target() {
   
-  if (_impl_.cluster_id_ == nullptr) {
-    auto* p = CreateMaybeMessage<::classifierpb::ClusterID>(GetArenaForAllocation());
-    _impl_.cluster_id_ = p;
+  if (_impl_.target_ == nullptr) {
+    auto* p = CreateMaybeMessage<::classifierpb::Target>(GetArenaForAllocation());
+    _impl_.target_ = p;
   }
-  return _impl_.cluster_id_;
+  return _impl_.target_;
 }
-inline ::classifierpb::ClusterID* LabeledVertexEntry::mutable_cluster_id() {
-  ::classifierpb::ClusterID* _msg = _internal_mutable_cluster_id();
-  // @@protoc_insertion_point(field_mutable:classifierpb.LabeledVertexEntry.cluster_id)
+inline ::classifierpb::Target* PredictedSampleEntry::mutable_target() {
+  ::classifierpb::Target* _msg = _internal_mutable_target();
+  // @@protoc_insertion_point(field_mutable:classifierpb.PredictedSampleEntry.target)
   return _msg;
 }
-inline void LabeledVertexEntry::set_allocated_cluster_id(::classifierpb::ClusterID* cluster_id) {
+inline void PredictedSampleEntry::set_allocated_target(::classifierpb::Target* target) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.cluster_id_;
+    delete _impl_.target_;
   }
-  if (cluster_id) {
+  if (target) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(cluster_id);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(target);
     if (message_arena != submessage_arena) {
-      cluster_id = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, cluster_id, submessage_arena);
+      target = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, target, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.cluster_id_ = cluster_id;
-  // @@protoc_insertion_point(field_set_allocated:classifierpb.LabeledVertexEntry.cluster_id)
+  _impl_.target_ = target;
+  // @@protoc_insertion_point(field_set_allocated:classifierpb.PredictedSampleEntry.target)
 }
 
 // -------------------------------------------------------------------
 
-// LabeledVertices
+// PredictedSamples
 
-// repeated .classifierpb.LabeledVertexEntry entries = 1;
-inline int LabeledVertices::_internal_entries_size() const {
+// repeated .classifierpb.PredictedSampleEntry entries = 1;
+inline int PredictedSamples::_internal_entries_size() const {
   return _impl_.entries_.size();
 }
-inline int LabeledVertices::entries_size() const {
+inline int PredictedSamples::entries_size() const {
   return _internal_entries_size();
 }
-inline void LabeledVertices::clear_entries() {
+inline void PredictedSamples::clear_entries() {
   _impl_.entries_.Clear();
 }
-inline ::classifierpb::LabeledVertexEntry* LabeledVertices::mutable_entries(int index) {
-  // @@protoc_insertion_point(field_mutable:classifierpb.LabeledVertices.entries)
+inline ::classifierpb::PredictedSampleEntry* PredictedSamples::mutable_entries(int index) {
+  // @@protoc_insertion_point(field_mutable:classifierpb.PredictedSamples.entries)
   return _impl_.entries_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::LabeledVertexEntry >*
-LabeledVertices::mutable_entries() {
-  // @@protoc_insertion_point(field_mutable_list:classifierpb.LabeledVertices.entries)
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::PredictedSampleEntry >*
+PredictedSamples::mutable_entries() {
+  // @@protoc_insertion_point(field_mutable_list:classifierpb.PredictedSamples.entries)
   return &_impl_.entries_;
 }
-inline const ::classifierpb::LabeledVertexEntry& LabeledVertices::_internal_entries(int index) const {
+inline const ::classifierpb::PredictedSampleEntry& PredictedSamples::_internal_entries(int index) const {
   return _impl_.entries_.Get(index);
 }
-inline const ::classifierpb::LabeledVertexEntry& LabeledVertices::entries(int index) const {
-  // @@protoc_insertion_point(field_get:classifierpb.LabeledVertices.entries)
+inline const ::classifierpb::PredictedSampleEntry& PredictedSamples::entries(int index) const {
+  // @@protoc_insertion_point(field_get:classifierpb.PredictedSamples.entries)
   return _internal_entries(index);
 }
-inline ::classifierpb::LabeledVertexEntry* LabeledVertices::_internal_add_entries() {
+inline ::classifierpb::PredictedSampleEntry* PredictedSamples::_internal_add_entries() {
   return _impl_.entries_.Add();
 }
-inline ::classifierpb::LabeledVertexEntry* LabeledVertices::add_entries() {
-  ::classifierpb::LabeledVertexEntry* _add = _internal_add_entries();
-  // @@protoc_insertion_point(field_add:classifierpb.LabeledVertices.entries)
+inline ::classifierpb::PredictedSampleEntry* PredictedSamples::add_entries() {
+  ::classifierpb::PredictedSampleEntry* _add = _internal_add_entries();
+  // @@protoc_insertion_point(field_add:classifierpb.PredictedSamples.entries)
   return _add;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::LabeledVertexEntry >&
-LabeledVertices::entries() const {
-  // @@protoc_insertion_point(field_list:classifierpb.LabeledVertices.entries)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::classifierpb::PredictedSampleEntry >&
+PredictedSamples::entries() const {
+  // @@protoc_insertion_point(field_list:classifierpb.PredictedSamples.entries)
   return _impl_.entries_;
 }
 

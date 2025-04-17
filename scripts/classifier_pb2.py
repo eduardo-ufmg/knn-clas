@@ -13,29 +13,29 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10\x63lassifier.proto\x12\x0c\x63lassifierpb\"M\n\tClusterID\x12\x18\n\x0e\x63luster_id_int\x18\x01 \x01(\x05H\x00\x12\x18\n\x0e\x63luster_id_str\x18\x02 \x01(\tH\x00\x42\x0c\n\ncluster_id\"U\n\x14TrainingDatasetEntry\x12\x10\n\x08\x66\x65\x61tures\x18\x01 \x03(\x02\x12+\n\ncluster_id\x18\x02 \x01(\x0b\x32\x17.classifierpb.ClusterID\"F\n\x0fTrainingDataset\x12\x33\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\".classifierpb.TrainingDatasetEntry\"f\n\x12SupportVertexEntry\x12\x11\n\tvertex_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12+\n\ncluster_id\x18\x03 \x01(\x0b\x32\x17.classifierpb.ClusterID\"D\n\x0fSupportVertices\x12\x31\n\x07\x65ntries\x18\x01 \x03(\x0b\x32 .classifierpb.SupportVertexEntry\"o\n\x12VertexToLabelEntry\x12\x11\n\tvertex_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12\x34\n\x13\x65xpected_cluster_id\x18\x03 \x01(\x0b\x32\x17.classifierpb.ClusterID\"D\n\x0fVerticesToLabel\x12\x31\n\x07\x65ntries\x18\x01 \x03(\x0b\x32 .classifierpb.VertexToLabelEntry\"f\n\x12LabeledVertexEntry\x12\x11\n\tvertex_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12+\n\ncluster_id\x18\x03 \x01(\x0b\x32\x17.classifierpb.ClusterID\"D\n\x0fLabeledVertices\x12\x31\n\x07\x65ntries\x18\x01 \x03(\x0b\x32 .classifierpb.LabeledVertexEntryb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10\x63lassifier.proto\x12\x0c\x63lassifierpb\">\n\x06Target\x12\x14\n\ntarget_int\x18\x01 \x01(\x05H\x00\x12\x14\n\ntarget_str\x18\x02 \x01(\tH\x00\x42\x08\n\x06target\"F\n\x0c\x44\x61tasetEntry\x12\x10\n\x08\x66\x65\x61tures\x18\x01 \x03(\x02\x12$\n\x06target\x18\x02 \x01(\x0b\x32\x14.classifierpb.Target\"6\n\x07\x44\x61taset\x12+\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x1a.classifierpb.DatasetEntry\"_\n\x12SupportSampleEntry\x12\x11\n\tsample_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12$\n\x06target\x18\x03 \x01(\x0b\x32\x14.classifierpb.Target\"C\n\x0eSupportSamples\x12\x31\n\x07\x65ntries\x18\x01 \x03(\x0b\x32 .classifierpb.SupportSampleEntry\"b\n\x0fTestSampleEntry\x12\x11\n\tsample_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12*\n\x0cground_truth\x18\x03 \x01(\x0b\x32\x14.classifierpb.Target\"=\n\x0bTestSamples\x12.\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x1d.classifierpb.TestSampleEntry\"a\n\x14PredictedSampleEntry\x12\x11\n\tsample_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12$\n\x06target\x18\x03 \x01(\x0b\x32\x14.classifierpb.Target\"G\n\x10PredictedSamples\x12\x33\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\".classifierpb.PredictedSampleEntryb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'classifier_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _CLUSTERID._serialized_start=34
-  _CLUSTERID._serialized_end=111
-  _TRAININGDATASETENTRY._serialized_start=113
-  _TRAININGDATASETENTRY._serialized_end=198
-  _TRAININGDATASET._serialized_start=200
-  _TRAININGDATASET._serialized_end=270
-  _SUPPORTVERTEXENTRY._serialized_start=272
-  _SUPPORTVERTEXENTRY._serialized_end=374
-  _SUPPORTVERTICES._serialized_start=376
-  _SUPPORTVERTICES._serialized_end=444
-  _VERTEXTOLABELENTRY._serialized_start=446
-  _VERTEXTOLABELENTRY._serialized_end=557
-  _VERTICESTOLABEL._serialized_start=559
-  _VERTICESTOLABEL._serialized_end=627
-  _LABELEDVERTEXENTRY._serialized_start=629
-  _LABELEDVERTEXENTRY._serialized_end=731
-  _LABELEDVERTICES._serialized_start=733
-  _LABELEDVERTICES._serialized_end=801
+  _TARGET._serialized_start=34
+  _TARGET._serialized_end=96
+  _DATASETENTRY._serialized_start=98
+  _DATASETENTRY._serialized_end=168
+  _DATASET._serialized_start=170
+  _DATASET._serialized_end=224
+  _SUPPORTSAMPLEENTRY._serialized_start=226
+  _SUPPORTSAMPLEENTRY._serialized_end=321
+  _SUPPORTSAMPLES._serialized_start=323
+  _SUPPORTSAMPLES._serialized_end=390
+  _TESTSAMPLEENTRY._serialized_start=392
+  _TESTSAMPLEENTRY._serialized_end=490
+  _TESTSAMPLES._serialized_start=492
+  _TESTSAMPLES._serialized_end=553
+  _PREDICTEDSAMPLEENTRY._serialized_start=555
+  _PREDICTEDSAMPLEENTRY._serialized_end=652
+  _PREDICTEDSAMPLES._serialized_start=654
+  _PREDICTEDSAMPLES._serialized_end=725
 # @@protoc_insertion_point(module_scope)

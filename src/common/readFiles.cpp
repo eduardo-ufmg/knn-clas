@@ -11,11 +11,11 @@
 using namespace std;
 
 ifstream openFileRead(const string& filename);
-ClusterID parseCID(const classifierpb::ClusterID& cid);
+Target parseCID(const classifierpb::Target& cid);
 
-Vertices readDataset(const string& filename)
+Samples readDataset(const string& filename)
 {
-  classifierpb::TrainingDataset pb_dataset;
+  classifierpb::Dataset pb_dataset;
   
   ifstream file = openFileRead(filename);
 
@@ -32,9 +32,9 @@ Vertices readDataset(const string& filename)
 
   file.close();
 
-  Vertices vertices;
+  Samples samples;
   Clusters clusters;
-  VertexID vcounter = 0;
+  SampleID vcounter = 0;
 
   #if DEBUG
   cout << "DEBUG_START: PRINT PARSED DATASET" << endl;
@@ -46,21 +46,21 @@ Vertices readDataset(const string& filename)
   int debug_counter = 0;
   #endif
 
-  for (const auto& vertex : pb_dataset.entries()) {
+  for (const auto& sample : pb_dataset.entries()) {
 
     #if DEBUG
     cout << "DEBUG_START: VERTEX " << debug_counter << endl;
-    vertex.PrintDebugString();
+    sample.PrintDebugString();
     cout << "DEBUG_END: VERTEX " << debug_counter ++ << endl;
     #endif
 
-    const VertexID id = vcounter ++;
-    const Coordinates coordinates(vertex.features().begin(), vertex.features().end());
-    const ClusterID cid = parseCID(vertex.cluster_id());
+    const SampleID id = vcounter ++;
+    const Coordinates coordinates(sample.features().begin(), sample.features().end());
+    const Target cid = parseCID(sample.target());
 
     clusters.emplace(cid, make_shared<Cluster>(cid));
 
-    vertices.emplace_back(id, coordinates, clusters.at(cid));
+    samples.emplace_back(id, coordinates, clusters.at(cid));
 
     #if DEBUG
     cout << "DEBUG: VERTEX PARSED" << endl;
@@ -71,57 +71,57 @@ Vertices readDataset(const string& filename)
   cout << "DEBUG: ALL VERTICES PARSED" << endl;
   #endif
 
-  return vertices;
+  return samples;
 }
 
-VerticesToLabel readToLabel(const string& filename)
+TestSamples readToLabel(const string& filename)
 {
-  classifierpb::VerticesToLabel pb_vertices;
+  classifierpb::TestSamples pb_samples;
   
   ifstream file = openFileRead(filename);
 
-  if (!pb_vertices.ParseFromIstream(&file)) {
-    throw runtime_error("Error: could not parse vertices");
+  if (!pb_samples.ParseFromIstream(&file)) {
+    throw runtime_error("Error: could not parse samples");
   }
 
   file.close();
 
-  VerticesToLabel vertices;
+  TestSamples samples;
 
-  for (const auto& vertex : pb_vertices.entries()) {
-    const VertexID id = vertex.vertex_id();
-    const Coordinates coordinates(vertex.features().begin(), vertex.features().end());
-    const ClusterID expectedcid = parseCID(vertex.expected_cluster_id());
+  for (const auto& sample : pb_samples.entries()) {
+    const SampleID id = sample.sample_id();
+    const Coordinates coordinates(sample.features().begin(), sample.features().end());
+    const Target expectedcid = parseCID(sample.ground_truth());
 
-    vertices.emplace_back(id, coordinates, expectedcid);
+    samples.emplace_back(id, coordinates, expectedcid);
   }
 
-  return vertices;
+  return samples;
 }
 
-SupportVertices readSVs(const string& filename)
+SupportSamples readSVs(const string& filename)
 {
-  classifierpb::SupportVertices pb_svs;
+  classifierpb::SupportSamples pb_svs;
 
   ifstream file = openFileRead(filename);
 
   if (!pb_svs.ParseFromIstream(&file)) {
-    throw runtime_error("Error: could not parse support vertices");
+    throw runtime_error("Error: could not parse support samples");
   }
 
   file.close();
 
-  SupportVertices vertices;
+  SupportSamples samples;
 
-  for (const auto& vertex : pb_svs.entries()) {
-    const VertexID id = vertex.vertex_id();
-    const Coordinates coordinates(vertex.features().begin(), vertex.features().end());
-    const ClusterID cid = parseCID(vertex.cluster_id());
+  for (const auto& sample : pb_svs.entries()) {
+    const SampleID id = sample.sample_id();
+    const Coordinates coordinates(sample.features().begin(), sample.features().end());
+    const Target cid = parseCID(sample.target());
 
-    vertices.emplace_back(id, coordinates, cid);
+    samples.emplace_back(id, coordinates, cid);
   }
 
-  return vertices;
+  return samples;
 }
 
 ifstream openFileRead(const string& filename)
@@ -135,17 +135,17 @@ ifstream openFileRead(const string& filename)
   return file;
 }
 
-ClusterID parseCID(const classifierpb::ClusterID& cid)
+Target parseCID(const classifierpb::Target& cid)
 {
-  if (!cid.has_cluster_id_int() && !cid.has_cluster_id_str()) {
+  if (!cid.has_target_int() && !cid.has_target_str()) {
     throw runtime_error("Error: cluster id did not have any value");
   }
 
-  switch(cid.cluster_id_case()) {
-  case classifierpb::ClusterID::kClusterIdInt:
-    return cid.cluster_id_int();
-  case classifierpb::ClusterID::kClusterIdStr:
-    return cid.cluster_id_str();
+  switch(cid.target_case()) {
+  case classifierpb::Target::kTargetInt:
+    return cid.target_int();
+  case classifierpb::Target::kTargetStr:
+    return cid.target_str();
   default:
     throw runtime_error("Error: cluster id did not match any case");
   }

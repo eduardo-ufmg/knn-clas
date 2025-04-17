@@ -7,29 +7,29 @@
 
 using namespace std;
 
-const LabeledVertices nearestSVLabel(const VerticesToLabel& toLabel, const SupportVertices& supportVertices)
+const PredictedSamples nearestSVLabel(const TestSamples& toLabel, const SupportSamples& supportSamples)
 {
-  LabeledVertices labeledVertices;
+  PredictedSamples predictedSamples;
 
-  for (const auto& vertex : toLabel) {
+  for (const auto& sample : toLabel) {
     float minDistance = numeric_limits<float>::max();
-    const ClusterID * nearestClusterID = nullptr;
+    const Target * nearestTarget = nullptr;
 
-    for (const auto& sv : supportVertices) {
-      const float distance = squaredDistance(vertex.coordinates, sv.coordinates);
+    for (const auto& sv : supportSamples) {
+      const float distance = squaredDistance(sample.coordinates, sv.coordinates);
 
       if (distance < minDistance) {
         minDistance = distance;
-        nearestClusterID = &sv.clusterid;
+        nearestTarget = &sv.target;
       }
     }
 
-    if (!nearestClusterID) {
-      throw runtime_error("No nearest cluster ID found for vertex " + to_string(vertex.id));
+    if (!nearestTarget) {
+      throw runtime_error("No nearest cluster ID found for sample " + to_string(sample.id));
     }
 
-    labeledVertices.emplace_back(vertex.id, vertex.coordinates, *nearestClusterID);
+    predictedSamples.emplace_back(sample.id, sample.coordinates, *nearestTarget);
   }
 
-  return labeledVertices;
+  return predictedSamples;
 }

@@ -15,32 +15,32 @@ template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
 ofstream openFileWrite(const string& filename);
 
-int writeSVs(const SupportVertices& supportVertices, const string& filename)
+int writeSVs(const SupportSamples& supportSamples, const string& filename)
 {
-  classifierpb::SupportVertices pb_supportVertices;
+  classifierpb::SupportSamples pb_supportSamples;
 
-  for (const SupportVertex& vertex : supportVertices) {
-    classifierpb::SupportVertexEntry *pb_vertex = pb_supportVertices.add_entries();
+  for (const SupportSample& sample : supportSamples) {
+    classifierpb::SupportSampleEntry *pb_sample = pb_supportSamples.add_entries();
     
-    pb_vertex->set_vertex_id(vertex.id);
+    pb_sample->set_sample_id(sample.id);
 
-    for (const float coord : vertex.coordinates) {
-      pb_vertex->add_features(coord);
+    for (const float coord : sample.coordinates) {
+      pb_sample->add_features(coord);
     }
 
-    classifierpb::ClusterID * pb_clusterid = make_unique<classifierpb::ClusterID>().release();
+    classifierpb::Target * pb_target = make_unique<classifierpb::Target>().release();
 
     visit(overloaded {
-      [pb_clusterid](const int id) { pb_clusterid->set_cluster_id_int(id); },
-      [pb_clusterid](const string& id) { pb_clusterid->set_cluster_id_str(id); }
-    }, vertex.clusterid);
+      [pb_target](const int id) { pb_target->set_target_int(id); },
+      [pb_target](const string& id) { pb_target->set_target_str(id); }
+    }, sample.target);
 
 
-    pb_vertex->set_allocated_cluster_id(pb_clusterid);
+    pb_sample->set_allocated_target(pb_target);
   }
 
   ofstream file = openFileWrite(filename);
-  if (!pb_supportVertices.SerializeToOstream(&file)) {
+  if (!pb_supportSamples.SerializeToOstream(&file)) {
     cerr << "Error: could not write SVs to file" << filename << endl;
     return 1;
   }
@@ -49,32 +49,32 @@ int writeSVs(const SupportVertices& supportVertices, const string& filename)
   return 0;
 }
 
-int writeLabeledVertices(const LabeledVertices& labeledVertices, const string& filename)
+int writePredictedSamples(const PredictedSamples& predictedSamples, const string& filename)
 {
-  classifierpb::LabeledVertices pb_labeledVertices;
+  classifierpb::PredictedSamples pb_predictedSamples;
 
-  for (const LabeledVertex& vertex : labeledVertices) {
-    classifierpb::LabeledVertexEntry *pb_vertex = pb_labeledVertices.add_entries();
+  for (const PredictedSample& sample : predictedSamples) {
+    classifierpb::PredictedSampleEntry *pb_sample = pb_predictedSamples.add_entries();
     
-    pb_vertex->set_vertex_id(vertex.id);
+    pb_sample->set_sample_id(sample.id);
 
-    for (const float coord : vertex.coordinates) {
-      pb_vertex->add_features(coord);
+    for (const float coord : sample.coordinates) {
+      pb_sample->add_features(coord);
     }
 
-    classifierpb::ClusterID * pb_clusterid = make_unique<classifierpb::ClusterID>().release();
+    classifierpb::Target * pb_target = make_unique<classifierpb::Target>().release();
 
     visit(overloaded {
-      [pb_clusterid](const int id) { pb_clusterid->set_cluster_id_int(id); },
-      [pb_clusterid](const string& id) { pb_clusterid->set_cluster_id_str(id); }
-    }, vertex.clusterid);
+      [pb_target](const int id) { pb_target->set_target_int(id); },
+      [pb_target](const string& id) { pb_target->set_target_str(id); }
+    }, sample.target);
 
-    pb_vertex->set_allocated_cluster_id(pb_clusterid);
+    pb_sample->set_allocated_target(pb_target);
   }
 
   ofstream file = openFileWrite(filename);
-  if (!pb_labeledVertices.SerializeToOstream(&file)) {
-    cerr << "Error: could not write labeled vertices to file" << filename << endl;
+  if (!pb_predictedSamples.SerializeToOstream(&file)) {
+    cerr << "Error: could not write predicted samples to file" << filename << endl;
     return 1;
   }
   file.close();

@@ -7,6 +7,6 @@ namespace ns_filter {
   const float DEFAULT_TOLERANCE = 0.0f;
 }
 
-void filter(Vertices& vertices, const float tolerance);
+void filter(Samples& samples, const float tolerance);
 
 #endif // FILTER_HPP

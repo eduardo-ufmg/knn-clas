@@ -21,131 +21,131 @@ namespace _pb = ::PROTOBUF_NAMESPACE_ID;
 namespace _pbi = _pb::internal;
 
 namespace classifierpb {
-PROTOBUF_CONSTEXPR ClusterID::ClusterID(
+PROTOBUF_CONSTEXPR Target::Target(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.cluster_id_)*/{}
+    /*decltype(_impl_.target_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}
   , /*decltype(_impl_._oneof_case_)*/{}} {}
-struct ClusterIDDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR ClusterIDDefaultTypeInternal()
+struct TargetDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TargetDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~ClusterIDDefaultTypeInternal() {}
+  ~TargetDefaultTypeInternal() {}
   union {
-    ClusterID _instance;
+    Target _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ClusterIDDefaultTypeInternal _ClusterID_default_instance_;
-PROTOBUF_CONSTEXPR TrainingDatasetEntry::TrainingDatasetEntry(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetDefaultTypeInternal _Target_default_instance_;
+PROTOBUF_CONSTEXPR DatasetEntry::DatasetEntry(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.features_)*/{}
-  , /*decltype(_impl_.cluster_id_)*/nullptr
+  , /*decltype(_impl_.target_)*/nullptr
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct TrainingDatasetEntryDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR TrainingDatasetEntryDefaultTypeInternal()
+struct DatasetEntryDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DatasetEntryDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~TrainingDatasetEntryDefaultTypeInternal() {}
+  ~DatasetEntryDefaultTypeInternal() {}
   union {
-    TrainingDatasetEntry _instance;
+    DatasetEntry _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TrainingDatasetEntryDefaultTypeInternal _TrainingDatasetEntry_default_instance_;
-PROTOBUF_CONSTEXPR TrainingDataset::TrainingDataset(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DatasetEntryDefaultTypeInternal _DatasetEntry_default_instance_;
+PROTOBUF_CONSTEXPR Dataset::Dataset(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.entries_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct TrainingDatasetDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR TrainingDatasetDefaultTypeInternal()
+struct DatasetDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DatasetDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~TrainingDatasetDefaultTypeInternal() {}
+  ~DatasetDefaultTypeInternal() {}
   union {
-    TrainingDataset _instance;
+    Dataset _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TrainingDatasetDefaultTypeInternal _TrainingDataset_default_instance_;
-PROTOBUF_CONSTEXPR SupportVertexEntry::SupportVertexEntry(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DatasetDefaultTypeInternal _Dataset_default_instance_;
+PROTOBUF_CONSTEXPR SupportSampleEntry::SupportSampleEntry(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.features_)*/{}
-  , /*decltype(_impl_.cluster_id_)*/nullptr
-  , /*decltype(_impl_.vertex_id_)*/0
+  , /*decltype(_impl_.target_)*/nullptr
+  , /*decltype(_impl_.sample_id_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct SupportVertexEntryDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR SupportVertexEntryDefaultTypeInternal()
+struct SupportSampleEntryDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SupportSampleEntryDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~SupportVertexEntryDefaultTypeInternal() {}
+  ~SupportSampleEntryDefaultTypeInternal() {}
   union {
-    SupportVertexEntry _instance;
+    SupportSampleEntry _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SupportVertexEntryDefaultTypeInternal _SupportVertexEntry_default_instance_;
-PROTOBUF_CONSTEXPR SupportVertices::SupportVertices(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SupportSampleEntryDefaultTypeInternal _SupportSampleEntry_default_instance_;
+PROTOBUF_CONSTEXPR SupportSamples::SupportSamples(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.entries_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct SupportVerticesDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR SupportVerticesDefaultTypeInternal()
+struct SupportSamplesDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SupportSamplesDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~SupportVerticesDefaultTypeInternal() {}
+  ~SupportSamplesDefaultTypeInternal() {}
   union {
-    SupportVertices _instance;
+    SupportSamples _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SupportVerticesDefaultTypeInternal _SupportVertices_default_instance_;
-PROTOBUF_CONSTEXPR VertexToLabelEntry::VertexToLabelEntry(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SupportSamplesDefaultTypeInternal _SupportSamples_default_instance_;
+PROTOBUF_CONSTEXPR TestSampleEntry::TestSampleEntry(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.features_)*/{}
-  , /*decltype(_impl_.expected_cluster_id_)*/nullptr
-  , /*decltype(_impl_.vertex_id_)*/0
+  , /*decltype(_impl_.ground_truth_)*/nullptr
+  , /*decltype(_impl_.sample_id_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct VertexToLabelEntryDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR VertexToLabelEntryDefaultTypeInternal()
+struct TestSampleEntryDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TestSampleEntryDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~VertexToLabelEntryDefaultTypeInternal() {}
+  ~TestSampleEntryDefaultTypeInternal() {}
   union {
-    VertexToLabelEntry _instance;
+    TestSampleEntry _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 VertexToLabelEntryDefaultTypeInternal _VertexToLabelEntry_default_instance_;
-PROTOBUF_CONSTEXPR VerticesToLabel::VerticesToLabel(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TestSampleEntryDefaultTypeInternal _TestSampleEntry_default_instance_;
+PROTOBUF_CONSTEXPR TestSamples::TestSamples(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.entries_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct VerticesToLabelDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR VerticesToLabelDefaultTypeInternal()
+struct TestSamplesDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TestSamplesDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~VerticesToLabelDefaultTypeInternal() {}
+  ~TestSamplesDefaultTypeInternal() {}
   union {
-    VerticesToLabel _instance;
+    TestSamples _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 VerticesToLabelDefaultTypeInternal _VerticesToLabel_default_instance_;
-PROTOBUF_CONSTEXPR LabeledVertexEntry::LabeledVertexEntry(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TestSamplesDefaultTypeInternal _TestSamples_default_instance_;
+PROTOBUF_CONSTEXPR PredictedSampleEntry::PredictedSampleEntry(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.features_)*/{}
-  , /*decltype(_impl_.cluster_id_)*/nullptr
-  , /*decltype(_impl_.vertex_id_)*/0
+  , /*decltype(_impl_.target_)*/nullptr
+  , /*decltype(_impl_.sample_id_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct LabeledVertexEntryDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR LabeledVertexEntryDefaultTypeInternal()
+struct PredictedSampleEntryDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR PredictedSampleEntryDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~LabeledVertexEntryDefaultTypeInternal() {}
+  ~PredictedSampleEntryDefaultTypeInternal() {}
   union {
-    LabeledVertexEntry _instance;
+    PredictedSampleEntry _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 LabeledVertexEntryDefaultTypeInternal _LabeledVertexEntry_default_instance_;
-PROTOBUF_CONSTEXPR LabeledVertices::LabeledVertices(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PredictedSampleEntryDefaultTypeInternal _PredictedSampleEntry_default_instance_;
+PROTOBUF_CONSTEXPR PredictedSamples::PredictedSamples(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.entries_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct LabeledVerticesDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR LabeledVerticesDefaultTypeInternal()
+struct PredictedSamplesDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR PredictedSamplesDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~LabeledVerticesDefaultTypeInternal() {}
+  ~PredictedSamplesDefaultTypeInternal() {}
   union {
-    LabeledVertices _instance;
+    PredictedSamples _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 LabeledVerticesDefaultTypeInternal _LabeledVertices_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PredictedSamplesDefaultTypeInternal _PredictedSamples_default_instance_;
 }  // namespace classifierpb
 static ::_pb::Metadata file_level_metadata_classifier_2eproto[9];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_classifier_2eproto = nullptr;
@@ -153,128 +153,126 @@ static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors
 
 const uint32_t TableStruct_classifier_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::ClusterID, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::Target, _internal_metadata_),
   ~0u,  // no _extensions_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::ClusterID, _impl_._oneof_case_[0]),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::Target, _impl_._oneof_case_[0]),
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   ::_pbi::kInvalidFieldOffsetTag,
   ::_pbi::kInvalidFieldOffsetTag,
-  PROTOBUF_FIELD_OFFSET(::classifierpb::ClusterID, _impl_.cluster_id_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::Target, _impl_.target_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::TrainingDatasetEntry, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::DatasetEntry, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::TrainingDatasetEntry, _impl_.features_),
-  PROTOBUF_FIELD_OFFSET(::classifierpb::TrainingDatasetEntry, _impl_.cluster_id_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::DatasetEntry, _impl_.features_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::DatasetEntry, _impl_.target_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::TrainingDataset, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::Dataset, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::TrainingDataset, _impl_.entries_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::Dataset, _impl_.entries_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportVertexEntry, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportSampleEntry, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportVertexEntry, _impl_.vertex_id_),
-  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportVertexEntry, _impl_.features_),
-  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportVertexEntry, _impl_.cluster_id_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportSampleEntry, _impl_.sample_id_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportSampleEntry, _impl_.features_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportSampleEntry, _impl_.target_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportVertices, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportSamples, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportVertices, _impl_.entries_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::SupportSamples, _impl_.entries_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::VertexToLabelEntry, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::TestSampleEntry, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::VertexToLabelEntry, _impl_.vertex_id_),
-  PROTOBUF_FIELD_OFFSET(::classifierpb::VertexToLabelEntry, _impl_.features_),
-  PROTOBUF_FIELD_OFFSET(::classifierpb::VertexToLabelEntry, _impl_.expected_cluster_id_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::TestSampleEntry, _impl_.sample_id_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::TestSampleEntry, _impl_.features_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::TestSampleEntry, _impl_.ground_truth_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::VerticesToLabel, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::TestSamples, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::VerticesToLabel, _impl_.entries_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::TestSamples, _impl_.entries_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::LabeledVertexEntry, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::PredictedSampleEntry, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::LabeledVertexEntry, _impl_.vertex_id_),
-  PROTOBUF_FIELD_OFFSET(::classifierpb::LabeledVertexEntry, _impl_.features_),
-  PROTOBUF_FIELD_OFFSET(::classifierpb::LabeledVertexEntry, _impl_.cluster_id_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::PredictedSampleEntry, _impl_.sample_id_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::PredictedSampleEntry, _impl_.features_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::PredictedSampleEntry, _impl_.target_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::LabeledVertices, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::PredictedSamples, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::classifierpb::LabeledVertices, _impl_.entries_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::PredictedSamples, _impl_.entries_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, -1, sizeof(::classifierpb::ClusterID)},
-  { 9, -1, -1, sizeof(::classifierpb::TrainingDatasetEntry)},
-  { 17, -1, -1, sizeof(::classifierpb::TrainingDataset)},
-  { 24, -1, -1, sizeof(::classifierpb::SupportVertexEntry)},
-  { 33, -1, -1, sizeof(::classifierpb::SupportVertices)},
-  { 40, -1, -1, sizeof(::classifierpb::VertexToLabelEntry)},
-  { 49, -1, -1, sizeof(::classifierpb::VerticesToLabel)},
-  { 56, -1, -1, sizeof(::classifierpb::LabeledVertexEntry)},
-  { 65, -1, -1, sizeof(::classifierpb::LabeledVertices)},
+  { 0, -1, -1, sizeof(::classifierpb::Target)},
+  { 9, -1, -1, sizeof(::classifierpb::DatasetEntry)},
+  { 17, -1, -1, sizeof(::classifierpb::Dataset)},
+  { 24, -1, -1, sizeof(::classifierpb::SupportSampleEntry)},
+  { 33, -1, -1, sizeof(::classifierpb::SupportSamples)},
+  { 40, -1, -1, sizeof(::classifierpb::TestSampleEntry)},
+  { 49, -1, -1, sizeof(::classifierpb::TestSamples)},
+  { 56, -1, -1, sizeof(::classifierpb::PredictedSampleEntry)},
+  { 65, -1, -1, sizeof(::classifierpb::PredictedSamples)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
-  &::classifierpb::_ClusterID_default_instance_._instance,
-  &::classifierpb::_TrainingDatasetEntry_default_instance_._instance,
-  &::classifierpb::_TrainingDataset_default_instance_._instance,
-  &::classifierpb::_SupportVertexEntry_default_instance_._instance,
-  &::classifierpb::_SupportVertices_default_instance_._instance,
-  &::classifierpb::_VertexToLabelEntry_default_instance_._instance,
-  &::classifierpb::_VerticesToLabel_default_instance_._instance,
-  &::classifierpb::_LabeledVertexEntry_default_instance_._instance,
-  &::classifierpb::_LabeledVertices_default_instance_._instance,
+  &::classifierpb::_Target_default_instance_._instance,
+  &::classifierpb::_DatasetEntry_default_instance_._instance,
+  &::classifierpb::_Dataset_default_instance_._instance,
+  &::classifierpb::_SupportSampleEntry_default_instance_._instance,
+  &::classifierpb::_SupportSamples_default_instance_._instance,
+  &::classifierpb::_TestSampleEntry_default_instance_._instance,
+  &::classifierpb::_TestSamples_default_instance_._instance,
+  &::classifierpb::_PredictedSampleEntry_default_instance_._instance,
+  &::classifierpb::_PredictedSamples_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_classifier_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\020classifier.proto\022\014classifierpb\"M\n\tClus"
-  "terID\022\030\n\016cluster_id_int\030\001 \001(\005H\000\022\030\n\016clust"
-  "er_id_str\030\002 \001(\tH\000B\014\n\ncluster_id\"U\n\024Train"
-  "ingDatasetEntry\022\020\n\010features\030\001 \003(\002\022+\n\nclu"
-  "ster_id\030\002 \001(\0132\027.classifierpb.ClusterID\"F"
-  "\n\017TrainingDataset\0223\n\007entries\030\001 \003(\0132\".cla"
-  "ssifierpb.TrainingDatasetEntry\"f\n\022Suppor"
-  "tVertexEntry\022\021\n\tvertex_id\030\001 \001(\005\022\020\n\010featu"
-  "res\030\002 \003(\002\022+\n\ncluster_id\030\003 \001(\0132\027.classifi"
-  "erpb.ClusterID\"D\n\017SupportVertices\0221\n\007ent"
-  "ries\030\001 \003(\0132 .classifierpb.SupportVertexE"
-  "ntry\"o\n\022VertexToLabelEntry\022\021\n\tvertex_id\030"
-  "\001 \001(\005\022\020\n\010features\030\002 \003(\002\0224\n\023expected_clus"
-  "ter_id\030\003 \001(\0132\027.classifierpb.ClusterID\"D\n"
-  "\017VerticesToLabel\0221\n\007entries\030\001 \003(\0132 .clas"
-  "sifierpb.VertexToLabelEntry\"f\n\022LabeledVe"
-  "rtexEntry\022\021\n\tvertex_id\030\001 \001(\005\022\020\n\010features"
-  "\030\002 \003(\002\022+\n\ncluster_id\030\003 \001(\0132\027.classifierp"
-  "b.ClusterID\"D\n\017LabeledVertices\0221\n\007entrie"
-  "s\030\001 \003(\0132 .classifierpb.LabeledVertexEntr"
-  "yb\006proto3"
+  "\n\020classifier.proto\022\014classifierpb\">\n\006Targ"
+  "et\022\024\n\ntarget_int\030\001 \001(\005H\000\022\024\n\ntarget_str\030\002"
+  " \001(\tH\000B\010\n\006target\"F\n\014DatasetEntry\022\020\n\010feat"
+  "ures\030\001 \003(\002\022$\n\006target\030\002 \001(\0132\024.classifierp"
+  "b.Target\"6\n\007Dataset\022+\n\007entries\030\001 \003(\0132\032.c"
+  "lassifierpb.DatasetEntry\"_\n\022SupportSampl"
+  "eEntry\022\021\n\tsample_id\030\001 \001(\005\022\020\n\010features\030\002 "
+  "\003(\002\022$\n\006target\030\003 \001(\0132\024.classifierpb.Targe"
+  "t\"C\n\016SupportSamples\0221\n\007entries\030\001 \003(\0132 .c"
+  "lassifierpb.SupportSampleEntry\"b\n\017TestSa"
+  "mpleEntry\022\021\n\tsample_id\030\001 \001(\005\022\020\n\010features"
+  "\030\002 \003(\002\022*\n\014ground_truth\030\003 \001(\0132\024.classifie"
+  "rpb.Target\"=\n\013TestSamples\022.\n\007entries\030\001 \003"
+  "(\0132\035.classifierpb.TestSampleEntry\"a\n\024Pre"
+  "dictedSampleEntry\022\021\n\tsample_id\030\001 \001(\005\022\020\n\010"
+  "features\030\002 \003(\002\022$\n\006target\030\003 \001(\0132\024.classif"
+  "ierpb.Target\"G\n\020PredictedSamples\0223\n\007entr"
+  "ies\030\001 \003(\0132\".classifierpb.PredictedSample"
+  "Entryb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_classifier_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_classifier_2eproto = {
-    false, false, 809, descriptor_table_protodef_classifier_2eproto,
+    false, false, 733, descriptor_table_protodef_classifier_2eproto,
     "classifier.proto",
     &descriptor_table_classifier_2eproto_once, nullptr, 0, 9,
     schemas, file_default_instances, TableStruct_classifier_2eproto::offsets,
@@ -291,56 +289,56 @@ namespace classifierpb {
 
 // ===================================================================
 
-class ClusterID::_Internal {
+class Target::_Internal {
  public:
 };
 
-ClusterID::ClusterID(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+Target::Target(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:classifierpb.ClusterID)
+  // @@protoc_insertion_point(arena_constructor:classifierpb.Target)
 }
-ClusterID::ClusterID(const ClusterID& from)
+Target::Target(const Target& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ClusterID* const _this = this; (void)_this;
+  Target* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.cluster_id_){}
+      decltype(_impl_.target_){}
     , /*decltype(_impl_._cached_size_)*/{}
     , /*decltype(_impl_._oneof_case_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  clear_has_cluster_id();
-  switch (from.cluster_id_case()) {
-    case kClusterIdInt: {
-      _this->_internal_set_cluster_id_int(from._internal_cluster_id_int());
+  clear_has_target();
+  switch (from.target_case()) {
+    case kTargetInt: {
+      _this->_internal_set_target_int(from._internal_target_int());
       break;
     }
-    case kClusterIdStr: {
-      _this->_internal_set_cluster_id_str(from._internal_cluster_id_str());
+    case kTargetStr: {
+      _this->_internal_set_target_str(from._internal_target_str());
       break;
     }
-    case CLUSTER_ID_NOT_SET: {
+    case TARGET_NOT_SET: {
       break;
     }
   }
-  // @@protoc_insertion_point(copy_constructor:classifierpb.ClusterID)
+  // @@protoc_insertion_point(copy_constructor:classifierpb.Target)
 }
 
-inline void ClusterID::SharedCtor(
+inline void Target::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.cluster_id_){}
+      decltype(_impl_.target_){}
     , /*decltype(_impl_._cached_size_)*/{}
     , /*decltype(_impl_._oneof_case_)*/{}
   };
-  clear_has_cluster_id();
+  clear_has_target();
 }
 
-ClusterID::~ClusterID() {
-  // @@protoc_insertion_point(destructor:classifierpb.ClusterID)
+Target::~Target() {
+  // @@protoc_insertion_point(destructor:classifierpb.Target)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -348,67 +346,67 @@ ClusterID::~ClusterID() {
   SharedDtor();
 }
 
-inline void ClusterID::SharedDtor() {
+inline void Target::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  if (has_cluster_id()) {
-    clear_cluster_id();
+  if (has_target()) {
+    clear_target();
   }
 }
 
-void ClusterID::SetCachedSize(int size) const {
+void Target::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ClusterID::clear_cluster_id() {
-// @@protoc_insertion_point(one_of_clear_start:classifierpb.ClusterID)
-  switch (cluster_id_case()) {
-    case kClusterIdInt: {
+void Target::clear_target() {
+// @@protoc_insertion_point(one_of_clear_start:classifierpb.Target)
+  switch (target_case()) {
+    case kTargetInt: {
       // No need to clear
       break;
     }
-    case kClusterIdStr: {
-      _impl_.cluster_id_.cluster_id_str_.Destroy();
+    case kTargetStr: {
+      _impl_.target_.target_str_.Destroy();
       break;
     }
-    case CLUSTER_ID_NOT_SET: {
+    case TARGET_NOT_SET: {
       break;
     }
   }
-  _impl_._oneof_case_[0] = CLUSTER_ID_NOT_SET;
+  _impl_._oneof_case_[0] = TARGET_NOT_SET;
 }
 
 
-void ClusterID::Clear() {
-// @@protoc_insertion_point(message_clear_start:classifierpb.ClusterID)
+void Target::Clear() {
+// @@protoc_insertion_point(message_clear_start:classifierpb.Target)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  clear_cluster_id();
+  clear_target();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* ClusterID::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* Target::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // int32 cluster_id_int = 1;
+      // int32 target_int = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _internal_set_cluster_id_int(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          _internal_set_target_int(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // string cluster_id_str = 2;
+      // string target_str = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_cluster_id_str();
+          auto str = _internal_mutable_target_str();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "classifierpb.ClusterID.cluster_id_str"));
+          CHK_(::_pbi::VerifyUTF8(str, "classifierpb.Target.target_str"));
         } else
           goto handle_unusual;
         continue;
@@ -435,114 +433,114 @@ failure:
 #undef CHK_
 }
 
-uint8_t* ClusterID::_InternalSerialize(
+uint8_t* Target::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.ClusterID)
+  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.Target)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 cluster_id_int = 1;
-  if (_internal_has_cluster_id_int()) {
+  // int32 target_int = 1;
+  if (_internal_has_target_int()) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_cluster_id_int(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_target_int(), target);
   }
 
-  // string cluster_id_str = 2;
-  if (_internal_has_cluster_id_str()) {
+  // string target_str = 2;
+  if (_internal_has_target_str()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_cluster_id_str().data(), static_cast<int>(this->_internal_cluster_id_str().length()),
+      this->_internal_target_str().data(), static_cast<int>(this->_internal_target_str().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "classifierpb.ClusterID.cluster_id_str");
+      "classifierpb.Target.target_str");
     target = stream->WriteStringMaybeAliased(
-        2, this->_internal_cluster_id_str(), target);
+        2, this->_internal_target_str(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.ClusterID)
+  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.Target)
   return target;
 }
 
-size_t ClusterID::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:classifierpb.ClusterID)
+size_t Target::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:classifierpb.Target)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  switch (cluster_id_case()) {
-    // int32 cluster_id_int = 1;
-    case kClusterIdInt: {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_cluster_id_int());
+  switch (target_case()) {
+    // int32 target_int = 1;
+    case kTargetInt: {
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_target_int());
       break;
     }
-    // string cluster_id_str = 2;
-    case kClusterIdStr: {
+    // string target_str = 2;
+    case kTargetStr: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-          this->_internal_cluster_id_str());
+          this->_internal_target_str());
       break;
     }
-    case CLUSTER_ID_NOT_SET: {
+    case TARGET_NOT_SET: {
       break;
     }
   }
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ClusterID::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData Target::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    ClusterID::MergeImpl
+    Target::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ClusterID::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*Target::GetClassData() const { return &_class_data_; }
 
 
-void ClusterID::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<ClusterID*>(&to_msg);
-  auto& from = static_cast<const ClusterID&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.ClusterID)
+void Target::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<Target*>(&to_msg);
+  auto& from = static_cast<const Target&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.Target)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  switch (from.cluster_id_case()) {
-    case kClusterIdInt: {
-      _this->_internal_set_cluster_id_int(from._internal_cluster_id_int());
+  switch (from.target_case()) {
+    case kTargetInt: {
+      _this->_internal_set_target_int(from._internal_target_int());
       break;
     }
-    case kClusterIdStr: {
-      _this->_internal_set_cluster_id_str(from._internal_cluster_id_str());
+    case kTargetStr: {
+      _this->_internal_set_target_str(from._internal_target_str());
       break;
     }
-    case CLUSTER_ID_NOT_SET: {
+    case TARGET_NOT_SET: {
       break;
     }
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void ClusterID::CopyFrom(const ClusterID& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.ClusterID)
+void Target::CopyFrom(const Target& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.Target)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool ClusterID::IsInitialized() const {
+bool Target::IsInitialized() const {
   return true;
 }
 
-void ClusterID::InternalSwap(ClusterID* other) {
+void Target::InternalSwap(Target* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_.cluster_id_, other->_impl_.cluster_id_);
+  swap(_impl_.target_, other->_impl_.target_);
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ClusterID::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata Target::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
       file_level_metadata_classifier_2eproto[0]);
@@ -550,49 +548,49 @@ void ClusterID::InternalSwap(ClusterID* other) {
 
 // ===================================================================
 
-class TrainingDatasetEntry::_Internal {
+class DatasetEntry::_Internal {
  public:
-  static const ::classifierpb::ClusterID& cluster_id(const TrainingDatasetEntry* msg);
+  static const ::classifierpb::Target& target(const DatasetEntry* msg);
 };
 
-const ::classifierpb::ClusterID&
-TrainingDatasetEntry::_Internal::cluster_id(const TrainingDatasetEntry* msg) {
-  return *msg->_impl_.cluster_id_;
+const ::classifierpb::Target&
+DatasetEntry::_Internal::target(const DatasetEntry* msg) {
+  return *msg->_impl_.target_;
 }
-TrainingDatasetEntry::TrainingDatasetEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+DatasetEntry::DatasetEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:classifierpb.TrainingDatasetEntry)
+  // @@protoc_insertion_point(arena_constructor:classifierpb.DatasetEntry)
 }
-TrainingDatasetEntry::TrainingDatasetEntry(const TrainingDatasetEntry& from)
+DatasetEntry::DatasetEntry(const DatasetEntry& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  TrainingDatasetEntry* const _this = this; (void)_this;
+  DatasetEntry* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.features_){from._impl_.features_}
-    , decltype(_impl_.cluster_id_){nullptr}
+    , decltype(_impl_.target_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  if (from._internal_has_cluster_id()) {
-    _this->_impl_.cluster_id_ = new ::classifierpb::ClusterID(*from._impl_.cluster_id_);
+  if (from._internal_has_target()) {
+    _this->_impl_.target_ = new ::classifierpb::Target(*from._impl_.target_);
   }
-  // @@protoc_insertion_point(copy_constructor:classifierpb.TrainingDatasetEntry)
+  // @@protoc_insertion_point(copy_constructor:classifierpb.DatasetEntry)
 }
 
-inline void TrainingDatasetEntry::SharedCtor(
+inline void DatasetEntry::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.features_){arena}
-    , decltype(_impl_.cluster_id_){nullptr}
+    , decltype(_impl_.target_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
 
-TrainingDatasetEntry::~TrainingDatasetEntry() {
-  // @@protoc_insertion_point(destructor:classifierpb.TrainingDatasetEntry)
+DatasetEntry::~DatasetEntry() {
+  // @@protoc_insertion_point(destructor:classifierpb.DatasetEntry)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -600,31 +598,31 @@ TrainingDatasetEntry::~TrainingDatasetEntry() {
   SharedDtor();
 }
 
-inline void TrainingDatasetEntry::SharedDtor() {
+inline void DatasetEntry::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.features_.~RepeatedField();
-  if (this != internal_default_instance()) delete _impl_.cluster_id_;
+  if (this != internal_default_instance()) delete _impl_.target_;
 }
 
-void TrainingDatasetEntry::SetCachedSize(int size) const {
+void DatasetEntry::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void TrainingDatasetEntry::Clear() {
-// @@protoc_insertion_point(message_clear_start:classifierpb.TrainingDatasetEntry)
+void DatasetEntry::Clear() {
+// @@protoc_insertion_point(message_clear_start:classifierpb.DatasetEntry)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   _impl_.features_.Clear();
-  if (GetArenaForAllocation() == nullptr && _impl_.cluster_id_ != nullptr) {
-    delete _impl_.cluster_id_;
+  if (GetArenaForAllocation() == nullptr && _impl_.target_ != nullptr) {
+    delete _impl_.target_;
   }
-  _impl_.cluster_id_ = nullptr;
+  _impl_.target_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* TrainingDatasetEntry::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* DatasetEntry::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
@@ -641,10 +639,10 @@ const char* TrainingDatasetEntry::_InternalParse(const char* ptr, ::_pbi::ParseC
         } else
           goto handle_unusual;
         continue;
-      // .classifierpb.ClusterID cluster_id = 2;
+      // .classifierpb.Target target = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_cluster_id(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_target(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -672,9 +670,9 @@ failure:
 #undef CHK_
 }
 
-uint8_t* TrainingDatasetEntry::_InternalSerialize(
+uint8_t* DatasetEntry::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.TrainingDatasetEntry)
+  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.DatasetEntry)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -683,23 +681,23 @@ uint8_t* TrainingDatasetEntry::_InternalSerialize(
     target = stream->WriteFixedPacked(1, _internal_features(), target);
   }
 
-  // .classifierpb.ClusterID cluster_id = 2;
-  if (this->_internal_has_cluster_id()) {
+  // .classifierpb.Target target = 2;
+  if (this->_internal_has_target()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::cluster_id(this),
-        _Internal::cluster_id(this).GetCachedSize(), target, stream);
+      InternalWriteMessage(2, _Internal::target(this),
+        _Internal::target(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.TrainingDatasetEntry)
+  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.DatasetEntry)
   return target;
 }
 
-size_t TrainingDatasetEntry::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:classifierpb.TrainingDatasetEntry)
+size_t DatasetEntry::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:classifierpb.DatasetEntry)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -717,58 +715,58 @@ size_t TrainingDatasetEntry::ByteSizeLong() const {
     total_size += data_size;
   }
 
-  // .classifierpb.ClusterID cluster_id = 2;
-  if (this->_internal_has_cluster_id()) {
+  // .classifierpb.Target target = 2;
+  if (this->_internal_has_target()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.cluster_id_);
+        *_impl_.target_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TrainingDatasetEntry::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData DatasetEntry::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    TrainingDatasetEntry::MergeImpl
+    DatasetEntry::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TrainingDatasetEntry::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*DatasetEntry::GetClassData() const { return &_class_data_; }
 
 
-void TrainingDatasetEntry::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<TrainingDatasetEntry*>(&to_msg);
-  auto& from = static_cast<const TrainingDatasetEntry&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.TrainingDatasetEntry)
+void DatasetEntry::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<DatasetEntry*>(&to_msg);
+  auto& from = static_cast<const DatasetEntry&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.DatasetEntry)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   _this->_impl_.features_.MergeFrom(from._impl_.features_);
-  if (from._internal_has_cluster_id()) {
-    _this->_internal_mutable_cluster_id()->::classifierpb::ClusterID::MergeFrom(
-        from._internal_cluster_id());
+  if (from._internal_has_target()) {
+    _this->_internal_mutable_target()->::classifierpb::Target::MergeFrom(
+        from._internal_target());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void TrainingDatasetEntry::CopyFrom(const TrainingDatasetEntry& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.TrainingDatasetEntry)
+void DatasetEntry::CopyFrom(const DatasetEntry& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.DatasetEntry)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool TrainingDatasetEntry::IsInitialized() const {
+bool DatasetEntry::IsInitialized() const {
   return true;
 }
 
-void TrainingDatasetEntry::InternalSwap(TrainingDatasetEntry* other) {
+void DatasetEntry::InternalSwap(DatasetEntry* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.features_.InternalSwap(&other->_impl_.features_);
-  swap(_impl_.cluster_id_, other->_impl_.cluster_id_);
+  swap(_impl_.target_, other->_impl_.target_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata TrainingDatasetEntry::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata DatasetEntry::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
       file_level_metadata_classifier_2eproto[1]);
@@ -776,28 +774,28 @@ void TrainingDatasetEntry::InternalSwap(TrainingDatasetEntry* other) {
 
 // ===================================================================
 
-class TrainingDataset::_Internal {
+class Dataset::_Internal {
  public:
 };
 
-TrainingDataset::TrainingDataset(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+Dataset::Dataset(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:classifierpb.TrainingDataset)
+  // @@protoc_insertion_point(arena_constructor:classifierpb.Dataset)
 }
-TrainingDataset::TrainingDataset(const TrainingDataset& from)
+Dataset::Dataset(const Dataset& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  TrainingDataset* const _this = this; (void)_this;
+  Dataset* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.entries_){from._impl_.entries_}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:classifierpb.TrainingDataset)
+  // @@protoc_insertion_point(copy_constructor:classifierpb.Dataset)
 }
 
-inline void TrainingDataset::SharedCtor(
+inline void Dataset::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
@@ -807,8 +805,8 @@ inline void TrainingDataset::SharedCtor(
   };
 }
 
-TrainingDataset::~TrainingDataset() {
-  // @@protoc_insertion_point(destructor:classifierpb.TrainingDataset)
+Dataset::~Dataset() {
+  // @@protoc_insertion_point(destructor:classifierpb.Dataset)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -816,17 +814,17 @@ TrainingDataset::~TrainingDataset() {
   SharedDtor();
 }
 
-inline void TrainingDataset::SharedDtor() {
+inline void Dataset::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.entries_.~RepeatedPtrField();
 }
 
-void TrainingDataset::SetCachedSize(int size) const {
+void Dataset::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void TrainingDataset::Clear() {
-// @@protoc_insertion_point(message_clear_start:classifierpb.TrainingDataset)
+void Dataset::Clear() {
+// @@protoc_insertion_point(message_clear_start:classifierpb.Dataset)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -835,13 +833,13 @@ void TrainingDataset::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* TrainingDataset::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* Dataset::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated .classifierpb.TrainingDatasetEntry entries = 1;
+      // repeated .classifierpb.DatasetEntry entries = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
@@ -877,13 +875,13 @@ failure:
 #undef CHK_
 }
 
-uint8_t* TrainingDataset::_InternalSerialize(
+uint8_t* Dataset::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.TrainingDataset)
+  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.Dataset)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .classifierpb.TrainingDatasetEntry entries = 1;
+  // repeated .classifierpb.DatasetEntry entries = 1;
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_entries_size()); i < n; i++) {
     const auto& repfield = this->_internal_entries(i);
@@ -895,19 +893,19 @@ uint8_t* TrainingDataset::_InternalSerialize(
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.TrainingDataset)
+  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.Dataset)
   return target;
 }
 
-size_t TrainingDataset::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:classifierpb.TrainingDataset)
+size_t Dataset::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:classifierpb.Dataset)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .classifierpb.TrainingDatasetEntry entries = 1;
+  // repeated .classifierpb.DatasetEntry entries = 1;
   total_size += 1UL * this->_internal_entries_size();
   for (const auto& msg : this->_impl_.entries_) {
     total_size +=
@@ -917,17 +915,17 @@ size_t TrainingDataset::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TrainingDataset::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData Dataset::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    TrainingDataset::MergeImpl
+    Dataset::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TrainingDataset::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*Dataset::GetClassData() const { return &_class_data_; }
 
 
-void TrainingDataset::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<TrainingDataset*>(&to_msg);
-  auto& from = static_cast<const TrainingDataset&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.TrainingDataset)
+void Dataset::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<Dataset*>(&to_msg);
+  auto& from = static_cast<const Dataset&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.Dataset)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -936,24 +934,24 @@ void TrainingDataset::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void TrainingDataset::CopyFrom(const TrainingDataset& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.TrainingDataset)
+void Dataset::CopyFrom(const Dataset& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.Dataset)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool TrainingDataset::IsInitialized() const {
+bool Dataset::IsInitialized() const {
   return true;
 }
 
-void TrainingDataset::InternalSwap(TrainingDataset* other) {
+void Dataset::InternalSwap(Dataset* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.entries_.InternalSwap(&other->_impl_.entries_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata TrainingDataset::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata Dataset::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
       file_level_metadata_classifier_2eproto[2]);
@@ -961,52 +959,52 @@ void TrainingDataset::InternalSwap(TrainingDataset* other) {
 
 // ===================================================================
 
-class SupportVertexEntry::_Internal {
+class SupportSampleEntry::_Internal {
  public:
-  static const ::classifierpb::ClusterID& cluster_id(const SupportVertexEntry* msg);
+  static const ::classifierpb::Target& target(const SupportSampleEntry* msg);
 };
 
-const ::classifierpb::ClusterID&
-SupportVertexEntry::_Internal::cluster_id(const SupportVertexEntry* msg) {
-  return *msg->_impl_.cluster_id_;
+const ::classifierpb::Target&
+SupportSampleEntry::_Internal::target(const SupportSampleEntry* msg) {
+  return *msg->_impl_.target_;
 }
-SupportVertexEntry::SupportVertexEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+SupportSampleEntry::SupportSampleEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:classifierpb.SupportVertexEntry)
+  // @@protoc_insertion_point(arena_constructor:classifierpb.SupportSampleEntry)
 }
-SupportVertexEntry::SupportVertexEntry(const SupportVertexEntry& from)
+SupportSampleEntry::SupportSampleEntry(const SupportSampleEntry& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  SupportVertexEntry* const _this = this; (void)_this;
+  SupportSampleEntry* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.features_){from._impl_.features_}
-    , decltype(_impl_.cluster_id_){nullptr}
-    , decltype(_impl_.vertex_id_){}
+    , decltype(_impl_.target_){nullptr}
+    , decltype(_impl_.sample_id_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  if (from._internal_has_cluster_id()) {
-    _this->_impl_.cluster_id_ = new ::classifierpb::ClusterID(*from._impl_.cluster_id_);
+  if (from._internal_has_target()) {
+    _this->_impl_.target_ = new ::classifierpb::Target(*from._impl_.target_);
   }
-  _this->_impl_.vertex_id_ = from._impl_.vertex_id_;
-  // @@protoc_insertion_point(copy_constructor:classifierpb.SupportVertexEntry)
+  _this->_impl_.sample_id_ = from._impl_.sample_id_;
+  // @@protoc_insertion_point(copy_constructor:classifierpb.SupportSampleEntry)
 }
 
-inline void SupportVertexEntry::SharedCtor(
+inline void SupportSampleEntry::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.features_){arena}
-    , decltype(_impl_.cluster_id_){nullptr}
-    , decltype(_impl_.vertex_id_){0}
+    , decltype(_impl_.target_){nullptr}
+    , decltype(_impl_.sample_id_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
 
-SupportVertexEntry::~SupportVertexEntry() {
-  // @@protoc_insertion_point(destructor:classifierpb.SupportVertexEntry)
+SupportSampleEntry::~SupportSampleEntry() {
+  // @@protoc_insertion_point(destructor:classifierpb.SupportSampleEntry)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -1014,41 +1012,41 @@ SupportVertexEntry::~SupportVertexEntry() {
   SharedDtor();
 }
 
-inline void SupportVertexEntry::SharedDtor() {
+inline void SupportSampleEntry::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.features_.~RepeatedField();
-  if (this != internal_default_instance()) delete _impl_.cluster_id_;
+  if (this != internal_default_instance()) delete _impl_.target_;
 }
 
-void SupportVertexEntry::SetCachedSize(int size) const {
+void SupportSampleEntry::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void SupportVertexEntry::Clear() {
-// @@protoc_insertion_point(message_clear_start:classifierpb.SupportVertexEntry)
+void SupportSampleEntry::Clear() {
+// @@protoc_insertion_point(message_clear_start:classifierpb.SupportSampleEntry)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   _impl_.features_.Clear();
-  if (GetArenaForAllocation() == nullptr && _impl_.cluster_id_ != nullptr) {
-    delete _impl_.cluster_id_;
+  if (GetArenaForAllocation() == nullptr && _impl_.target_ != nullptr) {
+    delete _impl_.target_;
   }
-  _impl_.cluster_id_ = nullptr;
-  _impl_.vertex_id_ = 0;
+  _impl_.target_ = nullptr;
+  _impl_.sample_id_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* SupportVertexEntry::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* SupportSampleEntry::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // int32 vertex_id = 1;
+      // int32 sample_id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _impl_.vertex_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          _impl_.sample_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1064,10 +1062,10 @@ const char* SupportVertexEntry::_InternalParse(const char* ptr, ::_pbi::ParseCon
         } else
           goto handle_unusual;
         continue;
-      // .classifierpb.ClusterID cluster_id = 3;
+      // .classifierpb.Target target = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          ptr = ctx->ParseMessage(_internal_mutable_cluster_id(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_target(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1095,16 +1093,16 @@ failure:
 #undef CHK_
 }
 
-uint8_t* SupportVertexEntry::_InternalSerialize(
+uint8_t* SupportSampleEntry::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.SupportVertexEntry)
+  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.SupportSampleEntry)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 vertex_id = 1;
-  if (this->_internal_vertex_id() != 0) {
+  // int32 sample_id = 1;
+  if (this->_internal_sample_id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_vertex_id(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_sample_id(), target);
   }
 
   // repeated float features = 2;
@@ -1112,23 +1110,23 @@ uint8_t* SupportVertexEntry::_InternalSerialize(
     target = stream->WriteFixedPacked(2, _internal_features(), target);
   }
 
-  // .classifierpb.ClusterID cluster_id = 3;
-  if (this->_internal_has_cluster_id()) {
+  // .classifierpb.Target target = 3;
+  if (this->_internal_has_target()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(3, _Internal::cluster_id(this),
-        _Internal::cluster_id(this).GetCachedSize(), target, stream);
+      InternalWriteMessage(3, _Internal::target(this),
+        _Internal::target(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.SupportVertexEntry)
+  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.SupportSampleEntry)
   return target;
 }
 
-size_t SupportVertexEntry::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:classifierpb.SupportVertexEntry)
+size_t SupportSampleEntry::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:classifierpb.SupportSampleEntry)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -1146,71 +1144,71 @@ size_t SupportVertexEntry::ByteSizeLong() const {
     total_size += data_size;
   }
 
-  // .classifierpb.ClusterID cluster_id = 3;
-  if (this->_internal_has_cluster_id()) {
+  // .classifierpb.Target target = 3;
+  if (this->_internal_has_target()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.cluster_id_);
+        *_impl_.target_);
   }
 
-  // int32 vertex_id = 1;
-  if (this->_internal_vertex_id() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_vertex_id());
+  // int32 sample_id = 1;
+  if (this->_internal_sample_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_sample_id());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SupportVertexEntry::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SupportSampleEntry::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    SupportVertexEntry::MergeImpl
+    SupportSampleEntry::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SupportVertexEntry::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SupportSampleEntry::GetClassData() const { return &_class_data_; }
 
 
-void SupportVertexEntry::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<SupportVertexEntry*>(&to_msg);
-  auto& from = static_cast<const SupportVertexEntry&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.SupportVertexEntry)
+void SupportSampleEntry::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<SupportSampleEntry*>(&to_msg);
+  auto& from = static_cast<const SupportSampleEntry&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.SupportSampleEntry)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   _this->_impl_.features_.MergeFrom(from._impl_.features_);
-  if (from._internal_has_cluster_id()) {
-    _this->_internal_mutable_cluster_id()->::classifierpb::ClusterID::MergeFrom(
-        from._internal_cluster_id());
+  if (from._internal_has_target()) {
+    _this->_internal_mutable_target()->::classifierpb::Target::MergeFrom(
+        from._internal_target());
   }
-  if (from._internal_vertex_id() != 0) {
-    _this->_internal_set_vertex_id(from._internal_vertex_id());
+  if (from._internal_sample_id() != 0) {
+    _this->_internal_set_sample_id(from._internal_sample_id());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void SupportVertexEntry::CopyFrom(const SupportVertexEntry& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.SupportVertexEntry)
+void SupportSampleEntry::CopyFrom(const SupportSampleEntry& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.SupportSampleEntry)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool SupportVertexEntry::IsInitialized() const {
+bool SupportSampleEntry::IsInitialized() const {
   return true;
 }
 
-void SupportVertexEntry::InternalSwap(SupportVertexEntry* other) {
+void SupportSampleEntry::InternalSwap(SupportSampleEntry* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.features_.InternalSwap(&other->_impl_.features_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SupportVertexEntry, _impl_.vertex_id_)
-      + sizeof(SupportVertexEntry::_impl_.vertex_id_)
-      - PROTOBUF_FIELD_OFFSET(SupportVertexEntry, _impl_.cluster_id_)>(
-          reinterpret_cast<char*>(&_impl_.cluster_id_),
-          reinterpret_cast<char*>(&other->_impl_.cluster_id_));
+      PROTOBUF_FIELD_OFFSET(SupportSampleEntry, _impl_.sample_id_)
+      + sizeof(SupportSampleEntry::_impl_.sample_id_)
+      - PROTOBUF_FIELD_OFFSET(SupportSampleEntry, _impl_.target_)>(
+          reinterpret_cast<char*>(&_impl_.target_),
+          reinterpret_cast<char*>(&other->_impl_.target_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata SupportVertexEntry::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata SupportSampleEntry::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
       file_level_metadata_classifier_2eproto[3]);
@@ -1218,28 +1216,28 @@ void SupportVertexEntry::InternalSwap(SupportVertexEntry* other) {
 
 // ===================================================================
 
-class SupportVertices::_Internal {
+class SupportSamples::_Internal {
  public:
 };
 
-SupportVertices::SupportVertices(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+SupportSamples::SupportSamples(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:classifierpb.SupportVertices)
+  // @@protoc_insertion_point(arena_constructor:classifierpb.SupportSamples)
 }
-SupportVertices::SupportVertices(const SupportVertices& from)
+SupportSamples::SupportSamples(const SupportSamples& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  SupportVertices* const _this = this; (void)_this;
+  SupportSamples* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.entries_){from._impl_.entries_}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:classifierpb.SupportVertices)
+  // @@protoc_insertion_point(copy_constructor:classifierpb.SupportSamples)
 }
 
-inline void SupportVertices::SharedCtor(
+inline void SupportSamples::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
@@ -1249,8 +1247,8 @@ inline void SupportVertices::SharedCtor(
   };
 }
 
-SupportVertices::~SupportVertices() {
-  // @@protoc_insertion_point(destructor:classifierpb.SupportVertices)
+SupportSamples::~SupportSamples() {
+  // @@protoc_insertion_point(destructor:classifierpb.SupportSamples)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -1258,17 +1256,17 @@ SupportVertices::~SupportVertices() {
   SharedDtor();
 }
 
-inline void SupportVertices::SharedDtor() {
+inline void SupportSamples::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.entries_.~RepeatedPtrField();
 }
 
-void SupportVertices::SetCachedSize(int size) const {
+void SupportSamples::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void SupportVertices::Clear() {
-// @@protoc_insertion_point(message_clear_start:classifierpb.SupportVertices)
+void SupportSamples::Clear() {
+// @@protoc_insertion_point(message_clear_start:classifierpb.SupportSamples)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1277,13 +1275,13 @@ void SupportVertices::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* SupportVertices::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* SupportSamples::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated .classifierpb.SupportVertexEntry entries = 1;
+      // repeated .classifierpb.SupportSampleEntry entries = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
@@ -1319,13 +1317,13 @@ failure:
 #undef CHK_
 }
 
-uint8_t* SupportVertices::_InternalSerialize(
+uint8_t* SupportSamples::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.SupportVertices)
+  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.SupportSamples)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .classifierpb.SupportVertexEntry entries = 1;
+  // repeated .classifierpb.SupportSampleEntry entries = 1;
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_entries_size()); i < n; i++) {
     const auto& repfield = this->_internal_entries(i);
@@ -1337,19 +1335,19 @@ uint8_t* SupportVertices::_InternalSerialize(
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.SupportVertices)
+  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.SupportSamples)
   return target;
 }
 
-size_t SupportVertices::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:classifierpb.SupportVertices)
+size_t SupportSamples::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:classifierpb.SupportSamples)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .classifierpb.SupportVertexEntry entries = 1;
+  // repeated .classifierpb.SupportSampleEntry entries = 1;
   total_size += 1UL * this->_internal_entries_size();
   for (const auto& msg : this->_impl_.entries_) {
     total_size +=
@@ -1359,17 +1357,17 @@ size_t SupportVertices::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SupportVertices::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SupportSamples::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    SupportVertices::MergeImpl
+    SupportSamples::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SupportVertices::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SupportSamples::GetClassData() const { return &_class_data_; }
 
 
-void SupportVertices::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<SupportVertices*>(&to_msg);
-  auto& from = static_cast<const SupportVertices&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.SupportVertices)
+void SupportSamples::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<SupportSamples*>(&to_msg);
+  auto& from = static_cast<const SupportSamples&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.SupportSamples)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -1378,24 +1376,24 @@ void SupportVertices::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void SupportVertices::CopyFrom(const SupportVertices& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.SupportVertices)
+void SupportSamples::CopyFrom(const SupportSamples& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.SupportSamples)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool SupportVertices::IsInitialized() const {
+bool SupportSamples::IsInitialized() const {
   return true;
 }
 
-void SupportVertices::InternalSwap(SupportVertices* other) {
+void SupportSamples::InternalSwap(SupportSamples* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.entries_.InternalSwap(&other->_impl_.entries_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata SupportVertices::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata SupportSamples::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
       file_level_metadata_classifier_2eproto[4]);
@@ -1403,52 +1401,52 @@ void SupportVertices::InternalSwap(SupportVertices* other) {
 
 // ===================================================================
 
-class VertexToLabelEntry::_Internal {
+class TestSampleEntry::_Internal {
  public:
-  static const ::classifierpb::ClusterID& expected_cluster_id(const VertexToLabelEntry* msg);
+  static const ::classifierpb::Target& ground_truth(const TestSampleEntry* msg);
 };
 
-const ::classifierpb::ClusterID&
-VertexToLabelEntry::_Internal::expected_cluster_id(const VertexToLabelEntry* msg) {
-  return *msg->_impl_.expected_cluster_id_;
+const ::classifierpb::Target&
+TestSampleEntry::_Internal::ground_truth(const TestSampleEntry* msg) {
+  return *msg->_impl_.ground_truth_;
 }
-VertexToLabelEntry::VertexToLabelEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+TestSampleEntry::TestSampleEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:classifierpb.VertexToLabelEntry)
+  // @@protoc_insertion_point(arena_constructor:classifierpb.TestSampleEntry)
 }
-VertexToLabelEntry::VertexToLabelEntry(const VertexToLabelEntry& from)
+TestSampleEntry::TestSampleEntry(const TestSampleEntry& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  VertexToLabelEntry* const _this = this; (void)_this;
+  TestSampleEntry* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.features_){from._impl_.features_}
-    , decltype(_impl_.expected_cluster_id_){nullptr}
-    , decltype(_impl_.vertex_id_){}
+    , decltype(_impl_.ground_truth_){nullptr}
+    , decltype(_impl_.sample_id_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  if (from._internal_has_expected_cluster_id()) {
-    _this->_impl_.expected_cluster_id_ = new ::classifierpb::ClusterID(*from._impl_.expected_cluster_id_);
+  if (from._internal_has_ground_truth()) {
+    _this->_impl_.ground_truth_ = new ::classifierpb::Target(*from._impl_.ground_truth_);
   }
-  _this->_impl_.vertex_id_ = from._impl_.vertex_id_;
-  // @@protoc_insertion_point(copy_constructor:classifierpb.VertexToLabelEntry)
+  _this->_impl_.sample_id_ = from._impl_.sample_id_;
+  // @@protoc_insertion_point(copy_constructor:classifierpb.TestSampleEntry)
 }
 
-inline void VertexToLabelEntry::SharedCtor(
+inline void TestSampleEntry::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.features_){arena}
-    , decltype(_impl_.expected_cluster_id_){nullptr}
-    , decltype(_impl_.vertex_id_){0}
+    , decltype(_impl_.ground_truth_){nullptr}
+    , decltype(_impl_.sample_id_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
 
-VertexToLabelEntry::~VertexToLabelEntry() {
-  // @@protoc_insertion_point(destructor:classifierpb.VertexToLabelEntry)
+TestSampleEntry::~TestSampleEntry() {
+  // @@protoc_insertion_point(destructor:classifierpb.TestSampleEntry)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -1456,41 +1454,41 @@ VertexToLabelEntry::~VertexToLabelEntry() {
   SharedDtor();
 }
 
-inline void VertexToLabelEntry::SharedDtor() {
+inline void TestSampleEntry::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.features_.~RepeatedField();
-  if (this != internal_default_instance()) delete _impl_.expected_cluster_id_;
+  if (this != internal_default_instance()) delete _impl_.ground_truth_;
 }
 
-void VertexToLabelEntry::SetCachedSize(int size) const {
+void TestSampleEntry::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void VertexToLabelEntry::Clear() {
-// @@protoc_insertion_point(message_clear_start:classifierpb.VertexToLabelEntry)
+void TestSampleEntry::Clear() {
+// @@protoc_insertion_point(message_clear_start:classifierpb.TestSampleEntry)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   _impl_.features_.Clear();
-  if (GetArenaForAllocation() == nullptr && _impl_.expected_cluster_id_ != nullptr) {
-    delete _impl_.expected_cluster_id_;
+  if (GetArenaForAllocation() == nullptr && _impl_.ground_truth_ != nullptr) {
+    delete _impl_.ground_truth_;
   }
-  _impl_.expected_cluster_id_ = nullptr;
-  _impl_.vertex_id_ = 0;
+  _impl_.ground_truth_ = nullptr;
+  _impl_.sample_id_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* VertexToLabelEntry::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* TestSampleEntry::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // int32 vertex_id = 1;
+      // int32 sample_id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _impl_.vertex_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          _impl_.sample_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1506,10 +1504,10 @@ const char* VertexToLabelEntry::_InternalParse(const char* ptr, ::_pbi::ParseCon
         } else
           goto handle_unusual;
         continue;
-      // .classifierpb.ClusterID expected_cluster_id = 3;
+      // .classifierpb.Target ground_truth = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          ptr = ctx->ParseMessage(_internal_mutable_expected_cluster_id(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_ground_truth(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1537,16 +1535,16 @@ failure:
 #undef CHK_
 }
 
-uint8_t* VertexToLabelEntry::_InternalSerialize(
+uint8_t* TestSampleEntry::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.VertexToLabelEntry)
+  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.TestSampleEntry)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 vertex_id = 1;
-  if (this->_internal_vertex_id() != 0) {
+  // int32 sample_id = 1;
+  if (this->_internal_sample_id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_vertex_id(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_sample_id(), target);
   }
 
   // repeated float features = 2;
@@ -1554,23 +1552,23 @@ uint8_t* VertexToLabelEntry::_InternalSerialize(
     target = stream->WriteFixedPacked(2, _internal_features(), target);
   }
 
-  // .classifierpb.ClusterID expected_cluster_id = 3;
-  if (this->_internal_has_expected_cluster_id()) {
+  // .classifierpb.Target ground_truth = 3;
+  if (this->_internal_has_ground_truth()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(3, _Internal::expected_cluster_id(this),
-        _Internal::expected_cluster_id(this).GetCachedSize(), target, stream);
+      InternalWriteMessage(3, _Internal::ground_truth(this),
+        _Internal::ground_truth(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.VertexToLabelEntry)
+  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.TestSampleEntry)
   return target;
 }
 
-size_t VertexToLabelEntry::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:classifierpb.VertexToLabelEntry)
+size_t TestSampleEntry::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:classifierpb.TestSampleEntry)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -1588,71 +1586,71 @@ size_t VertexToLabelEntry::ByteSizeLong() const {
     total_size += data_size;
   }
 
-  // .classifierpb.ClusterID expected_cluster_id = 3;
-  if (this->_internal_has_expected_cluster_id()) {
+  // .classifierpb.Target ground_truth = 3;
+  if (this->_internal_has_ground_truth()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.expected_cluster_id_);
+        *_impl_.ground_truth_);
   }
 
-  // int32 vertex_id = 1;
-  if (this->_internal_vertex_id() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_vertex_id());
+  // int32 sample_id = 1;
+  if (this->_internal_sample_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_sample_id());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData VertexToLabelEntry::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TestSampleEntry::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    VertexToLabelEntry::MergeImpl
+    TestSampleEntry::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*VertexToLabelEntry::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TestSampleEntry::GetClassData() const { return &_class_data_; }
 
 
-void VertexToLabelEntry::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<VertexToLabelEntry*>(&to_msg);
-  auto& from = static_cast<const VertexToLabelEntry&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.VertexToLabelEntry)
+void TestSampleEntry::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<TestSampleEntry*>(&to_msg);
+  auto& from = static_cast<const TestSampleEntry&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.TestSampleEntry)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   _this->_impl_.features_.MergeFrom(from._impl_.features_);
-  if (from._internal_has_expected_cluster_id()) {
-    _this->_internal_mutable_expected_cluster_id()->::classifierpb::ClusterID::MergeFrom(
-        from._internal_expected_cluster_id());
+  if (from._internal_has_ground_truth()) {
+    _this->_internal_mutable_ground_truth()->::classifierpb::Target::MergeFrom(
+        from._internal_ground_truth());
   }
-  if (from._internal_vertex_id() != 0) {
-    _this->_internal_set_vertex_id(from._internal_vertex_id());
+  if (from._internal_sample_id() != 0) {
+    _this->_internal_set_sample_id(from._internal_sample_id());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void VertexToLabelEntry::CopyFrom(const VertexToLabelEntry& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.VertexToLabelEntry)
+void TestSampleEntry::CopyFrom(const TestSampleEntry& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.TestSampleEntry)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool VertexToLabelEntry::IsInitialized() const {
+bool TestSampleEntry::IsInitialized() const {
   return true;
 }
 
-void VertexToLabelEntry::InternalSwap(VertexToLabelEntry* other) {
+void TestSampleEntry::InternalSwap(TestSampleEntry* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.features_.InternalSwap(&other->_impl_.features_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(VertexToLabelEntry, _impl_.vertex_id_)
-      + sizeof(VertexToLabelEntry::_impl_.vertex_id_)
-      - PROTOBUF_FIELD_OFFSET(VertexToLabelEntry, _impl_.expected_cluster_id_)>(
-          reinterpret_cast<char*>(&_impl_.expected_cluster_id_),
-          reinterpret_cast<char*>(&other->_impl_.expected_cluster_id_));
+      PROTOBUF_FIELD_OFFSET(TestSampleEntry, _impl_.sample_id_)
+      + sizeof(TestSampleEntry::_impl_.sample_id_)
+      - PROTOBUF_FIELD_OFFSET(TestSampleEntry, _impl_.ground_truth_)>(
+          reinterpret_cast<char*>(&_impl_.ground_truth_),
+          reinterpret_cast<char*>(&other->_impl_.ground_truth_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata VertexToLabelEntry::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata TestSampleEntry::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
       file_level_metadata_classifier_2eproto[5]);
@@ -1660,28 +1658,28 @@ void VertexToLabelEntry::InternalSwap(VertexToLabelEntry* other) {
 
 // ===================================================================
 
-class VerticesToLabel::_Internal {
+class TestSamples::_Internal {
  public:
 };
 
-VerticesToLabel::VerticesToLabel(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+TestSamples::TestSamples(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:classifierpb.VerticesToLabel)
+  // @@protoc_insertion_point(arena_constructor:classifierpb.TestSamples)
 }
-VerticesToLabel::VerticesToLabel(const VerticesToLabel& from)
+TestSamples::TestSamples(const TestSamples& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  VerticesToLabel* const _this = this; (void)_this;
+  TestSamples* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.entries_){from._impl_.entries_}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:classifierpb.VerticesToLabel)
+  // @@protoc_insertion_point(copy_constructor:classifierpb.TestSamples)
 }
 
-inline void VerticesToLabel::SharedCtor(
+inline void TestSamples::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
@@ -1691,8 +1689,8 @@ inline void VerticesToLabel::SharedCtor(
   };
 }
 
-VerticesToLabel::~VerticesToLabel() {
-  // @@protoc_insertion_point(destructor:classifierpb.VerticesToLabel)
+TestSamples::~TestSamples() {
+  // @@protoc_insertion_point(destructor:classifierpb.TestSamples)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -1700,17 +1698,17 @@ VerticesToLabel::~VerticesToLabel() {
   SharedDtor();
 }
 
-inline void VerticesToLabel::SharedDtor() {
+inline void TestSamples::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.entries_.~RepeatedPtrField();
 }
 
-void VerticesToLabel::SetCachedSize(int size) const {
+void TestSamples::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void VerticesToLabel::Clear() {
-// @@protoc_insertion_point(message_clear_start:classifierpb.VerticesToLabel)
+void TestSamples::Clear() {
+// @@protoc_insertion_point(message_clear_start:classifierpb.TestSamples)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1719,13 +1717,13 @@ void VerticesToLabel::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* VerticesToLabel::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* TestSamples::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated .classifierpb.VertexToLabelEntry entries = 1;
+      // repeated .classifierpb.TestSampleEntry entries = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
@@ -1761,13 +1759,13 @@ failure:
 #undef CHK_
 }
 
-uint8_t* VerticesToLabel::_InternalSerialize(
+uint8_t* TestSamples::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.VerticesToLabel)
+  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.TestSamples)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .classifierpb.VertexToLabelEntry entries = 1;
+  // repeated .classifierpb.TestSampleEntry entries = 1;
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_entries_size()); i < n; i++) {
     const auto& repfield = this->_internal_entries(i);
@@ -1779,19 +1777,19 @@ uint8_t* VerticesToLabel::_InternalSerialize(
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.VerticesToLabel)
+  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.TestSamples)
   return target;
 }
 
-size_t VerticesToLabel::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:classifierpb.VerticesToLabel)
+size_t TestSamples::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:classifierpb.TestSamples)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .classifierpb.VertexToLabelEntry entries = 1;
+  // repeated .classifierpb.TestSampleEntry entries = 1;
   total_size += 1UL * this->_internal_entries_size();
   for (const auto& msg : this->_impl_.entries_) {
     total_size +=
@@ -1801,17 +1799,17 @@ size_t VerticesToLabel::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData VerticesToLabel::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TestSamples::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    VerticesToLabel::MergeImpl
+    TestSamples::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*VerticesToLabel::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TestSamples::GetClassData() const { return &_class_data_; }
 
 
-void VerticesToLabel::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<VerticesToLabel*>(&to_msg);
-  auto& from = static_cast<const VerticesToLabel&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.VerticesToLabel)
+void TestSamples::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<TestSamples*>(&to_msg);
+  auto& from = static_cast<const TestSamples&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.TestSamples)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -1820,24 +1818,24 @@ void VerticesToLabel::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void VerticesToLabel::CopyFrom(const VerticesToLabel& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.VerticesToLabel)
+void TestSamples::CopyFrom(const TestSamples& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.TestSamples)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool VerticesToLabel::IsInitialized() const {
+bool TestSamples::IsInitialized() const {
   return true;
 }
 
-void VerticesToLabel::InternalSwap(VerticesToLabel* other) {
+void TestSamples::InternalSwap(TestSamples* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.entries_.InternalSwap(&other->_impl_.entries_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata VerticesToLabel::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata TestSamples::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
       file_level_metadata_classifier_2eproto[6]);
@@ -1845,52 +1843,52 @@ void VerticesToLabel::InternalSwap(VerticesToLabel* other) {
 
 // ===================================================================
 
-class LabeledVertexEntry::_Internal {
+class PredictedSampleEntry::_Internal {
  public:
-  static const ::classifierpb::ClusterID& cluster_id(const LabeledVertexEntry* msg);
+  static const ::classifierpb::Target& target(const PredictedSampleEntry* msg);
 };
 
-const ::classifierpb::ClusterID&
-LabeledVertexEntry::_Internal::cluster_id(const LabeledVertexEntry* msg) {
-  return *msg->_impl_.cluster_id_;
+const ::classifierpb::Target&
+PredictedSampleEntry::_Internal::target(const PredictedSampleEntry* msg) {
+  return *msg->_impl_.target_;
 }
-LabeledVertexEntry::LabeledVertexEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+PredictedSampleEntry::PredictedSampleEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:classifierpb.LabeledVertexEntry)
+  // @@protoc_insertion_point(arena_constructor:classifierpb.PredictedSampleEntry)
 }
-LabeledVertexEntry::LabeledVertexEntry(const LabeledVertexEntry& from)
+PredictedSampleEntry::PredictedSampleEntry(const PredictedSampleEntry& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  LabeledVertexEntry* const _this = this; (void)_this;
+  PredictedSampleEntry* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.features_){from._impl_.features_}
-    , decltype(_impl_.cluster_id_){nullptr}
-    , decltype(_impl_.vertex_id_){}
+    , decltype(_impl_.target_){nullptr}
+    , decltype(_impl_.sample_id_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  if (from._internal_has_cluster_id()) {
-    _this->_impl_.cluster_id_ = new ::classifierpb::ClusterID(*from._impl_.cluster_id_);
+  if (from._internal_has_target()) {
+    _this->_impl_.target_ = new ::classifierpb::Target(*from._impl_.target_);
   }
-  _this->_impl_.vertex_id_ = from._impl_.vertex_id_;
-  // @@protoc_insertion_point(copy_constructor:classifierpb.LabeledVertexEntry)
+  _this->_impl_.sample_id_ = from._impl_.sample_id_;
+  // @@protoc_insertion_point(copy_constructor:classifierpb.PredictedSampleEntry)
 }
 
-inline void LabeledVertexEntry::SharedCtor(
+inline void PredictedSampleEntry::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.features_){arena}
-    , decltype(_impl_.cluster_id_){nullptr}
-    , decltype(_impl_.vertex_id_){0}
+    , decltype(_impl_.target_){nullptr}
+    , decltype(_impl_.sample_id_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
 
-LabeledVertexEntry::~LabeledVertexEntry() {
-  // @@protoc_insertion_point(destructor:classifierpb.LabeledVertexEntry)
+PredictedSampleEntry::~PredictedSampleEntry() {
+  // @@protoc_insertion_point(destructor:classifierpb.PredictedSampleEntry)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -1898,41 +1896,41 @@ LabeledVertexEntry::~LabeledVertexEntry() {
   SharedDtor();
 }
 
-inline void LabeledVertexEntry::SharedDtor() {
+inline void PredictedSampleEntry::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.features_.~RepeatedField();
-  if (this != internal_default_instance()) delete _impl_.cluster_id_;
+  if (this != internal_default_instance()) delete _impl_.target_;
 }
 
-void LabeledVertexEntry::SetCachedSize(int size) const {
+void PredictedSampleEntry::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void LabeledVertexEntry::Clear() {
-// @@protoc_insertion_point(message_clear_start:classifierpb.LabeledVertexEntry)
+void PredictedSampleEntry::Clear() {
+// @@protoc_insertion_point(message_clear_start:classifierpb.PredictedSampleEntry)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   _impl_.features_.Clear();
-  if (GetArenaForAllocation() == nullptr && _impl_.cluster_id_ != nullptr) {
-    delete _impl_.cluster_id_;
+  if (GetArenaForAllocation() == nullptr && _impl_.target_ != nullptr) {
+    delete _impl_.target_;
   }
-  _impl_.cluster_id_ = nullptr;
-  _impl_.vertex_id_ = 0;
+  _impl_.target_ = nullptr;
+  _impl_.sample_id_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* LabeledVertexEntry::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* PredictedSampleEntry::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // int32 vertex_id = 1;
+      // int32 sample_id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _impl_.vertex_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          _impl_.sample_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1948,10 +1946,10 @@ const char* LabeledVertexEntry::_InternalParse(const char* ptr, ::_pbi::ParseCon
         } else
           goto handle_unusual;
         continue;
-      // .classifierpb.ClusterID cluster_id = 3;
+      // .classifierpb.Target target = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          ptr = ctx->ParseMessage(_internal_mutable_cluster_id(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_target(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1979,16 +1977,16 @@ failure:
 #undef CHK_
 }
 
-uint8_t* LabeledVertexEntry::_InternalSerialize(
+uint8_t* PredictedSampleEntry::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.LabeledVertexEntry)
+  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.PredictedSampleEntry)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 vertex_id = 1;
-  if (this->_internal_vertex_id() != 0) {
+  // int32 sample_id = 1;
+  if (this->_internal_sample_id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_vertex_id(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_sample_id(), target);
   }
 
   // repeated float features = 2;
@@ -1996,23 +1994,23 @@ uint8_t* LabeledVertexEntry::_InternalSerialize(
     target = stream->WriteFixedPacked(2, _internal_features(), target);
   }
 
-  // .classifierpb.ClusterID cluster_id = 3;
-  if (this->_internal_has_cluster_id()) {
+  // .classifierpb.Target target = 3;
+  if (this->_internal_has_target()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(3, _Internal::cluster_id(this),
-        _Internal::cluster_id(this).GetCachedSize(), target, stream);
+      InternalWriteMessage(3, _Internal::target(this),
+        _Internal::target(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.LabeledVertexEntry)
+  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.PredictedSampleEntry)
   return target;
 }
 
-size_t LabeledVertexEntry::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:classifierpb.LabeledVertexEntry)
+size_t PredictedSampleEntry::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:classifierpb.PredictedSampleEntry)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -2030,71 +2028,71 @@ size_t LabeledVertexEntry::ByteSizeLong() const {
     total_size += data_size;
   }
 
-  // .classifierpb.ClusterID cluster_id = 3;
-  if (this->_internal_has_cluster_id()) {
+  // .classifierpb.Target target = 3;
+  if (this->_internal_has_target()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.cluster_id_);
+        *_impl_.target_);
   }
 
-  // int32 vertex_id = 1;
-  if (this->_internal_vertex_id() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_vertex_id());
+  // int32 sample_id = 1;
+  if (this->_internal_sample_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_sample_id());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData LabeledVertexEntry::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData PredictedSampleEntry::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    LabeledVertexEntry::MergeImpl
+    PredictedSampleEntry::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*LabeledVertexEntry::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*PredictedSampleEntry::GetClassData() const { return &_class_data_; }
 
 
-void LabeledVertexEntry::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<LabeledVertexEntry*>(&to_msg);
-  auto& from = static_cast<const LabeledVertexEntry&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.LabeledVertexEntry)
+void PredictedSampleEntry::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<PredictedSampleEntry*>(&to_msg);
+  auto& from = static_cast<const PredictedSampleEntry&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.PredictedSampleEntry)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   _this->_impl_.features_.MergeFrom(from._impl_.features_);
-  if (from._internal_has_cluster_id()) {
-    _this->_internal_mutable_cluster_id()->::classifierpb::ClusterID::MergeFrom(
-        from._internal_cluster_id());
+  if (from._internal_has_target()) {
+    _this->_internal_mutable_target()->::classifierpb::Target::MergeFrom(
+        from._internal_target());
   }
-  if (from._internal_vertex_id() != 0) {
-    _this->_internal_set_vertex_id(from._internal_vertex_id());
+  if (from._internal_sample_id() != 0) {
+    _this->_internal_set_sample_id(from._internal_sample_id());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void LabeledVertexEntry::CopyFrom(const LabeledVertexEntry& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.LabeledVertexEntry)
+void PredictedSampleEntry::CopyFrom(const PredictedSampleEntry& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.PredictedSampleEntry)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool LabeledVertexEntry::IsInitialized() const {
+bool PredictedSampleEntry::IsInitialized() const {
   return true;
 }
 
-void LabeledVertexEntry::InternalSwap(LabeledVertexEntry* other) {
+void PredictedSampleEntry::InternalSwap(PredictedSampleEntry* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.features_.InternalSwap(&other->_impl_.features_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(LabeledVertexEntry, _impl_.vertex_id_)
-      + sizeof(LabeledVertexEntry::_impl_.vertex_id_)
-      - PROTOBUF_FIELD_OFFSET(LabeledVertexEntry, _impl_.cluster_id_)>(
-          reinterpret_cast<char*>(&_impl_.cluster_id_),
-          reinterpret_cast<char*>(&other->_impl_.cluster_id_));
+      PROTOBUF_FIELD_OFFSET(PredictedSampleEntry, _impl_.sample_id_)
+      + sizeof(PredictedSampleEntry::_impl_.sample_id_)
+      - PROTOBUF_FIELD_OFFSET(PredictedSampleEntry, _impl_.target_)>(
+          reinterpret_cast<char*>(&_impl_.target_),
+          reinterpret_cast<char*>(&other->_impl_.target_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata LabeledVertexEntry::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata PredictedSampleEntry::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
       file_level_metadata_classifier_2eproto[7]);
@@ -2102,28 +2100,28 @@ void LabeledVertexEntry::InternalSwap(LabeledVertexEntry* other) {
 
 // ===================================================================
 
-class LabeledVertices::_Internal {
+class PredictedSamples::_Internal {
  public:
 };
 
-LabeledVertices::LabeledVertices(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+PredictedSamples::PredictedSamples(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:classifierpb.LabeledVertices)
+  // @@protoc_insertion_point(arena_constructor:classifierpb.PredictedSamples)
 }
-LabeledVertices::LabeledVertices(const LabeledVertices& from)
+PredictedSamples::PredictedSamples(const PredictedSamples& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  LabeledVertices* const _this = this; (void)_this;
+  PredictedSamples* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.entries_){from._impl_.entries_}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:classifierpb.LabeledVertices)
+  // @@protoc_insertion_point(copy_constructor:classifierpb.PredictedSamples)
 }
 
-inline void LabeledVertices::SharedCtor(
+inline void PredictedSamples::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
@@ -2133,8 +2131,8 @@ inline void LabeledVertices::SharedCtor(
   };
 }
 
-LabeledVertices::~LabeledVertices() {
-  // @@protoc_insertion_point(destructor:classifierpb.LabeledVertices)
+PredictedSamples::~PredictedSamples() {
+  // @@protoc_insertion_point(destructor:classifierpb.PredictedSamples)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -2142,17 +2140,17 @@ LabeledVertices::~LabeledVertices() {
   SharedDtor();
 }
 
-inline void LabeledVertices::SharedDtor() {
+inline void PredictedSamples::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.entries_.~RepeatedPtrField();
 }
 
-void LabeledVertices::SetCachedSize(int size) const {
+void PredictedSamples::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void LabeledVertices::Clear() {
-// @@protoc_insertion_point(message_clear_start:classifierpb.LabeledVertices)
+void PredictedSamples::Clear() {
+// @@protoc_insertion_point(message_clear_start:classifierpb.PredictedSamples)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -2161,13 +2159,13 @@ void LabeledVertices::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* LabeledVertices::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* PredictedSamples::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated .classifierpb.LabeledVertexEntry entries = 1;
+      // repeated .classifierpb.PredictedSampleEntry entries = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
@@ -2203,13 +2201,13 @@ failure:
 #undef CHK_
 }
 
-uint8_t* LabeledVertices::_InternalSerialize(
+uint8_t* PredictedSamples::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.LabeledVertices)
+  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.PredictedSamples)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .classifierpb.LabeledVertexEntry entries = 1;
+  // repeated .classifierpb.PredictedSampleEntry entries = 1;
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_entries_size()); i < n; i++) {
     const auto& repfield = this->_internal_entries(i);
@@ -2221,19 +2219,19 @@ uint8_t* LabeledVertices::_InternalSerialize(
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.LabeledVertices)
+  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.PredictedSamples)
   return target;
 }
 
-size_t LabeledVertices::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:classifierpb.LabeledVertices)
+size_t PredictedSamples::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:classifierpb.PredictedSamples)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .classifierpb.LabeledVertexEntry entries = 1;
+  // repeated .classifierpb.PredictedSampleEntry entries = 1;
   total_size += 1UL * this->_internal_entries_size();
   for (const auto& msg : this->_impl_.entries_) {
     total_size +=
@@ -2243,17 +2241,17 @@ size_t LabeledVertices::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData LabeledVertices::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData PredictedSamples::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    LabeledVertices::MergeImpl
+    PredictedSamples::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*LabeledVertices::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*PredictedSamples::GetClassData() const { return &_class_data_; }
 
 
-void LabeledVertices::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<LabeledVertices*>(&to_msg);
-  auto& from = static_cast<const LabeledVertices&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.LabeledVertices)
+void PredictedSamples::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<PredictedSamples*>(&to_msg);
+  auto& from = static_cast<const PredictedSamples&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.PredictedSamples)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -2262,24 +2260,24 @@ void LabeledVertices::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void LabeledVertices::CopyFrom(const LabeledVertices& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.LabeledVertices)
+void PredictedSamples::CopyFrom(const PredictedSamples& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.PredictedSamples)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool LabeledVertices::IsInitialized() const {
+bool PredictedSamples::IsInitialized() const {
   return true;
 }
 
-void LabeledVertices::InternalSwap(LabeledVertices* other) {
+void PredictedSamples::InternalSwap(PredictedSamples* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.entries_.InternalSwap(&other->_impl_.entries_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata LabeledVertices::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata PredictedSamples::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
       file_level_metadata_classifier_2eproto[8]);
@@ -2288,41 +2286,41 @@ void LabeledVertices::InternalSwap(LabeledVertices* other) {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace classifierpb
 PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::classifierpb::ClusterID*
-Arena::CreateMaybeMessage< ::classifierpb::ClusterID >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::classifierpb::ClusterID >(arena);
+template<> PROTOBUF_NOINLINE ::classifierpb::Target*
+Arena::CreateMaybeMessage< ::classifierpb::Target >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::classifierpb::Target >(arena);
 }
-template<> PROTOBUF_NOINLINE ::classifierpb::TrainingDatasetEntry*
-Arena::CreateMaybeMessage< ::classifierpb::TrainingDatasetEntry >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::classifierpb::TrainingDatasetEntry >(arena);
+template<> PROTOBUF_NOINLINE ::classifierpb::DatasetEntry*
+Arena::CreateMaybeMessage< ::classifierpb::DatasetEntry >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::classifierpb::DatasetEntry >(arena);
 }
-template<> PROTOBUF_NOINLINE ::classifierpb::TrainingDataset*
-Arena::CreateMaybeMessage< ::classifierpb::TrainingDataset >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::classifierpb::TrainingDataset >(arena);
+template<> PROTOBUF_NOINLINE ::classifierpb::Dataset*
+Arena::CreateMaybeMessage< ::classifierpb::Dataset >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::classifierpb::Dataset >(arena);
 }
-template<> PROTOBUF_NOINLINE ::classifierpb::SupportVertexEntry*
-Arena::CreateMaybeMessage< ::classifierpb::SupportVertexEntry >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::classifierpb::SupportVertexEntry >(arena);
+template<> PROTOBUF_NOINLINE ::classifierpb::SupportSampleEntry*
+Arena::CreateMaybeMessage< ::classifierpb::SupportSampleEntry >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::classifierpb::SupportSampleEntry >(arena);
 }
-template<> PROTOBUF_NOINLINE ::classifierpb::SupportVertices*
-Arena::CreateMaybeMessage< ::classifierpb::SupportVertices >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::classifierpb::SupportVertices >(arena);
+template<> PROTOBUF_NOINLINE ::classifierpb::SupportSamples*
+Arena::CreateMaybeMessage< ::classifierpb::SupportSamples >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::classifierpb::SupportSamples >(arena);
 }
-template<> PROTOBUF_NOINLINE ::classifierpb::VertexToLabelEntry*
-Arena::CreateMaybeMessage< ::classifierpb::VertexToLabelEntry >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::classifierpb::VertexToLabelEntry >(arena);
+template<> PROTOBUF_NOINLINE ::classifierpb::TestSampleEntry*
+Arena::CreateMaybeMessage< ::classifierpb::TestSampleEntry >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::classifierpb::TestSampleEntry >(arena);
 }
-template<> PROTOBUF_NOINLINE ::classifierpb::VerticesToLabel*
-Arena::CreateMaybeMessage< ::classifierpb::VerticesToLabel >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::classifierpb::VerticesToLabel >(arena);
+template<> PROTOBUF_NOINLINE ::classifierpb::TestSamples*
+Arena::CreateMaybeMessage< ::classifierpb::TestSamples >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::classifierpb::TestSamples >(arena);
 }
-template<> PROTOBUF_NOINLINE ::classifierpb::LabeledVertexEntry*
-Arena::CreateMaybeMessage< ::classifierpb::LabeledVertexEntry >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::classifierpb::LabeledVertexEntry >(arena);
+template<> PROTOBUF_NOINLINE ::classifierpb::PredictedSampleEntry*
+Arena::CreateMaybeMessage< ::classifierpb::PredictedSampleEntry >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::classifierpb::PredictedSampleEntry >(arena);
 }
-template<> PROTOBUF_NOINLINE ::classifierpb::LabeledVertices*
-Arena::CreateMaybeMessage< ::classifierpb::LabeledVertices >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::classifierpb::LabeledVertices >(arena);
+template<> PROTOBUF_NOINLINE ::classifierpb::PredictedSamples*
+Arena::CreateMaybeMessage< ::classifierpb::PredictedSamples >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::classifierpb::PredictedSamples >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

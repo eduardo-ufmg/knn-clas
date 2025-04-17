@@ -27,17 +27,17 @@ int main(int argc, char **argv)
 
   const string dataset_file_path = argv[1];
 
-  Vertices vertices = readDataset(dataset_file_path);
+  Samples samples = readDataset(dataset_file_path);
 
-  computeGabrielGraph(vertices);
+  computeGabrielGraph(samples);
 
-  filter(vertices, tolerance);
+  filter(samples, tolerance);
 
-  const SupportVertices supportVertices = computeSVs(vertices);
+  const SupportSamples supportSamples = computeSVs(samples);
 
   const string output_file_path = defdirs::DEFAULT_OUTPUT_DIR + filenameFromPath(dataset_file_path);
 
-  if (writeSVs(supportVertices, output_file_path) != 0) {
+  if (writeSVs(supportSamples, output_file_path) != 0) {
     cerr << "Error: could not write SVs to file" << endl;
     return 1;
   }

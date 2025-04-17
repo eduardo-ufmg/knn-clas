@@ -3,6 +3,6 @@
 
 #include "types.hpp"
 
-const LabeledVertices nearestSVLabel(const VerticesToLabel& toLabel, const SupportVertices& supportVertices);
+const PredictedSamples nearestSVLabel(const TestSamples& toLabel, const SupportSamples& supportSamples);
 
 #endif // NEARESTSVLABEL_HPP

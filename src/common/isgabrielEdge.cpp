@@ -2,13 +2,13 @@
 
 #include "squaredDistance.hpp"
 
-bool isGabrielEdge(const Vertices& vertices, const Vertex& vi, const Vertex& vj, const size_t vertexqtty)
+bool isGabrielEdge(const Samples& samples, const Sample& vi, const Sample& vj, const size_t sampleqtty)
 {
   const float distancesq = squaredDistance(vi.coordinates, vj.coordinates);
 
-  for (size_t k = 0; k < vertexqtty; ++ k) {
+  for (size_t k = 0; k < sampleqtty; ++ k) {
 
-    const Vertex& vk = vertices[k];
+    const Sample& vk = samples[k];
 
     if (vk.id == vi.id || vk.id == vj.id) {
       continue;

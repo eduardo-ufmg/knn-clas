@@ -6,15 +6,15 @@
 
 using namespace std;
 
-BaseVertex::BaseVertex(const VertexID id, const Coordinates& coordinates)
+BaseSample::BaseSample(const SampleID id, const Coordinates& coordinates)
   : id(id), coordinates(coordinates)
 {}
 
-Vertex::Vertex(const VertexID id, const Coordinates& coordinates, shared_ptr<Cluster> cluster)
-  : BaseVertex(id, coordinates), cluster(cluster), quality(0.0f)
+Sample::Sample(const SampleID id, const Coordinates& coordinates, shared_ptr<Cluster> cluster)
+  : BaseSample(id, coordinates), cluster(cluster), quality(0.0f)
 {}
 
-Cluster::Cluster(const ClusterID id)
+Cluster::Cluster(const Target id)
   : id(id), sumq(0.0f), magq(0), online_avgq(0.0f), sumDeltaSq(0.0f), online_stdq(0.0f), threshold(0.0f)
 {}
 
@@ -51,14 +51,14 @@ void Cluster::computeThreshold(const float tolerance)
   threshold = online_avgq - tolerance * online_stdq;
 }
 
-SupportVertex::SupportVertex(const VertexID id, const Coordinates& coordinates, const ClusterID clusterid)
-  : BaseVertex(id, coordinates), clusterid(clusterid)
+SupportSample::SupportSample(const SampleID id, const Coordinates& coordinates, const Target target)
+  : BaseSample(id, coordinates), target(target)
 {}
 
-VertexToLabel::VertexToLabel(const VertexID id, const Coordinates& coordinates, const ClusterID expectedclusterid)
-  : BaseVertex(id, coordinates), expectedclusterid(expectedclusterid)
+TestSample::TestSample(const SampleID id, const Coordinates& coordinates, const Target expectedtarget)
+  : BaseSample(id, coordinates), expectedtarget(expectedtarget)
 {}
 
-LabeledVertex::LabeledVertex(const VertexID id, const Coordinates coordinates, const ClusterID clusterid)
-  : BaseVertex(id, coordinates), clusterid(clusterid)
+PredictedSample::PredictedSample(const SampleID id, const Coordinates coordinates, const Target target)
+  : BaseSample(id, coordinates), target(target)
 {}

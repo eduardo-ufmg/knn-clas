@@ -3,6 +3,6 @@
 
 #include "types.hpp"
 
-void computeGabrielGraph(Vertices &vertices);
+void computeGabrielGraph(Samples &samples);
 
 #endif // GABRIELGRAPH_HPP

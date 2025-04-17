@@ -7,24 +7,24 @@
 #include <memory>
 #include <map>
 
-class Vertex;
+class Sample;
 class Cluster;
 
-using VertexID = int;
+using SampleID = int;
 using Coordinates = std::vector<float>;
-using AdjacentVertex = std::pair<const Vertex *, bool>; // second: is support edge
-using AdjacencyList = std::vector<AdjacentVertex>;
+using AdjacentSample = std::pair<const Sample *, bool>; // second: is support edge
+using AdjacencyList = std::vector<AdjacentSample>;
 
-class BaseVertex
+class BaseSample
 {
 public:
-  VertexID id;
+  SampleID id;
   Coordinates coordinates;
 
-  BaseVertex(const VertexID id, const Coordinates& coordinates);  
+  BaseSample(const SampleID id, const Coordinates& coordinates);  
 };
 
-class Vertex : public BaseVertex
+class Sample : public BaseSample
 {
 public:
   std::shared_ptr<Cluster> cluster;
@@ -32,17 +32,17 @@ public:
   AdjacencyList adjacencyList;
   float quality;
 
-  Vertex(const VertexID id, const Coordinates& coordinates, std::shared_ptr<Cluster> cluster = nullptr);
+  Sample(const SampleID id, const Coordinates& coordinates, std::shared_ptr<Cluster> cluster = nullptr);
 };
 
-using Vertices = std::vector<Vertex>;
+using Samples = std::vector<Sample>;
 
-using ClusterID = std::variant<int, const std::string>;
+using Target = std::variant<int, const std::string>;
 
 class Cluster
 {
 public:
-  const ClusterID id;
+  const Target id;
 
   float sumq;
   int magq;
@@ -52,46 +52,46 @@ public:
   float online_stdq;
   float threshold;
 
-  Cluster(const ClusterID id);
+  Cluster(const Target id);
 
   void reset();
   void accumQ_updateStats(const float q);
   void computeThreshold(const float tolerance);
 };
 
-using Clusters = std::map<ClusterID, std::shared_ptr<Cluster>>;
+using Clusters = std::map<Target, std::shared_ptr<Cluster>>;
 
-using Edge = std::pair<const Vertex * const, const Vertex * const>;
+using Edge = std::pair<const Sample * const, const Sample * const>;
 
-class SupportVertex : public BaseVertex
+class SupportSample : public BaseSample
 {
 public:
-  const ClusterID clusterid;
+  const Target target;
 
-  SupportVertex(const VertexID id, const Coordinates& coordinates, const ClusterID cluster_id);
+  SupportSample(const SampleID id, const Coordinates& coordinates, const Target target);
 };
 
-using SupportVertices = std::vector<SupportVertex>;
+using SupportSamples = std::vector<SupportSample>;
 
-class VertexToLabel : public BaseVertex
+class TestSample : public BaseSample
 {
 public:
-  const ClusterID expectedclusterid;
+  const Target expectedtarget;
 
-  VertexToLabel(const VertexID id, const Coordinates& coordinates, const ClusterID expected_cluster_id);
+  TestSample(const SampleID id, const Coordinates& coordinates, const Target ground_truth);
 };
 
-using VerticesToLabel = std::vector<VertexToLabel>;
+using TestSamples = std::vector<TestSample>;
 
-class LabeledVertex : public BaseVertex
+class PredictedSample : public BaseSample
 {
 public:
-  const ClusterID clusterid;
+  const Target target;
 
-  LabeledVertex(const VertexID id, const Coordinates coordinates, const ClusterID cluster_id);
+  PredictedSample(const SampleID id, const Coordinates coordinates, const Target target);
 };
 
-using LabeledVertices = std::vector<LabeledVertex>;
+using PredictedSamples = std::vector<PredictedSample>;
 
 template<typename... Ts>
 std::enable_if_t<(sizeof...(Ts) > 0), std::ostream&>

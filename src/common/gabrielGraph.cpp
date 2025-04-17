@@ -9,21 +9,21 @@
 
 using namespace std;
 
-void computeGabrielGraph(Vertices &vertices)
+void computeGabrielGraph(Samples &samples)
 {
-  const size_t vertexqtty = vertices.size();
+  const size_t sampleqtty = samples.size();
 
-  for (size_t i = 0; i < vertexqtty; ++ i) {
-    for (size_t j = i + 1; j < vertexqtty; ++ j) {
+  for (size_t i = 0; i < sampleqtty; ++ i) {
+    for (size_t j = i + 1; j < sampleqtty; ++ j) {
 
-      Vertex& vi = vertices[i];
-      Vertex& vj = vertices[j];
+      Sample& vi = samples[i];
+      Sample& vj = samples[j];
       
-      bool isGE = isGabrielEdge(vertices, vi, vj, vertexqtty);
+      bool isGE = isGabrielEdge(samples, vi, vj, sampleqtty);
 
       if (isGE) {
-        const ClusterID viCid = vi.cluster->id;
-        const ClusterID vjCid = vj.cluster->id;
+        const Target viCid = vi.cluster->id;
+        const Target vjCid = vj.cluster->id;
 
         bool isSE = viCid != vjCid;
 

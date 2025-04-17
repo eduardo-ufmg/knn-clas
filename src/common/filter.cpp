@@ -4,23 +4,23 @@
 
 using namespace std;
 
-size_t countSameClusterAdjacents(const Vertex& vertex);
+size_t countSameClusterAdjacents(const Sample& sample);
 
-void filter(Vertices& vertices, const float tolerance)
+void filter(Samples& samples, const float tolerance)
 {
 
   Clusters clusters;
 
-  for (auto& vertex : vertices) {
+  for (auto& sample : samples) {
     
-    if (vertex.adjacencyList.empty()) {
-      vertex.quality = 0.0f;
+    if (sample.adjacencyList.empty()) {
+      sample.quality = 0.0f;
     } else {
-      vertex.quality = static_cast<float>(countSameClusterAdjacents(vertex)) / static_cast<float>(vertex.adjacencyList.size());
+      sample.quality = static_cast<float>(countSameClusterAdjacents(sample)) / static_cast<float>(sample.adjacencyList.size());
     }
 
-    shared_ptr<Cluster> cluster = vertex.cluster;
-    cluster->accumQ_updateStats(vertex.quality);
+    shared_ptr<Cluster> cluster = sample.cluster;
+    cluster->accumQ_updateStats(sample.quality);
     clusters.emplace(cluster->id, cluster);
 
   }
@@ -29,21 +29,21 @@ void filter(Vertices& vertices, const float tolerance)
     cluster->computeThreshold(tolerance);
   }
 
-  vertices.erase(remove_if(vertices.begin(), vertices.end(),
-                           [](const Vertex& vertex) {
-                             return vertex.quality < vertex.cluster->threshold;
+  samples.erase(remove_if(samples.begin(), samples.end(),
+                           [](const Sample& sample) {
+                             return sample.quality < sample.cluster->threshold;
                            }),
-                 vertices.end());
+                 samples.end());
 
-  for (auto& vertex : vertices) {
-    vertex.adjacencyList.clear();
+  for (auto& sample : samples) {
+    sample.adjacencyList.clear();
   }
 }
 
-size_t countSameClusterAdjacents(const Vertex& vertex)
+size_t countSameClusterAdjacents(const Sample& sample)
 {
-  return count_if(vertex.adjacencyList.begin(), vertex.adjacencyList.end(),
-                  [&vertex](const AdjacentVertex& adjacent) {
-                    return adjacent.first->cluster == vertex.cluster;
+  return count_if(sample.adjacencyList.begin(), sample.adjacencyList.end(),
+                  [&sample](const AdjacentSample& adjacent) {
+                    return adjacent.first->cluster == sample.cluster;
                   });
 }

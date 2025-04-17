@@ -3,6 +3,6 @@
 
 #include "types.hpp"
 
-bool isGabrielEdge(const Vertices& vertices, const Vertex& vi, const Vertex& vj, const size_t vertexqtty);
+bool isGabrielEdge(const Samples& samples, const Sample& vi, const Sample& vj, const size_t sampleqtty);
 
 #endif // ISGABRIELEDGE_HPP

@@ -4,8 +4,8 @@
 #include "types.hpp"
 #include "classifier.pb.h"
 
-Vertices readDataset(const std::string& filename);
-VerticesToLabel readToLabel(const std::string& filename);
-SupportVertices readSVs(const std::string& filename);
+Samples readDataset(const std::string& filename);
+TestSamples readToLabel(const std::string& filename);
+SupportSamples readSVs(const std::string& filename);
 
 #endif // READFILES_HPP
