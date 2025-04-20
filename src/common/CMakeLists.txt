@@ -5,7 +5,7 @@ add_library(common_lib STATIC
   filter.cpp
   gabrielGraph.cpp
   isgabrielEdge.cpp
-  nearestSVlabel.cpp
+  nearestSVpred.cpp
   readFiles.cpp
   squaredDistance.cpp
   types.cpp

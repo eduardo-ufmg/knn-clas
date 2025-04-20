@@ -3,7 +3,7 @@
 #include "types.hpp"
 #include "filenameHelpers.hpp"
 #include "readFiles.hpp"
-#include "nearestSVlabel.hpp"
+#include "nearestSVpred.hpp"
 #include "writeFiles.hpp"
 #include "defdirs.hpp"
 
@@ -12,14 +12,14 @@ using namespace std;
 int main(int argc, char **argv)
 {
   if (argc < 3) {
-    cerr << "Usage: " << argv[0] << " <tolabel> <support_samples>" << endl;
+    cerr << "Usage: " << argv[0] << " <topred> <support_samples>" << endl;
     return 1;
   }
 
-  const string tolabel_file_path = argv[1];
+  const string topred_file_path = argv[1];
   const string support_samples_file_path = argv[2];
 
-  const TestSamples toLabel = readToLabel(tolabel_file_path);
+  const TestSamples toLabel = readToLabel(topred_file_path);
   const SupportSamples supportSamples = readSVs(support_samples_file_path);
 
   const PredictedSamples predictedSamples = nearestSVLabel(toLabel, supportSamples);

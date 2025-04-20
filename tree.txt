@@ -1,0 +1,57 @@
+.
+├── bin
+│   ├── pred
+│   └── train
+├── build
+├── CMakeLists.txt
+├── data
+│   ├── input
+│   │   ├── spirals.pb
+│   │   └── spirals_test.pb
+│   └── output
+├── include
+│   ├── classifier.pb.h
+│   ├── computeSVs.hpp
+│   ├── defdirs.hpp
+│   ├── filenameHelpers.hpp
+│   ├── filter.hpp
+│   ├── gabrielGraph.hpp
+│   ├── isgabrielEdge.hpp
+│   ├── nearestSVpred.hpp
+│   ├── readFiles.hpp
+│   ├── squaredDistance.hpp
+│   ├── types.hpp
+│   └── writeFiles.hpp
+├── LICENSE
+├── proto
+│   ├── classifier.proto
+│   └── compile.sh
+├── README.md
+├── report
+├── scripts
+│   ├── classifier_pb2.py
+│   ├── generate.py
+│   ├── load_proto.py
+│   ├── plot.py
+│   ├── prepare.py
+│   ├── run.py
+│   ├── store_proto.py
+│   └── validate_prepare.py
+└── src
+    ├── app
+    │   ├── CMakeLists.txt
+    │   ├── pred.cpp
+    │   └── train.cpp
+    └── common
+        ├── classifier.pb.cc
+        ├── CMakeLists.txt
+        ├── computeSVs.cpp
+        ├── filenameHelpers.cpp
+        ├── filter.cpp
+        ├── gabrielGraph.cpp
+        ├── isgabrielEdge.cpp
+        ├── nearestSVpred.cpp
+        ├── readFiles.cpp
+        ├── squaredDistance.cpp
+        ├── types.cpp
+        └── writeFiles.cpp
