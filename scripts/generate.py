@@ -31,28 +31,43 @@ def make_spirals(n_samples: int=100, noise: float=0.0, turns: int=1) -> tuple[np
   
   return X, y_labels
 
-def make_grid(X: np.ndarray) -> np.ndarray:
+def make_grid(X: np.ndarray, target_points: int = 10000) -> np.ndarray:
   """
-  Create a grid of points for plotting decision boundaries.
-
-  Parameters
-  ----------
-  X : np.ndarray
-    The input data points.
-
-  Returns
-  -------
-  np.ndarray
-    The grid of points.
-  """
+  Create an adaptive grid of points for decision boundaries, balancing resolution and computation time.
   
+  Parameters:
+    X (np.ndarray): Input data points.
+    target_points (int): Approximate number of grid points (default: 10000).
+  
+  Returns:
+    np.ndarray: Grid of points shaped (n_samples, 2).
+  """
+  # Calculate data range with padding
   x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
   y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+
+  # Handle edge cases where range is zero
+  x_range = x_max - x_min
+  y_range = y_max - y_min
+  if x_range <= 0:
+    x_range = 1e-5
+    x_max = x_min + x_range
+  if y_range <= 0:
+    y_range = 1e-5
+    y_max = y_min + y_range
+
+  # Calculate aspect ratio and determine grid dimensions
+  aspect_ratio = x_range / y_range
+  nx = int(np.round(np.sqrt(target_points * aspect_ratio)))
+  ny = int(np.round(np.sqrt(target_points / aspect_ratio)))
+  nx, ny = max(nx, 1), max(ny, 1)  # Ensure at least 1 point per axis
+
+  # Generate evenly spaced grid
+  xx = np.linspace(x_min, x_max, nx)
+  yy = np.linspace(y_min, y_max, ny)
+  xx_mesh, yy_mesh = np.meshgrid(xx, yy)
   
-  xx, yy = np.meshgrid(np.arange(x_min, x_max, 1),
-                       np.arange(y_min, y_max, 1))
-  
-  return np.c_[xx.ravel(), yy.ravel()]
+  return np.c_[xx_mesh.ravel(), yy_mesh.ravel()]
 
 if __name__ == "__main__":
   import matplotlib.pyplot as plt
