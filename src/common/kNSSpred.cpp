@@ -43,9 +43,10 @@ const PredictedSamples kNSSpred(const TestSamples& testSample, const SupportSamp
       const auto& index = sortedIndices[i];
       const auto& supportSample = supportSamples[index];
       const auto& sqDistance = distances[index];
+      const auto& supportTarget = supportSample.target;
 
       const auto& kernelValue = kernel(sqDistance);
-      decisionSum += kernelValue * bimap.get_int(supportSample.target);
+      decisionSum += kernelValue * bimap.get_int(supportTarget);
     }
 
     const int& decision = sign(decisionSum);

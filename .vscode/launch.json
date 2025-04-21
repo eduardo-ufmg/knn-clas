@@ -90,7 +90,8 @@
     "args": [
       "${workspaceFolder}/data/spirals_test.pb",
       "${workspaceFolder}/data/spirals_knn_support.pb",
-      "${workspaceFolder}/data/spirals_knn_predicted.pb"
+      "${workspaceFolder}/data/spirals_knn_predicted.pb",
+      "200"
     ],
     "stopAtEntry": false,
     "cwd": "${workspaceFolder}/bin/",
