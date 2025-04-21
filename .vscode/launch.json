@@ -1,13 +1,13 @@
 {
   "configurations": [
   {
-    "name": "debug fit",
+    "name": "debug nn-fit",
     "type": "cppdbg",
     "request": "launch",
-    "program": "${workspaceFolder}/bin/fit",
+    "program": "${workspaceFolder}/bin/nn-fit",
     "args": [
       "${workspaceFolder}/data/spirals_train.pb",
-      "${workspaceFolder}/data/spirals_support.pb"
+      "${workspaceFolder}/data/spirals_nn_support.pb"
     ],
     "stopAtEntry": false,
     "cwd": "${workspaceFolder}/bin/",
@@ -28,14 +28,69 @@
     ]
   },
   {
-    "name": "debug pred",
+    "name": "debug nn-pred",
     "type": "cppdbg",
     "request": "launch",
     "program": "${workspaceFolder}/bin/pred",
     "args": [
       "${workspaceFolder}/data/spirals_test.pb",
-      "${workspaceFolder}/data/spirals_support.pb",
-      "${workspaceFolder}/data/spirals_predicted.pb"
+      "${workspaceFolder}/data/spirals_nn_support.pb",
+      "${workspaceFolder}/data/spirals_nn_predicted.pb"
+    ],
+    "stopAtEntry": false,
+    "cwd": "${workspaceFolder}/bin/",
+    "environment": [],
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "setupCommands": [
+      {
+        "description": "Enable pretty-printing for gdb",
+        "text": "-enable-pretty-printing",
+        "ignoreFailures": true
+      },
+      {
+        "description": "Set Disassembly Flavor to Intel",
+        "text": "-gdb-set disassembly-flavor intel",
+        "ignoreFailures": true
+      }
+    ]
+  },
+  {
+    "name": "debug knn-fit",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${workspaceFolder}/bin/knn-fit",
+    "args": [
+      "${workspaceFolder}/data/spirals_train.pb",
+      "${workspaceFolder}/data/spirals_knn_support.pb"
+    ],
+    "stopAtEntry": false,
+    "cwd": "${workspaceFolder}/bin/",
+    "environment": [],
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "setupCommands": [
+      {
+        "description": "Enable pretty-printing for gdb",
+        "text": "-enable-pretty-printing",
+        "ignoreFailures": true
+      },
+      {
+        "description": "Set Disassembly Flavor to Intel",
+        "text": "-gdb-set disassembly-flavor intel",
+        "ignoreFailures": true
+      }
+    ]
+  },
+  {
+    "name": "debug knn-pred",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${workspaceFolder}/bin/pred",
+    "args": [
+      "${workspaceFolder}/data/spirals_test.pb",
+      "${workspaceFolder}/data/spirals_knn_support.pb",
+      "${workspaceFolder}/data/spirals_knn_predicted.pb"
     ],
     "stopAtEntry": false,
     "cwd": "${workspaceFolder}/bin/",

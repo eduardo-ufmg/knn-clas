@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(nn-clas)
+project(k_nn-clas)
 
 # Set default build type to Release if not specified
 if(NOT CMAKE_BUILD_TYPE)
@@ -23,3 +23,4 @@ find_package(Protobuf REQUIRED)
 # Add subdirectories
 add_subdirectory(src/common)
 add_subdirectory(src/nn-clas)
+add_subdirectory(src/knn-clas)
