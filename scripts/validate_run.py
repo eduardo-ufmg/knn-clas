@@ -3,7 +3,7 @@ import pathlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-from load_proto import load_test_samples, load_predicted_samples, load_support_samples
+from load_proto import load_test_samples, load_predicted_samples, load_support_samples, load_dataset
 from plot import plot_test
 
 def main():
@@ -21,6 +21,7 @@ def main():
   test_path = input_dir / "spirals_test.pb"
   predicted_path = input_dir / "spirals_predicted.pb"
   support_path = input_dir / "spirals_support.pb"
+  train_path = input_dir / "spirals_train.pb"
 
   # Load test samples
   test_samples = load_test_samples(str(test_path))
@@ -39,11 +40,21 @@ def main():
   if support_samples is None:
     print("Error: Failed to load support samples.")
     return
+  
+  # Load training dataset
+  train_data = load_dataset(str(train_path))
+  if train_data is None:
+    print("Error: Failed to load training dataset.")
+    return
 
   # Extract test data
   X_test = np.array([[entry.features[0], entry.features[1]] for entry in test_samples.entries])
   y_truth = np.array([entry.ground_truth.target_int for entry in test_samples.entries])
   y_pred = np.array([entry.target.target_int for entry in predicted_samples.entries])
+
+  # Extract training data
+  X_train = np.array([[entry.features[0], entry.features[1]] for entry in train_data.entries])
+  y_train = np.array([entry.target.target_int for entry in train_data.entries])
 
   # Validate matching sample counts
   if len(y_truth) != len(y_pred):
@@ -75,6 +86,15 @@ def main():
     X_support[:, 0], X_support[:, 1],
     c=y_support,
     marker='x'
+  )
+
+  # Overlay training points with true class colors
+  plt.scatter(
+    X_train[:, 0], X_train[:, 1],
+    c=y_train,
+    marker='o',
+    edgecolor='black',
+    alpha=0.5
   )
 
   plt.title(f"Classifier Predictions with Support Vectors\nAccuracy: {accuracy:.1f}%")

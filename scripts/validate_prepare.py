@@ -11,14 +11,14 @@ def main():
   parser.add_argument(
     "--input_dir",
     type=pathlib.Path,
-    default=pathlib.Path("data") / "input",
+    default=pathlib.Path("data"),
     help="Directory containing the dataset files.",
   )
   args = parser.parse_args()
   input_dir = args.input_dir
 
   # Paths to dataset files
-  train_dataset_path = input_dir / "spirals.pb"
+  train_dataset_path = input_dir / "spirals_train.pb"
   test_samples_path = input_dir / "spirals_test.pb"
 
   # Validate and plot the training dataset
