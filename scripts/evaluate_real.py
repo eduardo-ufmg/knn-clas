@@ -1,8 +1,50 @@
 import pandas as pd
 import numpy as np
-
 from sklearn.datasets import load_breast_cancer, load_digits, fetch_openml
 from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+import classifier_pb2 as pb
+from store_proto import store_dataset, store_test_samples
+
+def create_proto_dataset(X, y):
+  """Convert numpy arrays to protobuf Dataset message."""
+  dataset = pb.Dataset()
+  for features, target in zip(X, y):
+    entry = dataset.entries.add()
+    entry.features.extend(features.tolist())
+    if isinstance(target[0], (np.int32, np.int64)):
+      entry.target.target_int = int(target[0])
+    else:
+      entry.target.target_str = str(target[0])
+  return dataset
+
+def create_proto_test_samples(X, y):
+  """Convert numpy arrays to protobuf TestSamples message."""
+  samples = pb.TestSamples()
+  for i, (features, target) in enumerate(zip(X, y)):
+    entry = samples.entries.add()
+    entry.sample_id = i
+    entry.features.extend(features.tolist())
+    if isinstance(target[0], (np.int32, np.int64)):
+      entry.ground_truth.target_int = int(target[0])
+    else:
+      entry.ground_truth.target_str = str(target[0])
+  return samples
+
+def store_real_dataset(X, y, name):
+  """Store dataset in protobuf format with train/test split."""
+  # Split into train (80%) and test (20%)
+  X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+  )
+  
+  # Create and store training dataset
+  train_dataset = create_proto_dataset(X_train, y_train)
+  store_dataset(train_dataset, f"data/{name}_train.pb")
+  
+  # Create and store test samples
+  test_samples = create_proto_test_samples(X_test, y_test)
+  store_test_samples(test_samples, f"data/{name}_test.pb")
 
 def load_breast_cancer_dataset():
   data = load_breast_cancer(return_X_y=False)
@@ -110,7 +152,7 @@ def load_spect_heart():
   return X, y.reshape(-1, 1)
 
 def load_all_datasets():
-  return {
+  datasets = {
     "breast_cancer": load_breast_cancer_dataset(),
     "pima_diabetes": load_pima_diabetes(),
     "haberman": load_haberman_survival(),
@@ -121,6 +163,12 @@ def load_all_datasets():
     "ionosphere": load_ionosphere(),
     "spect_heart": load_spect_heart(),
   }
+
+  for name, (X, y) in datasets.items():
+    print(f"Storing {name} dataset...")
+    store_real_dataset(X, y, name)
+
+  return datasets
 
 if __name__ == "__main__":
   for name, (X, y) in load_all_datasets().items():

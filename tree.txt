@@ -1,8 +1,18 @@
 .
 ├── bin
+│   ├── knn-fit
+│   ├── knn-pred
+│   ├── nn-fit
+│   └── nn-pred
 ├── build
 ├── CMakeLists.txt
 ├── data
+│   ├── spirals_knn_predicted.pb
+│   ├── spirals_knn_support.pb
+│   ├── spirals_nn_predicted.pb
+│   ├── spirals_nn_support.pb
+│   ├── spirals_test.pb
+│   └── spirals_train.pb
 ├── include
 │   ├── bimap.hpp
 │   ├── classifier.pb.h
@@ -24,13 +34,23 @@
 │   └── compile.sh
 ├── README.md
 ├── report
+│   └── knn-clas.TeX
 ├── scripts
 │   ├── classifier_pb2.py
-│   ├── compare.py
+│   ├── compare_spirals.py
+│   ├── comparison_results
+│   │   ├── spirals_10nn.png
+│   │   ├── spirals_1nn.png
+│   │   ├── spirals_2nn.png
+│   │   ├── spirals_3nn.png
+│   │   └── spirals_5nn.png
+│   ├── evaluate_real.py
 │   ├── generate.py
 │   ├── load_proto.py
 │   ├── plot.py
 │   ├── prepare.py
+│   ├── pvenv
+│   ├── __pycache__
 │   ├── run.py
 │   ├── store_proto.py
 │   ├── validate_prepare.py
@@ -60,5 +80,3 @@
 │       ├── nn-fit.cpp
 │       └── nn-pred.cpp
 └── tree.txt
-
-12 directories, 50 files
