@@ -38,8 +38,15 @@ def main():
   knn_support_path = input_dir / "spirals_knn_support.pb"
 
   # Select paths based on model type
-  predicted_path = nn_predicted_path if model == "nn-clas" else knn_predicted_path
-  support_path = nn_support_path if model == "nn-clas" else knn_support_path
+  if model == "nn-clas":
+    predicted_path = nn_predicted_path
+    support_path = nn_support_path
+  elif model == "knn-clas":
+    predicted_path = knn_predicted_path
+    support_path = knn_support_path
+  else:
+    print("Error: Unsupported model type.")
+    return
 
   # Load test samples
   test_samples = load_test_samples(str(test_path))

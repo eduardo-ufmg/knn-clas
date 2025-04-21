@@ -83,10 +83,19 @@ def main():
     return
   
   # Select paths based on model
-  fit_bin = nn_fit_bin if model == "nn-clas" else knn_fit_bin
-  pred_bin = nn_pred_bin if model == "nn-clas" else knn_pred_bin
-  support_path = nn_support_path if model == "nn-clas" else knn_support_path
-  predicted_path = nn_predicted_path if model == "nn-clas" else knn_predicted_path
+  if model == "nn-clas":
+    support_path = nn_support_path
+    predicted_path = nn_predicted_path
+    fit_bin = nn_fit_bin
+    pred_bin = nn_pred_bin
+  elif model == "knn-clas":
+    support_path = knn_support_path
+    predicted_path = knn_predicted_path
+    fit_bin = knn_fit_bin
+    pred_bin = knn_pred_bin
+  else:
+    print(f"Error: Unsupported model type {model}")
+    return
 
   # Run fit step
   fit_cmd = [str(fit_bin), str(train_path), str(support_path)]
