@@ -18,20 +18,47 @@ def main():
     help="Directory containing fit and pred executables."
   )
   parser.add_argument(
+    "--model",
+    type=str,
+    choices=["nn-clas", "knn-clas"],
+    default="nn-clas",
+    help="Model type to use for fitting and prediction."
+  )
+  parser.add_argument(
     "--tolerance",
     type=float,
     help="Optional tolerance parameter for the fit step."
+  )
+  parser.add_argument(
+    "--k",
+    type=int,
+    default=2,
+    help="Number of neighbors for the knn-clas model."
   )
   args = parser.parse_args()
 
   # Construct file paths
   train_path = args.output_dir / "spirals_train.pb"
   test_path = args.output_dir / "spirals_test.pb"
-  support_path = args.output_dir / "spirals_support.pb"
-  predicted_path = args.output_dir / "spirals_predicted.pb"
+  
+  # Support and prediction paths for the nn-clas model
+  nn_support_path = args.output_dir / "spirals_nn_support.pb"
+  nn_predicted_path = args.output_dir / "spirals_nn_predicted.pb"
 
+  # Support and prediction paths for the knn-clas model
+  knn_support_path = args.output_dir / "spirals_knn_support.pb"
+  knn_predicted_path = args.output_dir / "spirals_knn_predicted.pb"
+
+  # Binaries for nn-clas model
   nn_fit_bin = args.bin_dir / "nn-fit"
   nn_pred_bin = args.bin_dir / "nn-pred"
+
+  # Binaries for knn-clas model
+  knn_fit_bin = args.bin_dir / "knn-fit"
+  knn_pred_bin = args.bin_dir / "knn-pred"
+
+  # Set model
+  model = args.model
 
   # Check if binaries exist
   if not nn_fit_bin.exists():
@@ -39,6 +66,12 @@ def main():
     return
   if not nn_pred_bin.exists():
     print(f"Error: pred executable not found at {nn_pred_bin}")
+    return
+  if not knn_fit_bin.exists():
+    print(f"Error: knn-fit executable not found at {knn_fit_bin}")
+    return
+  if not knn_pred_bin.exists():
+    print(f"Error: knn-pred executable not found at {knn_pred_bin}")
     return
 
   # Check input files
@@ -48,9 +81,15 @@ def main():
   if not test_path.exists():
     print(f"Error: Test data not found at {test_path}")
     return
+  
+  # Select paths based on model
+  fit_bin = nn_fit_bin if model == "nn-clas" else knn_fit_bin
+  pred_bin = nn_pred_bin if model == "nn-clas" else knn_pred_bin
+  support_path = nn_support_path if model == "nn-clas" else knn_support_path
+  predicted_path = nn_predicted_path if model == "nn-clas" else knn_predicted_path
 
   # Run fit step
-  fit_cmd = [str(nn_fit_bin), str(train_path), str(support_path)]
+  fit_cmd = [str(fit_bin), str(train_path), str(support_path)]
   if args.tolerance is not None:
     fit_cmd.append(str(args.tolerance))
   fit_result = subprocess.run(fit_cmd)
@@ -59,7 +98,7 @@ def main():
     return
 
   # Run prediction step
-  pred_cmd = [str(nn_pred_bin), str(test_path), str(support_path), str(predicted_path)]
+  pred_cmd = [str(pred_bin), str(test_path), str(support_path), str(predicted_path)]
   pred_result = subprocess.run(pred_cmd)
   if pred_result.returncode != 0:
     print("Prediction step failed with exit code", pred_result.returncode)

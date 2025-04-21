@@ -9,19 +9,37 @@ from plot import plot_test
 def main():
   parser = argparse.ArgumentParser(description="Validate and visualize classifier predictions with support vectors.")
   parser.add_argument(
+    "--model",
+    type=str,
+    choices=["nn-clas", "knn-clas"],
+    default="nn-clas",
+    help="Model type to use for fitting and prediction."
+  )
+  parser.add_argument(
   "--input_dir",
   type=pathlib.Path,
   default=pathlib.Path("data"),
   help="Directory containing test, predicted, and support samples."
   )
   args = parser.parse_args()
+  model = args.model
   input_dir = args.input_dir
 
   # Define file paths
-  test_path = input_dir / "spirals_test.pb"
-  predicted_path = input_dir / "spirals_predicted.pb"
-  support_path = input_dir / "spirals_support.pb"
   train_path = input_dir / "spirals_train.pb"
+  test_path = input_dir / "spirals_test.pb"
+
+  # Define paths for predicted and support samples for nn-clas
+  nn_predicted_path = input_dir / "spirals_nn_predicted.pb"
+  nn_support_path = input_dir / "spirals_nn_support.pb"
+
+  # Define paths for predicted and support samples for knn-clas
+  knn_predicted_path = input_dir / "spirals_knn_predicted.pb"
+  knn_support_path = input_dir / "spirals_knn_support.pb"
+
+  # Select paths based on model type
+  predicted_path = nn_predicted_path if model == "nn-clas" else knn_predicted_path
+  support_path = nn_support_path if model == "nn-clas" else knn_support_path
 
   # Load test samples
   test_samples = load_test_samples(str(test_path))
