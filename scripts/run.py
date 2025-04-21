@@ -99,7 +99,7 @@ def main():
 
   # Run fit step
   fit_cmd = [str(fit_bin), str(train_path), str(support_path)]
-  if args.tolerance is not None:
+  if model == "nn-clas" and args.tolerance is not None:
     fit_cmd.append(str(args.tolerance))
   fit_result = subprocess.run(fit_cmd)
   if fit_result.returncode != 0:
@@ -108,6 +108,8 @@ def main():
 
   # Run prediction step
   pred_cmd = [str(pred_bin), str(test_path), str(support_path), str(predicted_path)]
+  if model == "knn-clas" and args.k is not None:
+    pred_cmd.append(str(args.k))
   pred_result = subprocess.run(pred_cmd)
   if pred_result.returncode != 0:
     print("Prediction step failed with exit code", pred_result.returncode)

@@ -1,5 +1,7 @@
+import os
 import sys
 import subprocess
+import argparse
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,8 +17,8 @@ from load_proto import (
   load_dataset
 )
 
-def run_model(model, output_dir, bin_dir):
-  """Run the specified model using subprocess."""
+def run_model(model, output_dir, bin_dir, k=None, tolerance=None):
+  """Run the specified model using subprocess with optional parameters."""
   run_script = script_dir / "run.py"
   cmd = [
     sys.executable,
@@ -25,6 +27,14 @@ def run_model(model, output_dir, bin_dir):
     "--output_dir", str(output_dir),
     "--bin_dir", str(bin_dir)
   ]
+
+  # Add tolerance for nn-clas
+  if model == "nn-clas" and tolerance is not None:
+    cmd.extend(["--tolerance", str(tolerance)])
+  # Add k for knn-clas
+  elif model == "knn-clas" and k is not None:
+    cmd.extend(["--k", str(k)])
+
   try:
     subprocess.run(cmd, check=True)
     print(f"Successfully ran {model} model.")
@@ -33,13 +43,25 @@ def run_model(model, output_dir, bin_dir):
     sys.exit(1)
 
 def main():
+  parser = argparse.ArgumentParser(description="Compare models with optional parameters.")
+  parser.add_argument('--k', type=int, default=2, help='Number of neighbors for knn-clas model')
+  parser.add_argument('--tolerance', type=float, default=0.0, help='Tolerance parameter for nn-clas model')
+  args = parser.parse_args()
+
   project_root = script_dir.parent
   output_dir = project_root / "data"
   bin_dir = project_root / "bin"
 
-  # Run both models
+  # Get arguments
+  k = args.k
+  tolerance = args.tolerance
+
+  # Run both models with respective parameters
   for model in ["nn-clas", "knn-clas"]:
-    run_model(model, output_dir, bin_dir)
+    if model == "nn-clas":
+      run_model(model, output_dir, bin_dir, tolerance=tolerance)
+    else:
+      run_model(model, output_dir, bin_dir, k=k)
 
   # Load test samples
   test_path = output_dir / "spirals_test.pb"
@@ -91,7 +113,7 @@ def main():
     support_data[model] = (support, y_truth)
 
   # Create comparison plot
-  plt.figure(figsize=(14, 6))
+  plt.figure(figsize=(12, 6))
 
   for idx, model in enumerate(models, 1):
     plt.subplot(1, 2, idx)
@@ -125,9 +147,24 @@ def main():
       alpha=0.3,
     )
 
-    plt.title(f"{model} - Accuracy: {accuracies[model]:.1f}%")
+    if model == "nn-clas":
+      title = f"{model}/tol={tolerance:.2f}"
+    else:
+      title = f"{model}/k={k}" 
+
+    plt.title(f"{title} - Accuracy: {accuracies[model]:.1f}%")
 
   plt.tight_layout()
+
+  # Ensure the comparison_results directory exists
+  comparison_results_dir = script_dir / "comparison_results"
+  comparison_results_dir.mkdir(exist_ok=True)
+
+  # Save the plot to the comparison_results directory
+  plot_path = comparison_results_dir / f"nn_{k}nn.png"
+  plt.savefig(plot_path)
+  print(f"Comparison plot saved to {plot_path}")
+
   plt.show()
 
 if __name__ == "__main__":

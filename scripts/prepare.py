@@ -35,18 +35,25 @@ def main():
     default=0.2,
     help="Ratio of test samples to total samples.",
   )
+  parser.add_argument(
+    "--turns",
+    type=int,
+    default=2,
+    help="Number of turns in the spiral.",
+  )
 
   args = parser.parse_args()
   output_dir = args.output_dir
   num_samples = args.num_samples
   noise = args.noise
   test_ratio = args.test_ratio
+  turns = args.turns
 
   # Create the output directory if it doesn't exist
   os.makedirs(output_dir, exist_ok=True)
 
   # Generate the dataset
-  X, y = make_spirals(num_samples, noise, turns=2)
+  X, y = make_spirals(num_samples, noise, turns=turns)
 
   # Split the dataset into training and test sets
   X_train, X_test, y_train, y_test = train_test_split(
