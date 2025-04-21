@@ -147,12 +147,12 @@ def main():
       alpha=0.3,
     )
 
-    if model == "nn-clas":
-      title = f"{model}/tol={tolerance:.2f}"
+    if model == "knn-clas":
+      model_name = f"{k}nn-clas"
     else:
-      title = f"{model}/k={k}" 
+      model_name = model
 
-    plt.title(f"{title} - Accuracy: {accuracies[model]:.1f}%")
+    plt.title(f"{model_name} - Accuracy: {accuracies[model]:.1f}%")
 
   plt.tight_layout()
 
@@ -161,7 +161,7 @@ def main():
   comparison_results_dir.mkdir(exist_ok=True)
 
   # Save the plot to the comparison_results directory
-  plot_path = comparison_results_dir / f"nn_{k}nn.png"
+  plot_path = comparison_results_dir / f"spirals_{k}nn.png"
   plt.savefig(plot_path)
   print(f"Comparison plot saved to {plot_path}")
 
