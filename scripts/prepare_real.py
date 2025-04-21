@@ -158,7 +158,7 @@ def load_all_datasets():
     "haberman": load_haberman_survival(),
     "banknote": load_banknote_authentication(),
     "sonar": load_sonar(),
-    "adult": load_adult_census(),
+    # "adult": load_adult_census(),
     "digits_binary": load_digits_binary(),
     "ionosphere": load_ionosphere(),
     "spect_heart": load_spect_heart(),
