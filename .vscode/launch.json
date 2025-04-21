@@ -31,7 +31,7 @@
     "name": "debug nn-pred",
     "type": "cppdbg",
     "request": "launch",
-    "program": "${workspaceFolder}/bin/pred",
+    "program": "${workspaceFolder}/bin/nn-pred",
     "args": [
       "${workspaceFolder}/data/spirals_test.pb",
       "${workspaceFolder}/data/spirals_nn_support.pb",
@@ -86,7 +86,7 @@
     "name": "debug knn-pred",
     "type": "cppdbg",
     "request": "launch",
-    "program": "${workspaceFolder}/bin/pred",
+    "program": "${workspaceFolder}/bin/knn-pred",
     "args": [
       "${workspaceFolder}/data/spirals_test.pb",
       "${workspaceFolder}/data/spirals_knn_support.pb",

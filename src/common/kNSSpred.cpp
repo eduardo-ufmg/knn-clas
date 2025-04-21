@@ -109,10 +109,12 @@ const Bimap createbimap(const SupportSamples& supportSamples)
 
   const bool shouldIncludeZero = isOdd;
 
+  const int n_targets = uniqueTargets.size();
+
   const int intstart =
       isOdd ?
-        -floor(uniqueTargets.size() / 2) :
-        -(uniqueTargets.size() / 2);
+        -floor(n_targets / 2) :
+        -(n_targets / 2);
 
   int intcounter = intstart;
 
