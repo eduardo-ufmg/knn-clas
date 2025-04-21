@@ -5,7 +5,7 @@
       "includePath": [
         "${workspaceFolder}/include",
         "${workspaceFolder}/src/common",
-        "${workspaceFolder}/src/app",
+        "${workspaceFolder}/src/nn-clas",
         "/usr/include",
         "/usr/local/include"
       ],
@@ -18,7 +18,7 @@
         "path": [
           "${workspaceFolder}/include",
           "${workspaceFolder}/src/common",
-          "${workspaceFolder}/src/app"
+          "${workspaceFolder}/src/nn-clas"
         ],
         "limitSymbolsToIncludedHeaders": true,
         "databaseFilename": ""

@@ -22,4 +22,4 @@ find_package(Protobuf REQUIRED)
 
 # Add subdirectories
 add_subdirectory(src/common)
-add_subdirectory(src/app)
+add_subdirectory(src/nn-clas)

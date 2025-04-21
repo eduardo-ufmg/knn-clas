@@ -30,15 +30,15 @@ def main():
   support_path = args.output_dir / "spirals_support.pb"
   predicted_path = args.output_dir / "spirals_predicted.pb"
 
-  fit_bin = args.bin_dir / "fit"
-  pred_bin = args.bin_dir / "pred"
+  nn_fit_bin = args.bin_dir / "nn-fit"
+  nn_pred_bin = args.bin_dir / "nn-pred"
 
   # Check if binaries exist
-  if not fit_bin.exists():
-    print(f"Error: fit executable not found at {fit_bin}")
+  if not nn_fit_bin.exists():
+    print(f"Error: fit executable not found at {nn_fit_bin}")
     return
-  if not pred_bin.exists():
-    print(f"Error: pred executable not found at {pred_bin}")
+  if not nn_pred_bin.exists():
+    print(f"Error: pred executable not found at {nn_pred_bin}")
     return
 
   # Check input files
@@ -50,7 +50,7 @@ def main():
     return
 
   # Run fit step
-  fit_cmd = [str(fit_bin), str(train_path), str(support_path)]
+  fit_cmd = [str(nn_fit_bin), str(train_path), str(support_path)]
   if args.tolerance is not None:
     fit_cmd.append(str(args.tolerance))
   fit_result = subprocess.run(fit_cmd)
@@ -59,7 +59,7 @@ def main():
     return
 
   # Run prediction step
-  pred_cmd = [str(pred_bin), str(test_path), str(support_path), str(predicted_path)]
+  pred_cmd = [str(nn_pred_bin), str(test_path), str(support_path), str(predicted_path)]
   pred_result = subprocess.run(pred_cmd)
   if pred_result.returncode != 0:
     print("Prediction step failed with exit code", pred_result.returncode)

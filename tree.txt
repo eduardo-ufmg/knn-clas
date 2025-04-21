@@ -1,7 +1,7 @@
 .
 ├── bin
-│   ├── fit
-│   └── pred
+│   ├── nn-fit
+│   └── nn-pred
 ├── build
 ├── CMakeLists.txt
 ├── data
@@ -39,7 +39,7 @@
 │   ├── validate_prepare.py
 │   └── validate_run.py
 ├── src
-│   ├── app
+│   ├── nn-clas
 │   │   ├── CMakeLists.txt
 │   │   ├── fit.cpp
 │   │   └── pred.cpp
