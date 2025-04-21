@@ -1,11 +1,11 @@
 add_library(common_lib STATIC
   classifier.pb.cc
-  computeSVs.cpp
+  computeSSs.cpp
   filenameHelpers.cpp
   filter.cpp
   gabrielGraph.cpp
   isgabrielEdge.cpp
-  nearestSVpred.cpp
+  nearestSSpred.cpp
   readFiles.cpp
   squaredDistance.cpp
   types.cpp

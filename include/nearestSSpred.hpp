@@ -1,8 +1,8 @@
-#ifndef NEARESTSVLABEL_HPP
-#define NEARESTSVLABEL_HPP
+#ifndef NEARESTSSLABEL_HPP
+#define NEARESTSSLABEL_HPP
 
 #include "types.hpp"
 
 const PredictedSamples nearestSVLabel(const TestSamples& toLabel, const SupportSamples& supportSamples);
 
-#endif // NEARESTSVLABEL_HPP
+#endif // NEARESTSSLABEL_HPP

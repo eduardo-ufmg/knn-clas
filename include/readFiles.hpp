@@ -6,6 +6,6 @@
 
 Samples readDataset(const std::string& filename);
 TestSamples readToLabel(const std::string& filename);
-SupportSamples readSVs(const std::string& filename);
+SupportSamples readSSs(const std::string& filename);
 
 #endif // READFILES_HPP

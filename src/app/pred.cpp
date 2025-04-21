@@ -1,45 +1,40 @@
 #include <iostream>
 
 #include "types.hpp"
-#include "readFiles.hpp"
-#include "gabrielGraph.hpp"
-#include "filter.hpp"
-#include "computeSVs.hpp"
 #include "filenameHelpers.hpp"
+#include "readFiles.hpp"
+#include "nearestSSpred.hpp"
 #include "writeFiles.hpp"
-#include "defdirs.hpp"
 
 using namespace std;
 
+const int EXPECTED_ARGS = 3;
+const int TEST_SAMPLES_ARG = 1;
+const int SUPPORT_SAMPLES_ARG = 2;
+const int PREDICTED_SAMPLES_ARG = 3;
+const char * USAGE = "Arguments: <test_samples_path INPUT> <support_samples_path INPUT> <predicted_samples_path OUTPUT>";
+
 int main(int argc, char **argv)
 {
-
-  float tolerance = ns_filter::DEFAULT_TOLERANCE;
-
-  if (argc < 2) {
-    cerr << "Usage: " << argv[0] << " <dataset> [tolerance]" << endl;
+  if (argc != EXPECTED_ARGS) {
+    cerr << USAGE << endl;
     return 1;
   }
 
-  if (argc > 2) {
-    tolerance = stof(argv[2]);
-  }
+  const string test_samples_path = argv[TEST_SAMPLES_ARG];
+  const string support_samples_path = argv[SUPPORT_SAMPLES_ARG];
 
-  const string dataset_file_path = argv[1];
+  const TestSamples toLabel = readToLabel(test_samples_path);
+  const SupportSamples supportSamples = readSSs(support_samples_path);
 
-  Samples samples = readDataset(dataset_file_path);
+  const PredictedSamples predictedSamples = nearestSVLabel(toLabel, supportSamples);
 
-  computeGabrielGraph(samples);
+  const string predicted_samples_path = argv[PREDICTED_SAMPLES_ARG];
 
-  filter(samples, tolerance);
-
-  const SupportSamples supportSamples = computeSVs(samples);
-
-  const string output_file_path = defdirs::DEFAULT_OUTPUT_DIR + filenameFromPath(dataset_file_path);
-
-  if (writeSVs(supportSamples, output_file_path) != 0) {
-    cerr << "Error: could not write SVs to file" << endl;
+  if (writePredictedSamples(predictedSamples, predicted_samples_path) != 0) {
+    cerr << "Error: could not write predicted samples to file" << predicted_samples_path << endl;
     return 1;
   }
 
+  return 0;
 }

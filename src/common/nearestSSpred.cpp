@@ -1,4 +1,4 @@
-#include "nearestSVpred.hpp"
+#include "nearestSSpred.hpp"
 
 #include <limits>
 #include <stdexcept>

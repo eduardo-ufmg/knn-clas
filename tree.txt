@@ -11,13 +11,13 @@
 │   └── output
 ├── include
 │   ├── classifier.pb.h
-│   ├── computeSVs.hpp
+│   ├── computeSSs.hpp
 │   ├── defdirs.hpp
 │   ├── filenameHelpers.hpp
 │   ├── filter.hpp
 │   ├── gabrielGraph.hpp
 │   ├── isgabrielEdge.hpp
-│   ├── nearestSVpred.hpp
+│   ├── nearestSSpred.hpp
 │   ├── readFiles.hpp
 │   ├── squaredDistance.hpp
 │   ├── types.hpp
@@ -45,12 +45,12 @@
     └── common
         ├── classifier.pb.cc
         ├── CMakeLists.txt
-        ├── computeSVs.cpp
+        ├── computeSSs.cpp
         ├── filenameHelpers.cpp
         ├── filter.cpp
         ├── gabrielGraph.cpp
         ├── isgabrielEdge.cpp
-        ├── nearestSVpred.cpp
+        ├── nearestSSpred.cpp
         ├── readFiles.cpp
         ├── squaredDistance.cpp
         ├── types.cpp

@@ -61,7 +61,7 @@ def main():
     entry.target.target_int = int(target)
 
   # Store the training dataset
-  train_dataset_path = output_dir / "spirals.pb"
+  train_dataset_path = output_dir / "spirals_train.pb"
 
   if not store_dataset(train_dataset, str(train_dataset_path)):
     print(f"Failed to store the dataset at {train_dataset_path}")

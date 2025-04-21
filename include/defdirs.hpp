@@ -3,10 +3,9 @@
 
 #include <string>
 
-namespace defdirs
-{
-  const std::string DEFAULT_INPUT_DIR = "../data/input/";
-  const std::string DEFAULT_OUTPUT_DIR = "../data/output/";
+namespace defdirs {
+  const std::string DEFAULT_INPUT_DIR = "../data/";
+  const std::string DEFAULT_OUTPUT_DIR = "../data/";
 }
 
 #endif // DEF_DIRS_HPP

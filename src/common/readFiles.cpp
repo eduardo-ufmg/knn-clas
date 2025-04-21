@@ -99,7 +99,7 @@ TestSamples readToLabel(const string& filename)
   return samples;
 }
 
-SupportSamples readSVs(const string& filename)
+SupportSamples readSSs(const string& filename)
 {
   classifierpb::SupportSamples pb_svs;
 

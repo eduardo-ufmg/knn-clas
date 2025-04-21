@@ -15,7 +15,7 @@ template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
 ofstream openFileWrite(const string& filename);
 
-int writeSVs(const SupportSamples& supportSamples, const string& filename)
+int writeSSs(const SupportSamples& supportSamples, const string& filename)
 {
   classifierpb::SupportSamples pb_supportSamples;
 
@@ -41,7 +41,7 @@ int writeSVs(const SupportSamples& supportSamples, const string& filename)
 
   ofstream file = openFileWrite(filename);
   if (!pb_supportSamples.SerializeToOstream(&file)) {
-    cerr << "Error: could not write SVs to file" << filename << endl;
+    cerr << "Error: could not write SSs to file" << filename << endl;
     return 1;
   }
   file.close();

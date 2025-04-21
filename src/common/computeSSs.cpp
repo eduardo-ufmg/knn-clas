@@ -1,4 +1,4 @@
-#include "computeSVs.hpp"
+#include "computeSSs.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -10,7 +10,7 @@ using namespace std;
 
 bool emplace_unique(SupportSamples& Samples, const Sample& sample);
 
-const SupportSamples computeSVs(const Samples& samples)
+const SupportSamples computeSSs(const Samples& samples)
 {
   const size_t sampleqtty = samples.size();
 
