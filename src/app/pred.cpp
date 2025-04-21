@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const int EXPECTED_ARGS = 3;
+const int EXPECTED_ARGS = 4;
 const int TEST_SAMPLES_ARG = 1;
 const int SUPPORT_SAMPLES_ARG = 2;
 const int PREDICTED_SAMPLES_ARG = 3;

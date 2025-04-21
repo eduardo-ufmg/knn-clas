@@ -1,14 +1,10 @@
 .
 ├── bin
+│   ├── fit
 │   ├── pred
-│   └── train
 ├── build
 ├── CMakeLists.txt
 ├── data
-│   ├── input
-│   │   ├── spirals.pb
-│   │   └── spirals_test.pb
-│   └── output
 ├── include
 │   ├── classifier.pb.h
 │   ├── computeSSs.hpp
@@ -37,21 +33,22 @@
 │   ├── run.py
 │   ├── store_proto.py
 │   └── validate_prepare.py
-└── src
-    ├── app
-    │   ├── CMakeLists.txt
-    │   ├── pred.cpp
-    │   └── train.cpp
-    └── common
-        ├── classifier.pb.cc
-        ├── CMakeLists.txt
-        ├── computeSSs.cpp
-        ├── filenameHelpers.cpp
-        ├── filter.cpp
-        ├── gabrielGraph.cpp
-        ├── isgabrielEdge.cpp
-        ├── nearestSSpred.cpp
-        ├── readFiles.cpp
-        ├── squaredDistance.cpp
-        ├── types.cpp
-        └── writeFiles.cpp
+├── src
+│   ├── app
+│   │   ├── CMakeLists.txt
+│   │   ├── fit.cpp
+│   │   └── pred.cpp
+│   └── common
+│       ├── classifier.pb.cc
+│       ├── CMakeLists.txt
+│       ├── computeSSs.cpp
+│       ├── filenameHelpers.cpp
+│       ├── filter.cpp
+│       ├── gabrielGraph.cpp
+│       ├── isgabrielEdge.cpp
+│       ├── nearestSSpred.cpp
+│       ├── readFiles.cpp
+│       ├── squaredDistance.cpp
+│       ├── types.cpp
+│       └── writeFiles.cpp
+└── tree.txt

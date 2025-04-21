@@ -14,7 +14,7 @@ def main():
   parser.add_argument(
     "--output_dir",
     type=pathlib.Path,
-    default=pathlib.Path("data") / "input",
+    default=pathlib.Path("data"),
     help="Directory to store the dataset.",
   )
   parser.add_argument(

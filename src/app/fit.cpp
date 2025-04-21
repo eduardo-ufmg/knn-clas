@@ -10,7 +10,7 @@
 
 using namespace std;
 
-const int EXPECTED_ARGS = 2;
+const int EXPECTED_ARGS = 3;
 const int OPTIONAL_ARGS = 1;
 const int TRAIN_SAMPLES_ARG = 1;
 const int SUPPORT_SAMPLES_ARG = 2;
