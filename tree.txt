@@ -1,10 +1,14 @@
 .
 ├── bin
 │   ├── fit
-│   ├── pred
+│   └── pred
 ├── build
 ├── CMakeLists.txt
 ├── data
+│   ├── spirals_predicted.pb
+│   ├── spirals_support.pb
+│   ├── spirals_test.pb
+│   └── spirals_train.pb
 ├── include
 │   ├── classifier.pb.h
 │   ├── computeSSs.hpp
@@ -32,7 +36,8 @@
 │   ├── prepare.py
 │   ├── run.py
 │   ├── store_proto.py
-│   └── validate_prepare.py
+│   ├── validate_prepare.py
+│   └── validate_run.py
 ├── src
 │   ├── app
 │   │   ├── CMakeLists.txt
@@ -52,3 +57,5 @@
 │       ├── types.cpp
 │       └── writeFiles.cpp
 └── tree.txt
+
+11 directories, 48 files
