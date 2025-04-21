@@ -7,11 +7,11 @@
 
 using namespace std;
 
-const PredictedSamples nearestSVLabel(const TestSamples& toLabel, const SupportSamples& supportSamples)
+const PredictedSamples nearestSSpred(const TestSamples& testSample, const SupportSamples& supportSamples)
 {
   PredictedSamples predictedSamples;
 
-  for (const auto& sample : toLabel) {
+  for (const auto& sample : testSample) {
     float minDistance = numeric_limits<float>::max();
     const Target * nearestTarget = nullptr;
 

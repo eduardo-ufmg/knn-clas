@@ -24,12 +24,12 @@ def make_spirals(n_samples: int=100, noise: float=0.0, turns: int=1) -> tuple[np
   y = n * np.cos(n) + np.random.randn(n_samples) * noise
   
   X = np.array(list(zip(x, y)))
-  y_labels = np.array([0] * samples_per_class + [1] * samples_per_class)
+  y = np.array([0] * samples_per_class + [1] * samples_per_class)
   
   # Rotate one class 180 degrees
   X[samples_per_class:] = -X[samples_per_class:]
   
-  return X, y_labels
+  return X, y
 
 def make_grid(X: np.ndarray, target_points: int = 10000) -> np.ndarray:
   """

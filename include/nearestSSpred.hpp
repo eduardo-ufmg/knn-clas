@@ -3,6 +3,6 @@
 
 #include "types.hpp"
 
-const PredictedSamples nearestSVLabel(const TestSamples& toLabel, const SupportSamples& supportSamples);
+const PredictedSamples nearestSSpred(const TestSamples& testSample, const SupportSamples& supportSamples);
 
 #endif // NEARESTSSLABEL_HPP

@@ -15,7 +15,7 @@ const int OPTIONAL_ARGS = 1;
 const int TRAIN_SAMPLES_ARG = 1;
 const int SUPPORT_SAMPLES_ARG = 2;
 const int TOLERANCE_ARG = 3;
-const char * USAGE = "Arguments: <train_samples_path INPUT> <support_samples_path OUTPUT> [<tolerance FLOAT>]";
+const char * USAGE = "Arguments: <train_samples_path INPUT> <support_samples_path OUTPUT> [tolerance FLOAT]";
 
 int main(int argc, char **argv)
 {

@@ -74,7 +74,7 @@ Samples readDataset(const string& filename)
   return samples;
 }
 
-TestSamples readToLabel(const string& filename)
+TestSamples readTestSamples(const string& filename)
 {
   classifierpb::TestSamples pb_samples;
   

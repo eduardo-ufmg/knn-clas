@@ -7,7 +7,7 @@ target_link_libraries(nn-fit PRIVATE
   common_lib
 )
 
-# Label executable
+# Pred executable
 add_executable(nn-pred
   pred.cpp
 )

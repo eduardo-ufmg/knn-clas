@@ -24,10 +24,10 @@ int main(int argc, char **argv)
   const string test_samples_path = argv[TEST_SAMPLES_ARG];
   const string support_samples_path = argv[SUPPORT_SAMPLES_ARG];
 
-  const TestSamples toLabel = readToLabel(test_samples_path);
+  const TestSamples testSample = readTestSamples(test_samples_path);
   const SupportSamples supportSamples = readSSs(support_samples_path);
 
-  const PredictedSamples predictedSamples = nearestSVLabel(toLabel, supportSamples);
+  const PredictedSamples predictedSamples = nearestSSpred(testSample, supportSamples);
 
   const string predicted_samples_path = argv[PREDICTED_SAMPLES_ARG];
 
