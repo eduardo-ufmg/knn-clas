@@ -1,10 +1,12 @@
 add_library(common_lib STATIC
+  bimap.cpp
   classifier.pb.cc
   computeSSs.cpp
   filenameHelpers.cpp
   filter.cpp
   gabrielGraph.cpp
   isgabrielEdge.cpp
+  kNSSpred.cpp
   nearestSSpred.cpp
   readFiles.cpp
   squaredDistance.cpp
