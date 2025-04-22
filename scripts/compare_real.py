@@ -1,5 +1,6 @@
 import subprocess
 import numpy as np
+from collections import defaultdict
 from pathlib import Path
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from load_proto import load_test_samples, load_predicted_samples
@@ -9,126 +10,124 @@ def main():
   project_root = script_dir.parent
   data_dir = project_root / "data"
   bin_dir = project_root / "bin"
+  nn_fit_bin = bin_dir / "nn-fit"
+  nn_pred_bin = bin_dir / "nn-pred"
+  knn_fit_bin = bin_dir / "knn-fit"
+  knn_pred_bin = bin_dir / "knn-pred"
 
-  # Discover datasets by checking for test files
+  # Discover datasets and folds
+  datasets = defaultdict(list)
   test_files = list(data_dir.glob("*_test.pb"))
-  datasets = []
   for test_file in test_files:
-    dataset_name = test_file.stem.split("_test")[0]
-    train_file = data_dir / f"{dataset_name}_train.pb"
-    if train_file.exists():
-      datasets.append(dataset_name)
+    stem = test_file.stem
+    if "_fold" in stem:
+      parts = stem.split("_fold")
+      base_name = parts[0]
+      fold_part = parts[1].split("_test")[0]
+      try:
+        fold = int(fold_part)
+        datasets[base_name].append(fold)
+      except ValueError:
+        continue
+    else:
+      # Handle legacy single split as fold 0
+      base_name = stem.split("_test")[0]
+      datasets[base_name].append(0)
 
   if not datasets:
     print("No datasets found.")
     return
 
-  results = []
   nn_tolerance = 0.0
   knn_ks = [1, 3, 5]
 
+  # Process each dataset and its folds
+  results = []
   for dataset in datasets:
-    print(f"Processing dataset: {dataset}")
-
-    train_path = data_dir / f"{dataset}_train.pb"
-    test_path = data_dir / f"{dataset}_test.pb"
-
-    # Load ground truth
-    test_samples = load_test_samples(str(test_path))
-    if test_samples is None:
-      print(f"Failed to load test samples for {dataset}")
-      continue
-    y_true = [entry.ground_truth.target_int for entry in test_samples.entries]
-
-    # Run nn-clas model
-    nn_fit_bin = bin_dir / "nn-fit"
-    nn_pred_bin = bin_dir / "nn-pred"
-    if nn_fit_bin.exists() and nn_pred_bin.exists():
-      nn_support_path = data_dir / f"{dataset}_nn-clas_support.pb"
-      nn_predicted_path = data_dir / f"{dataset}_nn-clas_predicted.pb"
-
+    folds = sorted(datasets[dataset])
+    print(f"Processing {dataset} with {len(folds)} folds")
+    
+    # Collect metrics across folds
+    nn_metrics = {'accuracy': [], 'precision': [], 'recall': [], 'f1': []}
+    knn_metrics = {k: {'accuracy': [], 'precision': [], 'recall': [], 'f1': []} for k in knn_ks}
+    
+    for fold in folds:
+      train_path = data_dir / f"{dataset}_fold{fold}_train.pb"
+      test_path = data_dir / f"{dataset}_fold{fold}_test.pb"
+      
+      # Load test samples
+      test_samples = load_test_samples(str(test_path))
+      if not test_samples:
+        continue
+      y_true = [entry.ground_truth.target_int for entry in test_samples.entries]
+      
+      # Process nn-clas
+      nn_support_path = data_dir / f"{dataset}_nn-clas_fold{fold}_support.pb"
+      nn_predicted_path = data_dir / f"{dataset}_nn-clas_fold{fold}_predicted.pb"
       try:
-        # Fit
-        subprocess.run([
-          str(nn_fit_bin), str(train_path),
-          str(nn_support_path), str(nn_tolerance)
-        ], check=True)
-        # Predict
-        subprocess.run([
-          str(nn_pred_bin), str(test_path),
-          str(nn_support_path), str(nn_predicted_path)
-        ], check=True)
-
-        # Load predictions
+        subprocess.run([str(nn_fit_bin), str(train_path), str(nn_support_path), str(nn_tolerance)], check=True)
+        subprocess.run([str(nn_pred_bin), str(test_path), str(nn_support_path), str(nn_predicted_path)], check=True)
         nn_predicted = load_predicted_samples(str(nn_predicted_path))
         if nn_predicted:
           y_pred = [entry.target.target_int for entry in nn_predicted.entries]
-          accuracy = accuracy_score(y_true, y_pred)
-          precision = precision_score(y_true, y_pred, average='macro')
-          recall = recall_score(y_true, y_pred, average='macro')
-          f1 = f1_score(y_true, y_pred, average='macro')
-          results.append({
-            'dataset': dataset,
-            'model': 'nn-clas',
-            'k': None,
-            'accuracy': accuracy,
-            'precision': precision,
-            'recall': recall,
-            'f1': f1
-          })
+          # Append metrics
+          nn_metrics['accuracy'].append(accuracy_score(y_true, y_pred))
+          nn_metrics['precision'].append(precision_score(y_true, y_pred, average='weighted', zero_division=0))
+          nn_metrics['recall'].append(recall_score(y_true, y_pred, average='weighted', zero_division=0))
+          nn_metrics['f1'].append(f1_score(y_true, y_pred, average='weighted', zero_division=0))
       except subprocess.CalledProcessError as e:
-        print(f"nn-clas failed for {dataset}: {e}")
-
-    # Run knn-clas for each k
-    knn_fit_bin = bin_dir / "knn-fit"
-    knn_pred_bin = bin_dir / "knn-pred"
-    if knn_fit_bin.exists() and knn_pred_bin.exists():
-      knn_support_path = data_dir / f"{dataset}_knn-clas_support.pb"
+        print(f"nn-clas fold {fold} failed: {e}")
+      
+      # Process knn-clas
+      knn_support_path = data_dir / f"{dataset}_knn-clas_fold{fold}_support.pb"
       try:
-        # Fit once
-        subprocess.run([
-          str(knn_fit_bin), str(train_path), str(knn_support_path)
-        ], check=True)
-      except subprocess.CalledProcessError as e:
-        print(f"knn-fit failed for {dataset}: {e}")
-        continue
-
-      for k in knn_ks:
-        knn_predicted_path = data_dir / f"{dataset}_knn-clas_predicted_k{k}.pb"
-        try:
-          # Predict with current k
-          subprocess.run([
-            str(knn_pred_bin), str(test_path),
-            str(knn_support_path), str(knn_predicted_path), str(k)
-          ], check=True)
-
-          # Load predictions
+        subprocess.run([str(knn_fit_bin), str(train_path), str(knn_support_path)], check=True)
+        for k in knn_ks:
+          knn_predicted_path = data_dir / f"{dataset}_knn-clas_fold{fold}_predicted_k{k}.pb"
+          subprocess.run([str(knn_pred_bin), str(test_path), str(knn_support_path), str(knn_predicted_path), str(k)], check=True)
           knn_predicted = load_predicted_samples(str(knn_predicted_path))
           if knn_predicted:
             y_pred = [entry.target.target_int for entry in knn_predicted.entries]
-            accuracy = accuracy_score(y_true, y_pred)
-            precision = precision_score(y_true, y_pred, average='macro', zero_division=np.nan)
-            recall = recall_score(y_true, y_pred, average='macro', zero_division=np.nan)
-            f1 = f1_score(y_true, y_pred, average='macro', zero_division=np.nan)
-            results.append({
-              'dataset': dataset,
-              'model': 'knn-clas',
-              'k': k,
-              'accuracy': accuracy,
-              'precision': precision,
-              'recall': recall,
-              'f1': f1
-            })
-        except subprocess.CalledProcessError as e:
-          print(f"knn-pred (k={k}) failed for {dataset}: {e}")
+            # Append metrics for this k
+            knn_metrics[k]['accuracy'].append(accuracy_score(y_true, y_pred))
+            knn_metrics[k]['precision'].append(precision_score(y_true, y_pred, average='weighted', zero_division=0))
+            knn_metrics[k]['recall'].append(recall_score(y_true, y_pred, average='weighted', zero_division=0))
+            knn_metrics[k]['f1'].append(f1_score(y_true, y_pred, average='weighted', zero_division=0))
+      except subprocess.CalledProcessError as e:
+        print(f"knn-clas fold {fold} failed: {e}")
+    
+    # Compute averages for nn-clas
+    if nn_metrics['accuracy']:
+      results.append({
+        'dataset': dataset,
+        'model': 'nn-clas',
+        'k': None,
+        'accuracy': f'{np.mean(nn_metrics['accuracy']):.2f} ± {np.std(nn_metrics['accuracy']):.2f}',
+        'precision': f'{np.mean(nn_metrics['precision']):.2f} ± {np.std(nn_metrics['precision']):.2f}',
+        'recall': f'{np.mean(nn_metrics['recall']):.2f} ± {np.std(nn_metrics['recall']):.2f}',
+        'f1': f'{np.mean(nn_metrics['f1']):.2f} ± {np.std(nn_metrics['f1']):.2f}',
+      })
+    
+    # Compute averages for knn-clas
+    for k in knn_ks:
+      if knn_metrics[k]['accuracy']:
+        results.append({
+          'dataset': dataset,
+          'model': 'knn-clas',
+          'k': k,
+          'accuracy': f'{np.mean(knn_metrics[k]['accuracy']):.2f} ± {np.std(knn_metrics[k]['accuracy']):.2f}',
+          'precision': f'{np.mean(knn_metrics[k]['precision']):.2f} ± {np.std(knn_metrics[k]['precision']):.2f}',
+          'recall': f'{np.mean(knn_metrics[k]['recall']):.2f} ± {np.std(knn_metrics[k]['recall']):.2f}',
+          'f1': f'{np.mean(knn_metrics[k]['f1']):.2f} ± {np.std(knn_metrics[k]['f1']):.2f}',
+        })
 
   # Print results
   print("\nComparison Results:")
-  print("{:<20} {:<10} {:<5} {:<8} {:<8} {:<8} {:<8}".format(
-    "Dataset", "Model", "k", "Acc", "Prec", "Rec", "F1"))
+  print("{:<20} {:<10} {:<5} {:<20} {:<20} {:<20} {:<20}".format(
+    "Dataset", "Model", "k", "Accuracy", "Precision", "Recall", "F1"))
   for res in results:
     k = res['k'] if res['k'] is not None else ''
-    print("{:<20} {:<10} {:<5} {:<8.2f} {:<8.2f} {:<8.2f} {:<8.2f}".format(
+    print("{:<20} {:<10} {:<5} {:<20} {:<20} {:<20} {:<20}".format(
       res['dataset'], res['model'], k,
       res['accuracy'], res['precision'], res['recall'], res['f1']
     ))
@@ -141,8 +140,8 @@ def main():
     f.write("Dataset,Model,k,Accuracy,Precision,Recall,F1\n")
     for res in results:
       k = res['k'] if res['k'] is not None else ''
-      f.write(f"{res['dataset']},{res['model']},{k},{res['accuracy']:.2f},"
-              f"{res['precision']:.2f},{res['recall']:.2f},{res['f1']:.2f}\n")
+      f.write(f"{res['dataset']},{res['model']},{k},\"{res['accuracy']}\","
+              f"\"{res['precision']}\",\"{res['recall']}\",\"{res['f1']}\"\n")
 
 if __name__ == "__main__":
   main()

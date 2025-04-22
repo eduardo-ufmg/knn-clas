@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.datasets import load_breast_cancer, load_digits, fetch_openml
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedKFold
 import classifier_pb2 as pb
 from store_proto import store_dataset, store_test_samples
 
@@ -31,20 +31,21 @@ def create_proto_test_samples(X, y):
       entry.ground_truth.target_str = str(target[0])
   return samples
 
-def store_real_dataset(X, y, name):
-  """Store dataset in protobuf format with train/test split."""
-  # Split into train (80%) and test (20%)
-  X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, stratify=y, shuffle=True
-  )
-  
-  # Create and store training dataset
-  train_dataset = create_proto_dataset(X_train, y_train)
-  store_dataset(train_dataset, f"data/{name}_train.pb")
-  
-  # Create and store test samples
-  test_samples = create_proto_test_samples(X_test, y_test)
-  store_test_samples(test_samples, f"data/{name}_test.pb")
+def store_real_dataset(X, y, name, n_splits=10):
+  skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
+  for fold, (train_idx, test_idx) in enumerate(skf.split(X, y)):
+    X_train, X_test = X[train_idx], X[test_idx]
+    y_train, y_test = y[train_idx], y[test_idx]
+    
+    # Save training dataset for this fold
+    train_dataset = create_proto_dataset(X_train, y_train)
+    train_filename = f"data/{name}_fold{fold}_train.pb"
+    store_dataset(train_dataset, train_filename)
+    
+    # Save test samples for this fold
+    test_samples = create_proto_test_samples(X_test, y_test)
+    test_filename = f"data/{name}_fold{fold}_test.pb"
+    store_test_samples(test_samples, test_filename)
 
 def load_breast_cancer_dataset():
   data = load_breast_cancer(return_X_y=False)
@@ -165,7 +166,7 @@ def load_all_datasets():
   }
 
   for name, (X, y) in datasets.items():
-    print(f"Storing {name} dataset...")
+    print(f"Storing {name} dataset with 10 folds...")
     store_real_dataset(X, y, name)
 
   return datasets
