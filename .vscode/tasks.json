@@ -1,0 +1,79 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CMake: Configure Release",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-DCMAKE_BUILD_TYPE=Release",
+        ".."
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CMake: Build Release",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build",
+        ".",
+        "--config",
+        "Release"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOn": "CMake: Configure Release",
+      "problemMatcher": []
+    },
+    {
+      "label": "CMake: Configure Debug",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-DCMAKE_BUILD_TYPE=Debug",
+        ".."
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CMake: Build Debug",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build",
+        ".",
+        "--config",
+        "Debug"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "dependsOn": "CMake: Configure Debug",
+      "problemMatcher": []
+    }
+  ]
+}

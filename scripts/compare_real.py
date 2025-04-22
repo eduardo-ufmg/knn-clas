@@ -1,4 +1,5 @@
 import subprocess
+import numpy as np
 from pathlib import Path
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from load_proto import load_test_samples, load_predicted_samples
@@ -106,9 +107,9 @@ def main():
           if knn_predicted:
             y_pred = [entry.target.target_int for entry in knn_predicted.entries]
             accuracy = accuracy_score(y_true, y_pred)
-            precision = precision_score(y_true, y_pred, average='macro')
-            recall = recall_score(y_true, y_pred, average='macro')
-            f1 = f1_score(y_true, y_pred, average='macro')
+            precision = precision_score(y_true, y_pred, average='macro', zero_division=np.nan)
+            recall = recall_score(y_true, y_pred, average='macro', zero_division=np.nan)
+            f1 = f1_score(y_true, y_pred, average='macro', zero_division=np.nan)
             results.append({
               'dataset': dataset,
               'model': 'knn-clas',
