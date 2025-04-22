@@ -133,6 +133,17 @@ def main():
       res['accuracy'], res['precision'], res['recall'], res['f1']
     ))
 
+  # Write results to CSV
+  output_dir = script_dir / "comparison_results"
+  output_dir.mkdir(exist_ok=True)
+  output_file = output_dir / "real_sets.csv"
+  with open(output_file, "w") as f:
+    f.write("Dataset,Model,k,Accuracy,Precision,Recall,F1\n")
+    for res in results:
+      k = res['k'] if res['k'] is not None else ''
+      f.write(f"{res['dataset']},{res['model']},{k},{res['accuracy']:.2f},"
+              f"{res['precision']:.2f},{res['recall']:.2f},{res['f1']:.2f}\n")
+
 if __name__ == "__main__":
   main()
   
