@@ -1,9 +1,9 @@
 name,nsamples,nfeatures
-breast_cancer,569,30
-pima_diabetes,768,8
-haberman,306,3
-banknote,1372,4
-sonar,208,60
-digits_binary,360,64
-ionosphere,351,34
-spect_heart,349,44
+Breast Cancer,569,30
+Pima Diabetes,768,8
+Haberman,306,3
+Banknote,1372,4
+Sonar,208,60
+Binary Digits,360,64
+Ionosphere,351,34
+SPECT Heart,349,44

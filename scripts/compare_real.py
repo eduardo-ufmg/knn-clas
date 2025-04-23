@@ -115,10 +115,10 @@ def main():
         'nFeatures': dataset_meta.get('nfeatures', ''),
         'Model': 'nn-clas',
         'k': '',
-        'Accuracy': f"{np.mean(nn_metrics['accuracy']):.2f} ± {np.std(nn_metrics['accuracy']):.2f}",
-        'Precision': f"{np.mean(nn_metrics['precision']):.2f} ± {np.std(nn_metrics['precision']):.2f}",
-        'Recall': f"{np.mean(nn_metrics['recall']):.2f} ± {np.std(nn_metrics['recall']):.2f}",
-        'F1': f"{np.mean(nn_metrics['f1']):.2f} ± {np.std(nn_metrics['f1']):.2f}",
+        'Accuracy': f"{np.mean(nn_metrics['accuracy']):.2f} $\\pm$ {np.std(nn_metrics['accuracy']):.2f}",
+        'Precision': f"{np.mean(nn_metrics['precision']):.2f} $\\pm$ {np.std(nn_metrics['precision']):.2f}",
+        'Recall': f"{np.mean(nn_metrics['recall']):.2f} $\\pm$ {np.std(nn_metrics['recall']):.2f}",
+        'F1': f"{np.mean(nn_metrics['f1']):.2f} $\\pm$ {np.std(nn_metrics['f1']):.2f}",
       })
 
     # Compute averages for knn-clas
@@ -131,10 +131,10 @@ def main():
           'nFeatures': dataset_meta.get('nfeatures', ''),
           'Model': 'knn-clas',
           'k': k,
-          'Accuracy': f"{np.mean(knn_metrics[k]['accuracy']):.2f} ± {np.std(knn_metrics[k]['accuracy']):.2f}",
-          'Precision': f"{np.mean(knn_metrics[k]['precision']):.2f} ± {np.std(knn_metrics[k]['precision']):.2f}",
-          'Recall': f"{np.mean(knn_metrics[k]['recall']):.2f} ± {np.std(knn_metrics[k]['recall']):.2f}",
-          'F1': f"{np.mean(knn_metrics[k]['f1']):.2f} ± {np.std(knn_metrics[k]['f1']):.2f}",
+          'Accuracy': f"{np.mean(knn_metrics[k]['accuracy']):.2f} $\\pm$ {np.std(knn_metrics[k]['accuracy']):.2f}",
+          'Precision': f"{np.mean(knn_metrics[k]['precision']):.2f} $\\pm$ {np.std(knn_metrics[k]['precision']):.2f}",
+          'Recall': f"{np.mean(knn_metrics[k]['recall']):.2f} $\\pm$ {np.std(knn_metrics[k]['recall']):.2f}",
+          'F1': f"{np.mean(knn_metrics[k]['f1']):.2f} $\\pm$ {np.std(knn_metrics[k]['f1']):.2f}",
         })
 
   # Print results

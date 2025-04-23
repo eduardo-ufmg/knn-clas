@@ -156,15 +156,15 @@ def load_spect_heart():
 
 def load_all_datasets():
   datasets = {
-    "breast_cancer": load_breast_cancer_dataset(),
-    "pima_diabetes": load_pima_diabetes(),
-    "haberman": load_haberman_survival(),
-    "banknote": load_banknote_authentication(),
-    "sonar": load_sonar(),
+    "Breast Cancer": load_breast_cancer_dataset(),
+    "Pima Diabetes": load_pima_diabetes(),
+    "Haberman": load_haberman_survival(),
+    "Banknote": load_banknote_authentication(),
+    "Sonar": load_sonar(),
     # "adult": load_adult_census(),
-    "digits_binary": load_digits_binary(),
-    "ionosphere": load_ionosphere(),
-    "spect_heart": load_spect_heart(),
+    "Binary Digits": load_digits_binary(),
+    "Ionosphere": load_ionosphere(),
+    "SPECT Heart": load_spect_heart(),
   }
 
   for name, (X, y) in datasets.items():
