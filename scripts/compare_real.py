@@ -2,6 +2,7 @@ import subprocess
 import numpy as np
 from collections import defaultdict
 from pathlib import Path
+import csv
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from load_proto import load_test_samples, load_predicted_samples
 
@@ -14,6 +15,21 @@ def main():
   nn_pred_bin = bin_dir / "nn-pred"
   knn_fit_bin = bin_dir / "knn-fit"
   knn_pred_bin = bin_dir / "knn-pred"
+
+  # Load metadata
+  metadata_path = script_dir / "comparison_results" / "setsmetadata.csv"
+  metadata_dict = {}
+  try:
+    with open(metadata_path, 'r') as f:
+      reader = csv.DictReader(f)
+      for row in reader:
+        metadata_dict[row['name']] = {
+          'nsamples': row['nsamples'],
+          'nfeatures': row['nfeatures']
+        }
+  except FileNotFoundError:
+    print(f"Metadata file {metadata_path} not found.")
+    return
 
   # Discover datasets and folds
   datasets = defaultdict(list)
@@ -30,7 +46,6 @@ def main():
       except ValueError:
         continue
     else:
-      # Handle legacy single split as fold 0
       base_name = stem.split("_test")[0]
       datasets[base_name].append(0)
 
@@ -41,26 +56,23 @@ def main():
   nn_tolerance = 0.0
   knn_ks = [1, 3, 5]
 
-  # Process each dataset and its folds
   results = []
   for dataset in datasets:
     folds = sorted(datasets[dataset])
     print(f"Processing {dataset} with {len(folds)} folds")
-    
-    # Collect metrics across folds
+
     nn_metrics = {'accuracy': [], 'precision': [], 'recall': [], 'f1': []}
     knn_metrics = {k: {'accuracy': [], 'precision': [], 'recall': [], 'f1': []} for k in knn_ks}
-    
+
     for fold in folds:
       train_path = data_dir / f"{dataset}_fold{fold}_train.pb"
       test_path = data_dir / f"{dataset}_fold{fold}_test.pb"
-      
-      # Load test samples
+
       test_samples = load_test_samples(str(test_path))
       if not test_samples:
         continue
       y_true = [entry.ground_truth.target_int for entry in test_samples.entries]
-      
+
       # Process nn-clas
       nn_support_path = data_dir / f"{dataset}_nn-clas_fold{fold}_support.pb"
       nn_predicted_path = data_dir / f"{dataset}_nn-clas_fold{fold}_predicted.pb"
@@ -70,14 +82,13 @@ def main():
         nn_predicted = load_predicted_samples(str(nn_predicted_path))
         if nn_predicted:
           y_pred = [entry.target.target_int for entry in nn_predicted.entries]
-          # Append metrics
           nn_metrics['accuracy'].append(accuracy_score(y_true, y_pred))
           nn_metrics['precision'].append(precision_score(y_true, y_pred, average='weighted', zero_division=0))
           nn_metrics['recall'].append(recall_score(y_true, y_pred, average='weighted', zero_division=0))
           nn_metrics['f1'].append(f1_score(y_true, y_pred, average='weighted', zero_division=0))
       except subprocess.CalledProcessError as e:
         print(f"nn-clas fold {fold} failed: {e}")
-      
+
       # Process knn-clas
       knn_support_path = data_dir / f"{dataset}_knn-clas_fold{fold}_support.pb"
       try:
@@ -88,48 +99,52 @@ def main():
           knn_predicted = load_predicted_samples(str(knn_predicted_path))
           if knn_predicted:
             y_pred = [entry.target.target_int for entry in knn_predicted.entries]
-            # Append metrics for this k
             knn_metrics[k]['accuracy'].append(accuracy_score(y_true, y_pred))
             knn_metrics[k]['precision'].append(precision_score(y_true, y_pred, average='weighted', zero_division=0))
             knn_metrics[k]['recall'].append(recall_score(y_true, y_pred, average='weighted', zero_division=0))
             knn_metrics[k]['f1'].append(f1_score(y_true, y_pred, average='weighted', zero_division=0))
       except subprocess.CalledProcessError as e:
         print(f"knn-clas fold {fold} failed: {e}")
-    
+
     # Compute averages for nn-clas
     if nn_metrics['accuracy']:
+      dataset_meta = metadata_dict.get(dataset, {})
       results.append({
-        'dataset': dataset,
-        'model': 'nn-clas',
-        'k': None,
-        'accuracy': f'{np.mean(nn_metrics['accuracy']):.2f} ± {np.std(nn_metrics['accuracy']):.2f}',
-        'precision': f'{np.mean(nn_metrics['precision']):.2f} ± {np.std(nn_metrics['precision']):.2f}',
-        'recall': f'{np.mean(nn_metrics['recall']):.2f} ± {np.std(nn_metrics['recall']):.2f}',
-        'f1': f'{np.mean(nn_metrics['f1']):.2f} ± {np.std(nn_metrics['f1']):.2f}',
+        'Dataset': dataset,
+        'nSamples': dataset_meta.get('nsamples', ''),
+        'nFeatures': dataset_meta.get('nfeatures', ''),
+        'Model': 'nn-clas',
+        'k': '',
+        'Accuracy': f"{np.mean(nn_metrics['accuracy']):.2f} ± {np.std(nn_metrics['accuracy']):.2f}",
+        'Precision': f"{np.mean(nn_metrics['precision']):.2f} ± {np.std(nn_metrics['precision']):.2f}",
+        'Recall': f"{np.mean(nn_metrics['recall']):.2f} ± {np.std(nn_metrics['recall']):.2f}",
+        'F1': f"{np.mean(nn_metrics['f1']):.2f} ± {np.std(nn_metrics['f1']):.2f}",
       })
-    
+
     # Compute averages for knn-clas
     for k in knn_ks:
       if knn_metrics[k]['accuracy']:
+        dataset_meta = metadata_dict.get(dataset, {})
         results.append({
-          'dataset': dataset,
-          'model': 'knn-clas',
+          'Dataset': dataset,
+          'nSamples': dataset_meta.get('nsamples', ''),
+          'nFeatures': dataset_meta.get('nfeatures', ''),
+          'Model': 'knn-clas',
           'k': k,
-          'accuracy': f'{np.mean(knn_metrics[k]['accuracy']):.2f} ± {np.std(knn_metrics[k]['accuracy']):.2f}',
-          'precision': f'{np.mean(knn_metrics[k]['precision']):.2f} ± {np.std(knn_metrics[k]['precision']):.2f}',
-          'recall': f'{np.mean(knn_metrics[k]['recall']):.2f} ± {np.std(knn_metrics[k]['recall']):.2f}',
-          'f1': f'{np.mean(knn_metrics[k]['f1']):.2f} ± {np.std(knn_metrics[k]['f1']):.2f}',
+          'Accuracy': f"{np.mean(knn_metrics[k]['accuracy']):.2f} ± {np.std(knn_metrics[k]['accuracy']):.2f}",
+          'Precision': f"{np.mean(knn_metrics[k]['precision']):.2f} ± {np.std(knn_metrics[k]['precision']):.2f}",
+          'Recall': f"{np.mean(knn_metrics[k]['recall']):.2f} ± {np.std(knn_metrics[k]['recall']):.2f}",
+          'F1': f"{np.mean(knn_metrics[k]['f1']):.2f} ± {np.std(knn_metrics[k]['f1']):.2f}",
         })
 
   # Print results
   print("\nComparison Results:")
-  print("{:<20} {:<10} {:<5} {:<20} {:<20} {:<20} {:<20}".format(
-    "Dataset", "Model", "k", "Accuracy", "Precision", "Recall", "F1"))
+  print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<20} {:<20} {:<20} {:<20}".format(
+    "Dataset", "nSamples", "nFeatures", "Model", "k", "Accuracy", "Precision", "Recall", "F1"))
   for res in results:
-    k = res['k'] if res['k'] is not None else ''
-    print("{:<20} {:<10} {:<5} {:<20} {:<20} {:<20} {:<20}".format(
-      res['dataset'], res['model'], k,
-      res['accuracy'], res['precision'], res['recall'], res['f1']
+    print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<20} {:<20} {:<20} {:<20}".format(
+      res['Dataset'], res['nSamples'], res['nFeatures'], res['Model'], res['k'],
+      res['Accuracy'], res['Precision'], res['Recall'], res['F1']
     ))
 
   # Write results to CSV
@@ -137,12 +152,20 @@ def main():
   output_dir.mkdir(exist_ok=True)
   output_file = output_dir / "real_sets.csv"
   with open(output_file, "w") as f:
-    f.write("Dataset,Model,k,Accuracy,Precision,Recall,F1\n")
+    f.write("Dataset,nSamples,nFeatures,Model,k,Accuracy,Precision,Recall,F1\n")
     for res in results:
-      k = res['k'] if res['k'] is not None else ''
-      f.write(f"{res['dataset']},{res['model']},{k},\"{res['accuracy']}\","
-              f"\"{res['precision']}\",\"{res['recall']}\",\"{res['f1']}\"\n")
+      line = (
+        f"{res['Dataset']},"
+        f"{res['nSamples']},"
+        f"{res['nFeatures']},"
+        f"{res['Model']},"
+        f"{res['k']},"
+        f"\"{res['Accuracy']}\","
+        f"\"{res['Precision']}\","
+        f"\"{res['Recall']}\","
+        f"\"{res['F1']}\"\n"
+      )
+      f.write(line)
 
 if __name__ == "__main__":
   main()
-  

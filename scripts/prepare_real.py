@@ -1,3 +1,5 @@
+import os
+import csv
 import pandas as pd
 import numpy as np
 from sklearn.datasets import load_breast_cancer, load_digits, fetch_openml
@@ -174,3 +176,21 @@ def load_all_datasets():
 if __name__ == "__main__":
   for name, (X, y) in load_all_datasets().items():
     print(f"{name}: X={X.shape}, y={y.shape}")
+
+  # Ensure the directory exists
+  os.makedirs("scripts/comparison_results", exist_ok=True)
+
+  # Prepare metadata
+  metadata = []
+  for name, (X, y) in load_all_datasets().items():
+    nsamples, nfeatures = X.shape
+    metadata.append({"name": name, "nsamples": nsamples, "nfeatures": nfeatures})
+
+  # Write metadata to CSV
+  csv_path = "scripts/comparison_results/setsmetadata.csv"
+  with open(csv_path, mode="w", newline="") as csvfile:
+    writer = csv.DictWriter(csvfile, fieldnames=["name", "nsamples", "nfeatures"])
+    writer.writeheader()
+    writer.writerows(metadata)
+
+  print(f"Metadata saved to {csv_path}")
