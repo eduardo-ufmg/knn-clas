@@ -3,7 +3,7 @@ import numpy as np
 from collections import defaultdict
 from pathlib import Path
 import csv
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score
 from load_proto import load_test_samples, load_predicted_samples
 
 def main():
@@ -61,8 +61,8 @@ def main():
     folds = sorted(datasets[dataset])
     print(f"Processing {dataset} with {len(folds)} folds")
 
-    nn_metrics = {'accuracy': [], 'precision': [], 'recall': [], 'f1': []}
-    knn_metrics = {k: {'accuracy': [], 'precision': [], 'recall': [], 'f1': []} for k in knn_ks}
+    nn_metrics = {'accuracy': []}
+    knn_metrics = {k: {'accuracy': []} for k in knn_ks}
 
     for fold in folds:
       train_path = data_dir / f"{dataset}_fold{fold}_train.pb"
@@ -83,9 +83,6 @@ def main():
         if nn_predicted:
           y_pred = [entry.target.target_int for entry in nn_predicted.entries]
           nn_metrics['accuracy'].append(accuracy_score(y_true, y_pred))
-          nn_metrics['precision'].append(precision_score(y_true, y_pred, average='weighted', zero_division=0))
-          nn_metrics['recall'].append(recall_score(y_true, y_pred, average='weighted', zero_division=0))
-          nn_metrics['f1'].append(f1_score(y_true, y_pred, average='weighted', zero_division=0))
       except subprocess.CalledProcessError as e:
         print(f"nn-clas fold {fold} failed: {e}")
 
@@ -100,9 +97,6 @@ def main():
           if knn_predicted:
             y_pred = [entry.target.target_int for entry in knn_predicted.entries]
             knn_metrics[k]['accuracy'].append(accuracy_score(y_true, y_pred))
-            knn_metrics[k]['precision'].append(precision_score(y_true, y_pred, average='weighted', zero_division=0))
-            knn_metrics[k]['recall'].append(recall_score(y_true, y_pred, average='weighted', zero_division=0))
-            knn_metrics[k]['f1'].append(f1_score(y_true, y_pred, average='weighted', zero_division=0))
       except subprocess.CalledProcessError as e:
         print(f"knn-clas fold {fold} failed: {e}")
 
@@ -115,10 +109,7 @@ def main():
         'nFeatures': dataset_meta.get('nfeatures', ''),
         'Model': 'nn-clas',
         'k': '',
-        'Accuracy': f"{np.mean(nn_metrics['accuracy']):.2f} $\\pm$ {np.std(nn_metrics['accuracy']):.2f}",
-        'Precision': f"{np.mean(nn_metrics['precision']):.2f} $\\pm$ {np.std(nn_metrics['precision']):.2f}",
-        'Recall': f"{np.mean(nn_metrics['recall']):.2f} $\\pm$ {np.std(nn_metrics['recall']):.2f}",
-        'F1': f"{np.mean(nn_metrics['f1']):.2f} $\\pm$ {np.std(nn_metrics['f1']):.2f}",
+        'Accuracy': np.mean(nn_metrics['accuracy'])
       })
 
     # Compute averages for knn-clas
@@ -131,20 +122,16 @@ def main():
           'nFeatures': dataset_meta.get('nfeatures', ''),
           'Model': 'knn-clas',
           'k': k,
-          'Accuracy': f"{np.mean(knn_metrics[k]['accuracy']):.2f} $\\pm$ {np.std(knn_metrics[k]['accuracy']):.2f}",
-          'Precision': f"{np.mean(knn_metrics[k]['precision']):.2f} $\\pm$ {np.std(knn_metrics[k]['precision']):.2f}",
-          'Recall': f"{np.mean(knn_metrics[k]['recall']):.2f} $\\pm$ {np.std(knn_metrics[k]['recall']):.2f}",
-          'F1': f"{np.mean(knn_metrics[k]['f1']):.2f} $\\pm$ {np.std(knn_metrics[k]['f1']):.2f}",
+          'Accuracy': np.mean(knn_metrics[k]['accuracy'])
         })
 
   # Print results
   print("\nComparison Results:")
-  print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<20} {:<20} {:<20} {:<20}".format(
-    "Dataset", "nSamples", "nFeatures", "Model", "k", "Accuracy", "Precision", "Recall", "F1"))
+  print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<20}".format(
+    "Dataset", "nSamples", "nFeatures", "Model", "k", "Accuracy"))
   for res in results:
-    print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<20} {:<20} {:<20} {:<20}".format(
-      res['Dataset'], res['nSamples'], res['nFeatures'], res['Model'], res['k'],
-      res['Accuracy'], res['Precision'], res['Recall'], res['F1']
+    print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<20}".format(
+      res['Dataset'], res['nSamples'], res['nFeatures'], res['Model'], res['k'], f'{res['Accuracy']:.2f}'
     ))
 
   # Write results to CSV
@@ -152,7 +139,7 @@ def main():
   output_dir.mkdir(exist_ok=True)
   output_file = output_dir / "real_sets.csv"
   with open(output_file, "w") as f:
-    f.write("Dataset,nSamples,nFeatures,Model,k,Accuracy,Precision,Recall,F1\n")
+    f.write("Dataset,nSamples,nFeatures,Model,k,Accuracy\n")
     for res in results:
       line = (
         f"{res['Dataset']},"
@@ -160,10 +147,8 @@ def main():
         f"{res['nFeatures']},"
         f"{res['Model']},"
         f"{res['k']},"
-        f"\"{res['Accuracy']}\","
-        f"\"{res['Precision']}\","
-        f"\"{res['Recall']}\","
-        f"\"{res['F1']}\"\n"
+        f"{res['Accuracy']:.2f}"
+        "\n"
       )
       f.write(line)
 

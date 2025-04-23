@@ -1,33 +1,33 @@
-Dataset,nSamples,nFeatures,Model,k,Accuracy,Precision,Recall,F1
-Ionosphere,351,34,nn-clas,,"0.87 $\pm$ 0.05","0.88 $\pm$ 0.05","0.87 $\pm$ 0.05","0.87 $\pm$ 0.05"
-Ionosphere,351,34,knn-clas,1,"0.85 $\pm$ 0.05","0.87 $\pm$ 0.05","0.85 $\pm$ 0.05","0.85 $\pm$ 0.06"
-Ionosphere,351,34,knn-clas,3,"0.87 $\pm$ 0.04","0.89 $\pm$ 0.04","0.87 $\pm$ 0.04","0.87 $\pm$ 0.05"
-Ionosphere,351,34,knn-clas,5,"0.87 $\pm$ 0.05","0.88 $\pm$ 0.05","0.87 $\pm$ 0.05","0.86 $\pm$ 0.05"
-Binary Digits,360,64,nn-clas,,"1.00 $\pm$ 0.00","1.00 $\pm$ 0.00","1.00 $\pm$ 0.00","1.00 $\pm$ 0.00"
-Binary Digits,360,64,knn-clas,1,"0.52 $\pm$ 0.02","0.56 $\pm$ 0.25","0.52 $\pm$ 0.02","0.38 $\pm$ 0.04"
-Binary Digits,360,64,knn-clas,3,"0.52 $\pm$ 0.02","0.56 $\pm$ 0.25","0.52 $\pm$ 0.02","0.38 $\pm$ 0.04"
-Binary Digits,360,64,knn-clas,5,"0.52 $\pm$ 0.02","0.56 $\pm$ 0.25","0.52 $\pm$ 0.02","0.38 $\pm$ 0.04"
-Haberman,306,3,nn-clas,,"0.71 $\pm$ 0.07","0.71 $\pm$ 0.07","0.71 $\pm$ 0.07","0.71 $\pm$ 0.07"
-Haberman,306,3,knn-clas,1,"0.68 $\pm$ 0.06","0.67 $\pm$ 0.05","0.68 $\pm$ 0.06","0.67 $\pm$ 0.05"
-Haberman,306,3,knn-clas,3,"0.69 $\pm$ 0.07","0.67 $\pm$ 0.07","0.69 $\pm$ 0.07","0.67 $\pm$ 0.07"
-Haberman,306,3,knn-clas,5,"0.69 $\pm$ 0.06","0.66 $\pm$ 0.07","0.69 $\pm$ 0.06","0.67 $\pm$ 0.06"
-Pima Diabetes,768,8,nn-clas,,"0.73 $\pm$ 0.05","0.75 $\pm$ 0.05","0.73 $\pm$ 0.05","0.73 $\pm$ 0.05"
-Pima Diabetes,768,8,knn-clas,1,"0.52 $\pm$ 0.05","0.65 $\pm$ 0.05","0.52 $\pm$ 0.05","0.50 $\pm$ 0.04"
-Pima Diabetes,768,8,knn-clas,3,"0.52 $\pm$ 0.05","0.65 $\pm$ 0.05","0.52 $\pm$ 0.05","0.50 $\pm$ 0.04"
-Pima Diabetes,768,8,knn-clas,5,"0.52 $\pm$ 0.05","0.65 $\pm$ 0.05","0.52 $\pm$ 0.05","0.50 $\pm$ 0.04"
-Banknote,1372,4,nn-clas,,"1.00 $\pm$ 0.00","1.00 $\pm$ 0.00","1.00 $\pm$ 0.00","1.00 $\pm$ 0.00"
-Banknote,1372,4,knn-clas,1,"0.99 $\pm$ 0.01","0.99 $\pm$ 0.01","0.99 $\pm$ 0.01","0.99 $\pm$ 0.01"
-Banknote,1372,4,knn-clas,3,"0.99 $\pm$ 0.01","0.99 $\pm$ 0.01","0.99 $\pm$ 0.01","0.99 $\pm$ 0.01"
-Banknote,1372,4,knn-clas,5,"0.99 $\pm$ 0.01","0.99 $\pm$ 0.01","0.99 $\pm$ 0.01","0.99 $\pm$ 0.01"
-Sonar,208,60,nn-clas,,"0.77 $\pm$ 0.13","0.79 $\pm$ 0.12","0.77 $\pm$ 0.13","0.76 $\pm$ 0.14"
-Sonar,208,60,knn-clas,1,"0.85 $\pm$ 0.07","0.86 $\pm$ 0.07","0.85 $\pm$ 0.07","0.85 $\pm$ 0.07"
-Sonar,208,60,knn-clas,3,"0.83 $\pm$ 0.07","0.85 $\pm$ 0.07","0.83 $\pm$ 0.07","0.83 $\pm$ 0.07"
-Sonar,208,60,knn-clas,5,"0.81 $\pm$ 0.08","0.82 $\pm$ 0.08","0.81 $\pm$ 0.08","0.81 $\pm$ 0.08"
-Breast Cancer,569,30,nn-clas,,"0.93 $\pm$ 0.03","0.93 $\pm$ 0.03","0.93 $\pm$ 0.03","0.93 $\pm$ 0.03"
-Breast Cancer,569,30,knn-clas,1,"0.39 $\pm$ 0.02","0.58 $\pm$ 0.29","0.39 $\pm$ 0.02","0.25 $\pm$ 0.04"
-Breast Cancer,569,30,knn-clas,3,"0.39 $\pm$ 0.02","0.58 $\pm$ 0.29","0.39 $\pm$ 0.02","0.25 $\pm$ 0.04"
-Breast Cancer,569,30,knn-clas,5,"0.39 $\pm$ 0.02","0.58 $\pm$ 0.29","0.39 $\pm$ 0.02","0.25 $\pm$ 0.04"
-SPECT Heart,349,44,nn-clas,,"0.70 $\pm$ 0.08","0.84 $\pm$ 0.05","0.70 $\pm$ 0.08","0.71 $\pm$ 0.08"
-SPECT Heart,349,44,knn-clas,1,"0.95 $\pm$ 0.03","0.96 $\pm$ 0.03","0.95 $\pm$ 0.03","0.95 $\pm$ 0.04"
-SPECT Heart,349,44,knn-clas,3,"0.95 $\pm$ 0.03","0.96 $\pm$ 0.03","0.95 $\pm$ 0.03","0.95 $\pm$ 0.04"
-SPECT Heart,349,44,knn-clas,5,"0.95 $\pm$ 0.03","0.96 $\pm$ 0.03","0.95 $\pm$ 0.03","0.95 $\pm$ 0.04"
+Dataset,nSamples,nFeatures,Model,k,Accuracy
+Ionosphere,351,34,nn-clas,,0.87
+Ionosphere,351,34,knn-clas,1,0.85
+Ionosphere,351,34,knn-clas,3,0.87
+Ionosphere,351,34,knn-clas,5,0.87
+Binary Digits,360,64,nn-clas,,1.00
+Binary Digits,360,64,knn-clas,1,0.52
+Binary Digits,360,64,knn-clas,3,0.52
+Binary Digits,360,64,knn-clas,5,0.52
+Haberman,306,3,nn-clas,,0.71
+Haberman,306,3,knn-clas,1,0.68
+Haberman,306,3,knn-clas,3,0.69
+Haberman,306,3,knn-clas,5,0.69
+Pima Diabetes,768,8,nn-clas,,0.73
+Pima Diabetes,768,8,knn-clas,1,0.52
+Pima Diabetes,768,8,knn-clas,3,0.52
+Pima Diabetes,768,8,knn-clas,5,0.52
+Banknote,1372,4,nn-clas,,1.00
+Banknote,1372,4,knn-clas,1,0.99
+Banknote,1372,4,knn-clas,3,0.99
+Banknote,1372,4,knn-clas,5,0.99
+Sonar,208,60,nn-clas,,0.77
+Sonar,208,60,knn-clas,1,0.85
+Sonar,208,60,knn-clas,3,0.83
+Sonar,208,60,knn-clas,5,0.81
+Breast Cancer,569,30,nn-clas,,0.93
+Breast Cancer,569,30,knn-clas,1,0.39
+Breast Cancer,569,30,knn-clas,3,0.39
+Breast Cancer,569,30,knn-clas,5,0.39
+SPECT Heart,349,44,nn-clas,,0.70
+SPECT Heart,349,44,knn-clas,1,0.95
+SPECT Heart,349,44,knn-clas,3,0.95
+SPECT Heart,349,44,knn-clas,5,0.95
