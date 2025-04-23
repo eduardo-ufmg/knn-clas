@@ -1,7 +1,8 @@
 import csv
 from collections import defaultdict
+from pathlib import Path
 
-def csv_to_latex_tables(csv_path, output_path):
+def csv_to_separate_latex_tables(csv_path, output_base_path):
   # Read and organize data
   datasets = defaultdict(dict)
   with open(csv_path, 'r') as f:
@@ -91,21 +92,33 @@ def csv_to_latex_tables(csv_path, output_path):
     timing_table.append(" & ".join(time_row) + r" \\ \hline")
 
   # Close tables
-  for table in [accuracy_table, timing_table]:
-    table.extend([
-      r"\end{tabular}",
-      r"\caption{" + ("Model Accuracy Comparison" if table == accuracy_table else "Training and Prediction Times") + "}",
-      r"\label{tab:" + ("accuracy" if table == accuracy_table else "timing") + "}",
-      r"\end{table}"
-    ])
+  accuracy_table.extend([
+    r"\end{tabular}",
+    r"\caption{Model Accuracy Comparison}",
+    r"\label{tab:accuracy}",
+    r"\end{table}"
+  ])
 
-  # Combine both tables
-  full_output = "\n\n".join(["\n".join(accuracy_table), "\n".join(timing_table)])
+  timing_table.extend([
+    r"\end{tabular}",
+    r"\caption{Training and Prediction Times}",
+    r"\label{tab:timing}",
+    r"\end{table}"
+  ])
 
-  # Write output
-  with open(output_path, 'w') as f:
-    f.write(full_output)
+  # Write to separate files
+  output_path = Path(output_base_path)
+  accuracy_path = output_path.with_name(f"{output_path.stem}_accuracy.tex")
+  timing_path = output_path.with_name(f"{output_path.stem}_timing.tex")
+
+  with open(accuracy_path, 'w') as f:
+    f.write("\n".join(accuracy_table))
+  
+  with open(timing_path, 'w') as f:
+    f.write("\n".join(timing_table))
 
 if __name__ == "__main__":
-  csv_to_latex_tables("scripts/comparison_results/real_sets.csv", 
-             "scripts/comparison_results/real_sets_results.tex")
+  csv_to_separate_latex_tables(
+    "scripts/comparison_results/real_sets.csv",
+    "scripts/comparison_results/real_sets_results.tex"
+  )
