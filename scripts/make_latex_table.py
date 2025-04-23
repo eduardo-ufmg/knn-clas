@@ -1,7 +1,7 @@
 import csv
 from collections import defaultdict
 
-def csv_to_latex_table(csv_path, output_path):
+def csv_to_latex_tables(csv_path, output_path):
   # Read and organize data
   datasets = defaultdict(dict)
   with open(csv_path, 'r') as f:
@@ -14,77 +14,98 @@ def csv_to_latex_table(csv_path, output_path):
       # Initialize dataset entry
       if dataset not in datasets:
         datasets[dataset] = {
-          'samples': row['nSamples'].strip(),
-          'features': row['nFeatures'].strip(),
-          'models': {
-            'nn-clas': {'acc': None, 'train_time': None, 'pred_time': None},
-            'knn-clas': {
-              'train_time': None,
-              'k_metrics': {
-                1: {'acc': None, 'pred_time': None},
-                3: {'acc': None, 'pred_time': None},
-                5: {'acc': None, 'pred_time': None}
-              }
-            }
+          'samples': row['nSamples'],
+          'features': row['nFeatures'],
+          'nn-clas': {'acc': None, 'train': None, 'pred': None},
+          'knn-clas': {
+            'train': None,
+            '1nn': {'acc': None, 'pred': None},
+            '3nn': {'acc': None, 'pred': None},
+            '5nn': {'acc': None, 'pred': None}
           }
         }
       
       # Populate data
       if model == 'nn-clas':
-        datasets[dataset]['models']['nn-clas']['acc'] = row['Accuracy'].strip()
-        datasets[dataset]['models']['nn-clas']['train_time'] = row['TrainTime'].strip()
-        datasets[dataset]['models']['nn-clas']['pred_time'] = row['PredTime'].strip()
+        datasets[dataset]['nn-clas'] = {
+          'acc': row['Accuracy'],
+          'train': row['TrainTime'],
+          'pred': row['PredTime']
+        }
       elif model == 'knn-clas':
-        k_int = int(k)
-        datasets[dataset]['models']['knn-clas']['k_metrics'][k_int]['acc'] = row['Accuracy'].strip()
-        datasets[dataset]['models']['knn-clas']['k_metrics'][k_int]['pred_time'] = row['PredTime'].strip()
-        # Set training time once (same for all k)
-        if datasets[dataset]['models']['knn-clas']['train_time'] is None:
-          datasets[dataset]['models']['knn-clas']['train_time'] = row['TrainTime'].strip()
+        key = f'{k}nn'
+        datasets[dataset]['knn-clas'][key] = {
+          'acc': row['Accuracy'],
+          'pred': row['PredTime']
+        }
+        # Store training time once
+        if not datasets[dataset]['knn-clas']['train']:
+          datasets[dataset]['knn-clas']['train'] = row['TrainTime']
 
-  # Generate LaTeX table
-  latex = [
+  # Generate Accuracy Table
+  accuracy_table = [
     r"\begin{table}[H]",
     r"\centering",
-    r"\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}",
+    r"\begin{tabular}{|c|c|c|c|c|c|c|}",
     r"\hline",
-    r"\multirow{2}{*}{\textbf{Dataset}} & \multirow{2}{*}{\textbf{Samples}} & \multirow{2}{*}{\textbf{Features}} & \multicolumn{4}{c|}{\textbf{Accuracy}} & \multicolumn{2}{c|}{\textbf{Training Time (ms)}} & \multicolumn{4}{c|}{\textbf{Prediction Time (ms)}} \\ \cline{4-7} \cline{8-9} \cline{10-13}",
-    r" & & & \textbf{nn} & \textbf{1nn} & \textbf{3nn} & \textbf{5nn} & \textbf{nn} & \textbf{knn} & \textbf{nn} & \textbf{1nn} & \textbf{3nn} & \textbf{5nn} \\ \hline"
+    r"\multirow{2}{*}{\textbf{Dataset}} & \multirow{2}{*}{\textbf{Samples}} & \multirow{2}{*}{\textbf{Features}} & \multicolumn{4}{c|}{\textbf{Accuracy}} \\ \cline{4-7}",
+    r" & & & \textbf{nn-clas} & \textbf{1nn-clas} & \textbf{3nn-clas} & \textbf{5nn-clas} \\ \hline"
   ]
 
-  # Add data rows
+  # Generate Timing Table
+  timing_table = [
+    r"\begin{table}[H]",
+    r"\centering",
+    r"\begin{tabular}{|c|c|c|c|c|c|c|c|c|}",
+    r"\hline",
+    r"\multirow{2}{*}{\textbf{Dataset}} & \multirow{2}{*}{\textbf{Samples}} & \multirow{2}{*}{\textbf{Features}} & \multicolumn{2}{c|}{\textbf{Training (ms)}} & \multicolumn{4}{c|}{\textbf{Prediction (ms)}} \\ \cline{4-9}",
+    r" & & & \textbf{nn-clas} & \textbf{knn-clas} & \textbf{nn-clas} & \textbf{1nn} & \textbf{3nn} & \textbf{5nn} \\ \hline"
+  ]
+
+  # Add data rows to both tables
   for dataset, data in datasets.items():
-    row = [
+    # Accuracy table row
+    acc_row = [
       dataset,
       data['samples'],
       data['features'],
-      # Accuracy
-      data['models']['nn-clas']['acc'],
-      data['models']['knn-clas']['k_metrics'][1]['acc'],
-      data['models']['knn-clas']['k_metrics'][3]['acc'],
-      data['models']['knn-clas']['k_metrics'][5]['acc'],
-      # Training Time
-      data['models']['nn-clas']['train_time'],
-      data['models']['knn-clas']['train_time'],
-      # Prediction Time
-      data['models']['nn-clas']['pred_time'],
-      data['models']['knn-clas']['k_metrics'][1]['pred_time'],
-      data['models']['knn-clas']['k_metrics'][3]['pred_time'],
-      data['models']['knn-clas']['k_metrics'][5]['pred_time'],
+      data['nn-clas']['acc'],
+      data['knn-clas']['1nn']['acc'],
+      data['knn-clas']['3nn']['acc'],
+      data['knn-clas']['5nn']['acc']
     ]
-    latex.append(" & ".join(row) + r" \\ \hline")
+    accuracy_table.append(" & ".join(acc_row) + r" \\ \hline")
 
-  # Close table
-  latex.extend([
-    r"\end{tabular}",
-    r"\caption{Comparison of Models with Training and Prediction Times}",
-    r"\label{tab:comparison_results}",
-    r"\end{table}"
-  ])
+    # Timing table row
+    time_row = [
+      dataset,
+      data['samples'],
+      data['features'],
+      data['nn-clas']['train'],
+      data['knn-clas']['train'],
+      data['nn-clas']['pred'],
+      data['knn-clas']['1nn']['pred'],
+      data['knn-clas']['3nn']['pred'],
+      data['knn-clas']['5nn']['pred']
+    ]
+    timing_table.append(" & ".join(time_row) + r" \\ \hline")
+
+  # Close tables
+  for table in [accuracy_table, timing_table]:
+    table.extend([
+      r"\end{tabular}",
+      r"\caption{" + ("Model Accuracy Comparison" if table == accuracy_table else "Training and Prediction Times") + "}",
+      r"\label{tab:" + ("accuracy" if table == accuracy_table else "timing") + "}",
+      r"\end{table}"
+    ])
+
+  # Combine both tables
+  full_output = "\n\n".join(["\n".join(accuracy_table), "\n".join(timing_table)])
 
   # Write output
   with open(output_path, 'w') as f:
-    f.write("\n".join(latex))
+    f.write(full_output)
 
 if __name__ == "__main__":
-  csv_to_latex_table("scripts/comparison_results/real_sets.csv", "scripts/comparison_results/real_sets_results.tex")
+  csv_to_latex_tables("scripts/comparison_results/real_sets.csv", 
+             "scripts/comparison_results/real_sets_results.tex")
