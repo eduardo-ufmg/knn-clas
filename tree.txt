@@ -5,86 +5,73 @@
 │   ├── nn-fit
 │   └── nn-pred
 ├── build
-├── CMakeLists.txt
 ├── data
-│   ├── banknote_knn-clas_predicted_k1.pb
-│   ├── banknote_knn-clas_predicted_k3.pb
-│   ├── banknote_knn-clas_predicted_k5.pb
-│   ├── banknote_knn-clas_support.pb
-│   ├── banknote_nn-clas_predicted.pb
-│   ├── banknote_nn-clas_support.pb
-│   ├── banknote_test.pb
-│   ├── banknote_train.pb
-│   ├── breast_cancer_knn-clas_predicted_k1.pb
-│   ├── breast_cancer_knn-clas_predicted_k3.pb
-│   ├── breast_cancer_knn-clas_predicted_k5.pb
-│   ├── breast_cancer_knn-clas_support.pb
-│   ├── breast_cancer_nn-clas_predicted.pb
-│   ├── breast_cancer_nn-clas_support.pb
-│   ├── breast_cancer_test.pb
-│   ├── breast_cancer_train.pb
-│   ├── digits_binary_knn-clas_predicted_k1.pb
-│   ├── digits_binary_knn-clas_predicted_k3.pb
-│   ├── digits_binary_knn-clas_predicted_k5.pb
-│   ├── digits_binary_knn-clas_support.pb
-│   ├── digits_binary_nn-clas_predicted.pb
-│   ├── digits_binary_nn-clas_support.pb
-│   ├── digits_binary_test.pb
-│   ├── digits_binary_train.pb
-│   ├── haberman_knn-clas_predicted_k1.pb
-│   ├── haberman_knn-clas_predicted_k3.pb
-│   ├── haberman_knn-clas_predicted_k5.pb
-│   ├── haberman_knn-clas_support.pb
-│   ├── haberman_nn-clas_predicted.pb
-│   ├── haberman_nn-clas_support.pb
-│   ├── haberman_test.pb
-│   ├── haberman_train.pb
-│   ├── ionosphere_knn-clas_predicted_k1.pb
-│   ├── ionosphere_knn-clas_predicted_k3.pb
-│   ├── ionosphere_knn-clas_predicted_k5.pb
-│   ├── ionosphere_knn-clas_support.pb
-│   ├── ionosphere_nn-clas_predicted.pb
-│   ├── ionosphere_nn-clas_support.pb
-│   ├── ionosphere_test.pb
-│   ├── ionosphere_train.pb
-│   ├── pima_diabetes_knn-clas_predicted_k1.pb
-│   ├── pima_diabetes_knn-clas_predicted_k3.pb
-│   ├── pima_diabetes_knn-clas_predicted_k5.pb
-│   ├── pima_diabetes_knn-clas_support.pb
-│   ├── pima_diabetes_nn-clas_predicted.pb
-│   ├── pima_diabetes_nn-clas_support.pb
-│   ├── pima_diabetes_test.pb
-│   ├── pima_diabetes_train.pb
-│   ├── sonar_knn-clas_predicted_k1.pb
-│   ├── sonar_knn-clas_predicted_k3.pb
-│   ├── sonar_knn-clas_predicted_k5.pb
-│   ├── sonar_knn-clas_support.pb
-│   ├── sonar_nn-clas_predicted.pb
-│   ├── sonar_nn-clas_support.pb
-│   ├── sonar_test.pb
-│   ├── sonar_train.pb
-│   ├── spect_heart_knn-clas_predicted_k1.pb
-│   ├── spect_heart_knn-clas_predicted_k3.pb
-│   ├── spect_heart_knn-clas_predicted_k5.pb
-│   ├── spect_heart_knn-clas_support.pb
-│   ├── spect_heart_nn-clas_predicted.pb
-│   ├── spect_heart_nn-clas_support.pb
-│   ├── spect_heart_test.pb
-│   └── spect_heart_train.pb
+│   ├── < PROTOBUFERS >
+├── include
+│   ├── bimap.hpp
+│   ├── classifier.pb.h
+│   ├── computeSSs.hpp
+│   ├── defdirs.hpp
+│   ├── filenameHelpers.hpp
+│   ├── filter.hpp
+│   ├── gabrielGraph.hpp
+│   ├── isgabrielEdge.hpp
+│   ├── kNSSpred.hpp
+│   ├── nearestSSpred.hpp
+│   ├── readFiles.hpp
+│   ├── squaredDistance.hpp
+│   ├── types.hpp
+│   └── writeFiles.hpp
 ├── LICENSE
 ├── proto
 │   ├── classifier.proto
 │   └── compile.sh
 ├── README.md
+├── report
+│   ├── knn-clas.pdf
+│   └── knn-clas.TeX
 ├── scripts
 │   ├── classifier_pb2.py
 │   ├── compare_real.py
+│   ├── compare_spirals.py
 │   ├── comparison_results
 │   │   ├── real_sets.csv
-│   │   └── setsmetadata.csv
+│   │   ├── real_sets_results.tex
+│   │   └── setsmetadata.csv
+│   ├── generate.py
 │   ├── load_proto.py
+│   ├── make_latex_table.py
+│   ├── plot.py
 │   ├── prepare_real.py
+│   ├── prepare_spirals.py
 │   ├── pvenv
-│   └── store_proto.py
+│   ├── run.py
+|   ├── run_and_measure_time.sh
+│   ├── store_proto.py
+│   ├── validate_prepare_spirals.py
+│   └── validate_run_spirals.py
 ├── src
+│   ├── common
+│   │   ├── bimap.cpp
+│   │   ├── classifier.pb.cc
+│   │   ├── CMakeLists.txt
+│   │   ├── computeSSs.cpp
+│   │   ├── filenameHelpers.cpp
+│   │   ├── filter.cpp
+│   │   ├── gabrielGraph.cpp
+│   │   ├── isgabrielEdge.cpp
+│   │   ├── kNSSpred.cpp
+│   │   ├── nearestSSpred.cpp
+│   │   ├── readFiles.cpp
+│   │   ├── squaredDistance.cpp
+│   │   ├── types.cpp
+│   │   └── writeFiles.cpp
+│   ├── knn-clas
+│   │   ├── CMakeLists.txt
+│   │   ├── knn-fit.cpp
+│   │   └── knn-pred.cpp
+│   └── nn-clas
+│       ├── CMakeLists.txt
+│       ├── nn-fit.cpp
+│       └── nn-pred.cpp
 └── tree.txt

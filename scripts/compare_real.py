@@ -15,6 +15,7 @@ def main():
   nn_pred_bin = bin_dir / "nn-pred"
   knn_fit_bin = bin_dir / "knn-fit"
   knn_pred_bin = bin_dir / "knn-pred"
+  run_and_measure_script = script_dir / "run_and_measure_time.sh"
 
   # Load metadata
   metadata_path = script_dir / "comparison_results" / "setsmetadata.csv"
@@ -61,8 +62,11 @@ def main():
     folds = sorted(datasets[dataset])
     print(f"Processing {dataset} with {len(folds)} folds")
 
-    nn_metrics = {'accuracy': []}
-    knn_metrics = {k: {'accuracy': []} for k in knn_ks}
+    nn_metrics = {'accuracy': [], 'train_time': [], 'pred_time': []}
+    knn_metrics = {
+      'train_time': [],
+      'k_metrics': {k: {'accuracy': [], 'pred_time': []} for k in knn_ks}
+    }
 
     for fold in folds:
       train_path = data_dir / f"{dataset}_fold{fold}_train.pb"
@@ -77,8 +81,22 @@ def main():
       nn_support_path = data_dir / f"{dataset}_nn-clas_fold{fold}_support.pb"
       nn_predicted_path = data_dir / f"{dataset}_nn-clas_fold{fold}_predicted.pb"
       try:
-        subprocess.run([str(nn_fit_bin), str(train_path), str(nn_support_path), str(nn_tolerance)], check=True)
-        subprocess.run([str(nn_pred_bin), str(test_path), str(nn_support_path), str(nn_predicted_path)], check=True)
+        # Measure training time
+        train_time_output = subprocess.check_output(
+          [str(run_and_measure_script), str(nn_fit_bin), str(train_path), str(nn_support_path), str(nn_tolerance)],
+          text=True
+        )
+        train_time_ms = float(train_time_output.strip())
+        nn_metrics['train_time'].append(train_time_ms)
+
+        # Measure prediction time
+        pred_time_output = subprocess.check_output(
+          [str(run_and_measure_script), str(nn_pred_bin), str(test_path), str(nn_support_path), str(nn_predicted_path)],
+          text=True
+        )
+        pred_time_ms = float(pred_time_output.strip())
+        nn_metrics['pred_time'].append(pred_time_ms)
+
         nn_predicted = load_predicted_samples(str(nn_predicted_path))
         if nn_predicted:
           y_pred = [entry.target.target_int for entry in nn_predicted.entries]
@@ -89,49 +107,72 @@ def main():
       # Process knn-clas
       knn_support_path = data_dir / f"{dataset}_knn-clas_fold{fold}_support.pb"
       try:
-        subprocess.run([str(knn_fit_bin), str(train_path), str(knn_support_path)], check=True)
+        # Measure training time
+        train_time_output = subprocess.check_output(
+          [str(run_and_measure_script), str(knn_fit_bin), str(train_path), str(knn_support_path)],
+          text=True
+        )
+        train_time_ms = float(train_time_output.strip())
+        knn_metrics['train_time'].append(train_time_ms)
+
         for k in knn_ks:
           knn_predicted_path = data_dir / f"{dataset}_knn-clas_fold{fold}_predicted_k{k}.pb"
-          subprocess.run([str(knn_pred_bin), str(test_path), str(knn_support_path), str(knn_predicted_path), str(k)], check=True)
+          # Measure prediction time for k
+          pred_time_output = subprocess.check_output(
+            [str(run_and_measure_script), str(knn_pred_bin), str(test_path), str(knn_support_path), str(knn_predicted_path), str(k)],
+            text=True
+          )
+          pred_time_ms = float(pred_time_output.strip())
+          knn_metrics['k_metrics'][k]['pred_time'].append(pred_time_ms)
+
           knn_predicted = load_predicted_samples(str(knn_predicted_path))
           if knn_predicted:
             y_pred = [entry.target.target_int for entry in knn_predicted.entries]
-            knn_metrics[k]['accuracy'].append(accuracy_score(y_true, y_pred))
+            knn_metrics['k_metrics'][k]['accuracy'].append(accuracy_score(y_true, y_pred))
       except subprocess.CalledProcessError as e:
         print(f"knn-clas fold {fold} failed: {e}")
 
     # Compute averages for nn-clas
     if nn_metrics['accuracy']:
       dataset_meta = metadata_dict.get(dataset, {})
+      avg_train = np.mean(nn_metrics['train_time']).item() if nn_metrics['train_time'] else 0.0
+      avg_pred = np.mean(nn_metrics['pred_time']).item() if nn_metrics['pred_time'] else 0.0
       results.append({
         'Dataset': dataset,
         'nSamples': dataset_meta.get('nsamples', ''),
         'nFeatures': dataset_meta.get('nfeatures', ''),
         'Model': 'nn-clas',
         'k': '',
-        'Accuracy': np.mean(nn_metrics['accuracy'])
+        'Accuracy': np.mean(nn_metrics['accuracy']),
+        'TrainTime': avg_train,
+        'PredTime': avg_pred
       })
 
     # Compute averages for knn-clas
     for k in knn_ks:
-      if knn_metrics[k]['accuracy']:
+      if knn_metrics['k_metrics'][k]['accuracy']:
         dataset_meta = metadata_dict.get(dataset, {})
+        avg_train = np.mean(knn_metrics['train_time']).item() if knn_metrics['train_time'] else 0.0
+        avg_pred = np.mean(knn_metrics['k_metrics'][k]['pred_time']).item() if knn_metrics['k_metrics'][k]['pred_time'] else 0.0
         results.append({
           'Dataset': dataset,
           'nSamples': dataset_meta.get('nsamples', ''),
           'nFeatures': dataset_meta.get('nfeatures', ''),
           'Model': 'knn-clas',
           'k': k,
-          'Accuracy': np.mean(knn_metrics[k]['accuracy'])
+          'Accuracy': np.mean(knn_metrics['k_metrics'][k]['accuracy']),
+          'TrainTime': avg_train,
+          'PredTime': avg_pred
         })
 
   # Print results
   print("\nComparison Results:")
-  print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<20}".format(
-    "Dataset", "nSamples", "nFeatures", "Model", "k", "Accuracy"))
+  print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<10} {:<10} {:<10}".format(
+    "Dataset", "nSamples", "nFeatures", "Model", "k", "Accuracy", "TrainTime", "PredTime"))
   for res in results:
-    print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<20}".format(
-      res['Dataset'], res['nSamples'], res['nFeatures'], res['Model'], res['k'], f'{res['Accuracy']:.2f}'
+    print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<10.2f} {:<10.2f} {:<10.2f}".format(
+      res['Dataset'], res['nSamples'], res['nFeatures'], res['Model'], res['k'],
+      res['Accuracy'], res['TrainTime'], res['PredTime']
     ))
 
   # Write results to CSV
@@ -139,7 +180,7 @@ def main():
   output_dir.mkdir(exist_ok=True)
   output_file = output_dir / "real_sets.csv"
   with open(output_file, "w") as f:
-    f.write("Dataset,nSamples,nFeatures,Model,k,Accuracy\n")
+    f.write("Dataset,nSamples,nFeatures,Model,k,Accuracy,TrainTime,PredTime\n")
     for res in results:
       line = (
         f"{res['Dataset']},"
@@ -147,8 +188,9 @@ def main():
         f"{res['nFeatures']},"
         f"{res['Model']},"
         f"{res['k']},"
-        f"{res['Accuracy']:.2f}"
-        "\n"
+        f"{res['Accuracy']:.2f},"
+        f"{res['TrainTime']:.2f},"
+        f"{res['PredTime']:.2f}\n"
       )
       f.write(line)
 
