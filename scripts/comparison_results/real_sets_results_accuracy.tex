@@ -1,18 +1,19 @@
-\begin{table}[H]
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|}
-\hline
-\multirow{2}{*}{\textbf{Dataset}} & \multirow{2}{*}{\textbf{Samples}} & \multirow{2}{*}{\textbf{Features}} & \multicolumn{4}{c|}{\textbf{Accuracy}} \\ \cline{4-7}
- & & & \textbf{nn-clas} & \textbf{1nn-clas} & \textbf{3nn-clas} & \textbf{5nn-clas} \\ \hline
-Ionosphere & 351 & 34 & 0.87 & 0.85 & 0.87 & 0.87 \\ \hline
-Binary Digits & 360 & 64 & 1.00 & 0.52 & 0.52 & 0.52 \\ \hline
-Haberman & 306 & 3 & 0.71 & 0.68 & 0.69 & 0.69 \\ \hline
-Pima Diabetes & 768 & 8 & 0.73 & 0.52 & 0.52 & 0.52 \\ \hline
-Banknote & 1372 & 4 & 1.00 & 0.99 & 0.99 & 0.99 \\ \hline
-Sonar & 208 & 60 & 0.77 & 0.85 & 0.83 & 0.81 \\ \hline
-Breast Cancer & 569 & 30 & 0.93 & 0.39 & 0.39 & 0.39 \\ \hline
-SPECT Heart & 349 & 44 & 0.70 & 0.95 & 0.95 & 0.95 \\ \hline
-\end{tabular}
+\begin{table}[htbp]
 \caption{Model Accuracy Comparison}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{\textbf{Dataset}} & \multicolumn{4}{c|}{\textbf{Accuracy}} \\ \cline{2-5}
+ & \textbf{nn} & \textbf{1nn} & \textbf{3nn} & \textbf{5nn} \\ \hline
+Ionosphere & 0.87 & 0.85 & 0.87 & 0.87 \\ \hline
+Binary Digits & 1.00 & 0.52 & 0.52 & 0.52 \\ \hline
+Haberman & 0.71 & 0.68 & 0.69 & 0.69 \\ \hline
+Pima Diabetes & 0.73 & 0.52 & 0.52 & 0.52 \\ \hline
+Banknote & 1.00 & 0.99 & 0.99 & 0.99 \\ \hline
+Sonar & 0.77 & 0.85 & 0.83 & 0.81 \\ \hline
+Breast Cancer & 0.93 & 0.39 & 0.39 & 0.39 \\ \hline
+SPECT Heart & 0.70 & 0.95 & 0.95 & 0.95 \\ \hline
+\end{tabular}
 \label{tab:accuracy}
+\end{center}
 \end{table}
