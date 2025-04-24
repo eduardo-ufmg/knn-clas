@@ -50,6 +50,7 @@ const PredictedSamples kNSSpred(const TestSamples& testSample, const SupportSamp
     }
 
     const int& decision = sign(decisionSum);
+                            
     const auto& predictedTarget = bimap.get_target(decision);
 
     predictedSamples.emplace_back(sample.id, sampleCoords, predictedTarget);
@@ -86,11 +87,8 @@ Indices sortIndices(const Distances& distances)
 
 int sign(const float x)
 {
-  if (x < 0) {
-    return -1;
-  } else {
-    return 1;
-  }
+  // biased towards 1
+  return static_cast<int>(0 <= x) - static_cast<int>(x < 0);
 }
 
 const Bimap createbimap(const SupportSamples& supportSamples)

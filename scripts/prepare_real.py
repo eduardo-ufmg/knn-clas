@@ -174,9 +174,6 @@ def load_all_datasets():
   return datasets
 
 if __name__ == "__main__":
-  for name, (X, y) in load_all_datasets().items():
-    print(f"{name}: X={X.shape}, y={y.shape}")
-
   # Ensure the directory exists
   os.makedirs("scripts/comparison_results", exist_ok=True)
 
