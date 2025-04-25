@@ -8,7 +8,7 @@
 #include <map>
 
 class Sample;
-class Cluster;
+class Class;
 
 using SampleID = int;
 using Coordinates = std::vector<float>;
@@ -27,19 +27,19 @@ public:
 class Sample : public BaseSample
 {
 public:
-  std::shared_ptr<Cluster> cluster;
+  std::shared_ptr<Class> class_;
   
   AdjacencyList adjacencyList;
   float quality;
 
-  Sample(const SampleID id, const Coordinates& coordinates, std::shared_ptr<Cluster> cluster = nullptr);
+  Sample(const SampleID id, const Coordinates& coordinates, std::shared_ptr<Class> class_ = nullptr);
 };
 
 using Samples = std::vector<Sample>;
 
 using Target = std::variant<int, const std::string>;
 
-class Cluster
+class Class
 {
 public:
   const Target id;
@@ -52,14 +52,14 @@ public:
   float online_stdq;
   float threshold;
 
-  Cluster(const Target id);
+  Class(const Target id);
 
   void reset();
   void accumQ_updateStats(const float q);
   void computeThreshold(const float tolerance);
 };
 
-using Clusters = std::map<Target, std::shared_ptr<Cluster>>;
+using Classes = std::map<Target, std::shared_ptr<Class>>;
 
 using Edge = std::pair<const Sample * const, const Sample * const>;
 

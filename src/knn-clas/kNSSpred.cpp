@@ -9,15 +9,10 @@
 
 #include "bimap.hpp"
 #include "squaredDistance.hpp"
+#include "kNSSvoting.hpp"
 
 using namespace std;
 
-using Distances = vector<float>;
-using Indices = vector<int>;
-
-float kernel(const float sqDistance);
-Distances computeDistances(const Coordinates& sampleCoords, const SupportSamples& supportSamples);
-Indices sortIndices(const Distances& distances);
 int sign(const float x);
 
 const Bimap createbimap(const SupportSamples& supportSamples);
@@ -29,24 +24,22 @@ const PredictedSamples kNSSpred(const TestSamples& testSample, const SupportSamp
 
   PredictedSamples predictedSamples;
 
-  for (const auto& sample : testSample) {
+  for (const TestSample& sample : testSample) {
     
-    const auto& sampleCoords = sample.coordinates;
-
-    Distances distances = computeDistances(sampleCoords, supportSamples);
-
-    Indices sortedIndices = sortIndices(distances);
+    const Coordinates& sampleCoords = sample.coordinates;
 
     float decisionSum = 0.0f;
 
-    for (int i = 0; i < k; ++i) {
-      const int index = sortedIndices[i];
-      const SupportSample& supportSample = supportSamples[index];
-      const float sqDistance = distances[index];
-      const Target& supportTarget = supportSample.target;
+    const SSampleDistancePairVec knss = getKNSS(sampleCoords, supportSamples, k);
 
-      const float kernelValue = kernel(sqDistance);
-      decisionSum += kernelValue * bimap.get_int(supportTarget);
+    for (const auto& [supportSample, distance] : knss) {
+      const Target& target = supportSample->target;
+
+      const int targetInt = bimap.get_int(target);
+
+      const float kernelValue = kernel(distance);
+
+      decisionSum += targetInt * kernelValue;
     }
 
     int decisionSign = sign(decisionSum);
@@ -65,32 +58,6 @@ const PredictedSamples kNSSpred(const TestSamples& testSample, const SupportSamp
   return predictedSamples;
 }
 
-float kernel(const float sqDistance)
-{
-  return exp(-sqDistance);
-}
-
-Distances computeDistances(const Coordinates& sampleCoords, const SupportSamples& supportSamples)
-{
-  Distances distances;
-  distances.reserve(supportSamples.size());
-  for (const auto& supportSample : supportSamples) {
-    const auto& supportCoords = supportSample.coordinates;
-    distances.push_back(squaredDistance(sampleCoords, supportCoords));
-  }
-  return distances;
-}
-
-Indices sortIndices(const Distances& distances)
-{
-  Indices indices(distances.size());
-  iota(indices.begin(), indices.end(), 0);
-  sort(indices.begin(), indices.end(), [&](int a, int b) {
-    return distances[a] < distances[b];
-  });
-  return indices;
-}
-
 int sign(const float x)
 {
   return static_cast<int>(0 < x) - static_cast<int>(x < 0);
@@ -101,7 +68,7 @@ const Bimap createbimap(const SupportSamples& supportSamples)
   vector<Target> targets;
   targets.reserve(supportSamples.size());
 
-  for (const auto& sample : supportSamples) {
+  for (const SupportSample& sample : supportSamples) {
     targets.push_back(sample.target);
   }
 
@@ -122,7 +89,7 @@ const Bimap createbimap(const SupportSamples& supportSamples)
 
   Bimap bimap;
 
-  for (const auto& target : uniqueTargets) {
+  for (const Target& target : uniqueTargets) {
     if (intcounter == 0 && !shouldIncludeZero) {
       ++intcounter;
     }

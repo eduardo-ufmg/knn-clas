@@ -22,7 +22,7 @@ const SupportSamples computeSSs(const Samples& samples)
       const Sample& vi = samples[i];
       const Sample& vj = samples[j];
 
-      if (vi.cluster == vj.cluster) {
+      if (vi.class_ == vj.class_) {
         continue;
       }
 
@@ -51,6 +51,6 @@ bool emplace_unique(SupportSamples& Samples, const Sample& sample)
     return false;
   }
 
-  Samples.emplace_back(sample.id, sample.coordinates, sample.cluster->id);
+  Samples.emplace_back(sample.id, sample.coordinates, sample.class_->id);
   return true;
 }

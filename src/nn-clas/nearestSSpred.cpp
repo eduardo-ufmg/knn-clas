@@ -25,7 +25,7 @@ const PredictedSamples nearestSSpred(const TestSamples& testSample, const Suppor
     }
 
     if (!nearestTarget) {
-      throw runtime_error("No nearest cluster ID found for sample " + to_string(sample.id));
+      throw runtime_error("No nearest Class ID found for sample " + to_string(sample.id));
     }
 
     predictedSamples.emplace_back(sample.id, sample.coordinates, *nearestTarget);

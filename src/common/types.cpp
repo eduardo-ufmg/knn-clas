@@ -10,15 +10,15 @@ BaseSample::BaseSample(const SampleID id, const Coordinates& coordinates)
   : id(id), coordinates(coordinates)
 {}
 
-Sample::Sample(const SampleID id, const Coordinates& coordinates, shared_ptr<Cluster> cluster)
-  : BaseSample(id, coordinates), cluster(cluster), quality(0.0f)
+Sample::Sample(const SampleID id, const Coordinates& coordinates, shared_ptr<Class> class_)
+  : BaseSample(id, coordinates), class_(class_), quality(0.0f)
 {}
 
-Cluster::Cluster(const Target id)
+Class::Class(const Target id)
   : id(id), sumq(0.0f), magq(0), online_avgq(0.0f), sumDeltaSq(0.0f), online_stdq(0.0f), threshold(0.0f)
 {}
 
-void Cluster::reset()
+void Class::reset()
 {
   sumq = 0.0f;
   magq = 0;
@@ -28,7 +28,7 @@ void Cluster::reset()
   threshold = 0.0f;
 }
 
-void Cluster::accumQ_updateStats(const float q)
+void Class::accumQ_updateStats(const float q)
 {
   sumq += q;
   ++ magq;
@@ -46,7 +46,7 @@ void Cluster::accumQ_updateStats(const float q)
   }
 }
 
-void Cluster::computeThreshold(const float tolerance)
+void Class::computeThreshold(const float tolerance)
 {
   threshold = online_avgq - tolerance * online_stdq;
 }

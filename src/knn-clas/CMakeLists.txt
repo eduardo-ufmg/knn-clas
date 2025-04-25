@@ -1,5 +1,6 @@
 # knn-specific library
 add_library(knn_clas_lib STATIC
+  kNSSvoting.cpp
   kNSSpred.cpp
 )
 

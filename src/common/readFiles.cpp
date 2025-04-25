@@ -26,7 +26,7 @@ Samples readDataset(const string& filename)
   file.close();
 
   Samples samples;
-  Clusters clusters;
+  Classes classes;
   SampleID vcounter = 0;
 
   for (const auto& sample : pb_dataset.entries()) {
@@ -35,9 +35,9 @@ Samples readDataset(const string& filename)
     const Coordinates coordinates(sample.features().begin(), sample.features().end());
     const Target cid = parseCID(sample.target());
 
-    clusters.emplace(cid, make_shared<Cluster>(cid));
+    classes.emplace(cid, make_shared<Class>(cid));
 
-    samples.emplace_back(id, coordinates, clusters.at(cid));
+    samples.emplace_back(id, coordinates, classes.at(cid));
 
   }
 
@@ -109,7 +109,7 @@ ifstream openFileRead(const string& filename)
 Target parseCID(const classifierpb::Target& cid)
 {
   if (!cid.has_target_int() && !cid.has_target_str()) {
-    throw runtime_error("Error: cluster id did not have any value");
+    throw runtime_error("Error: Class id did not have any value");
   }
 
   switch(cid.target_case()) {
@@ -118,6 +118,6 @@ Target parseCID(const classifierpb::Target& cid)
   case classifierpb::Target::kTargetStr:
     return cid.target_str();
   default:
-    throw runtime_error("Error: cluster id did not match any case");
+    throw runtime_error("Error: Class id did not match any case");
   }
 }

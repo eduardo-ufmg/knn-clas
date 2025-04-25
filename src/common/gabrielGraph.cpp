@@ -22,8 +22,8 @@ void computeGabrielGraph(Samples &samples)
       bool isGE = isGabrielEdge(samples, vi, vj, sampleqtty);
 
       if (isGE) {
-        const Target viCid = vi.cluster->id;
-        const Target vjCid = vj.cluster->id;
+        const Target viCid = vi.class_->id;
+        const Target vjCid = vj.class_->id;
 
         bool isSE = viCid != vjCid;
 
