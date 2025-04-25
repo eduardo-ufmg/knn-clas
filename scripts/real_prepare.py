@@ -3,6 +3,7 @@ import csv
 import pandas as pd
 import numpy as np
 from sklearn.datasets import load_breast_cancer, load_digits, fetch_openml
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import StratifiedKFold
 from sklearn.feature_selection import mutual_info_classif
@@ -35,18 +36,36 @@ def create_proto_test_samples(X, y):
       entry.ground_truth.target_str = str(target[0])
   return samples
 
+def preprocess_data(X, y, mi_threshold=0.01):
+  """
+  Normalize X to [-1, 1] and remove features with low mutual information.
+  """
+  # Normalize to [-1, 1]
+  scaler = MinMaxScaler(feature_range=(-1, 1))
+  X_scaled = scaler.fit_transform(X)
+
+  # Compute mutual information
+  mi = mutual_info_classif(X_scaled, y.ravel(), discrete_features='auto')
+  
+  # Keep only features with sufficient MI
+  informative_idx = np.where(mi > mi_threshold)[0]
+  X_filtered = X_scaled[:, informative_idx]
+
+  return X_filtered, y
+
 def store_real_dataset(X, y, name, n_splits=10):
+  # Preprocess before splitting
+  X, y = preprocess_data(X, y)
+
   skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
   for fold, (train_idx, test_idx) in enumerate(skf.split(X, y)):
     X_train, X_test = X[train_idx], X[test_idx]
     y_train, y_test = y[train_idx], y[test_idx]
-    
-    # Save training dataset for this fold
+
     train_dataset = create_proto_dataset(X_train, y_train)
     train_filename = f"data/{name}_fold{fold}_train.pb"
     store_dataset(train_dataset, train_filename)
-    
-    # Save test samples for this fold
+
     test_samples = create_proto_test_samples(X_test, y_test)
     test_filename = f"data/{name}_fold{fold}_test.pb"
     store_test_samples(test_samples, test_filename)
