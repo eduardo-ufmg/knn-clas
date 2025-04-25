@@ -82,7 +82,8 @@ def csv_to_separate_latex_tables(csv_path, output_base_path):
     r"\begin{center}",
     r"\begin{tabular}{|c|c|c|}",
     r"\hline",
-    r"\textbf{Dataset} & \textbf{nn} & \textbf{knn} \\ \hline"
+    r"\multirow{2}{*}{\textbf{Dataset}} & \multicolumn{2}{c|}{\textbf{Support Samples}} \\ \cline{2-3}",
+    r" & \textbf{nn} & \textbf{knn} \\ \hline"
   ]
 
   for dataset, data in datasets.items():
