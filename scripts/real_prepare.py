@@ -69,7 +69,6 @@ def load_pima_diabetes():
   
   features = ["Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI"]
   
-  # Pattern 1: direct assignment instead of inplace on a slice
   for feat in features:
     df[feat] = df[feat].replace(0, np.nan)
     df[feat] = df[feat].fillna(df[feat].median())

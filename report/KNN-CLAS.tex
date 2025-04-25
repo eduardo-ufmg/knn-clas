@@ -7,6 +7,7 @@
 \usepackage{xcolor}
 \usepackage{multirow}
 \usepackage{float}
+\usepackage{hyperref}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -47,23 +48,40 @@ where \( \mathcal{A}(\mathbf{x}_i) \) is the vertex degree and \( \hat{\mathcal{
 
 \section{Methodology}
 
+% eight datasets cite() were downloaded from UCI ML repository and sklearn. 
+% preprocessing: drop NaN, encode categorical variables, encode targets
+% cross-validation: 10-fold stratified
+% measurements made by the same script, with the same criteria and parameters
+% run in the same hardware under the same conditions
+
 \section{Results}
 
+% metadata table
 \input{../scripts/comparison_results/setsresults_metadata.tex}
+%
 
+% statistics table
 \input{../scripts/comparison_results/setsresults_statistics.tex}
+%
 
+% accuracy table
 \input{../scripts/comparison_results/setsresults_accuracy.tex}
+%
 
+% timing table
 \input{../scripts/comparison_results/setsresults_timing.tex}
+%
 
+% support table
 \input{../scripts/comparison_results/setsresults_support.tex}
+%
 
 \section{Discussion}
 
 \section*{Acknowledgment}
 
 \begin{thebibliography}{00}
+    % reference papers
     \bibitem{torres2016} L. C. B. Torres, "Classificador por arestas de suporte (CLAS): métodos de aprendizado baseados em Grafos de Gabriel," Manuscript, 2016.
     \bibitem{souza2019} A. C. Souza, C. Leite Castro, J. A. Garcia, L. C. B. Torres, L. J. Acevedo Jaimes and B. R. A. Jaimes, "Improving the Efficiency of Gabriel Graph-based Classifiers for Hardware-optimized Implementations," 2019 XXII Symposium on Image, Signal Processing and Artificial Vision (STSIVA), Bucaramanga, Colombia, 2019.
     \bibitem{arias2021} J. Arias-Garcia et al., "Enhancing Performance of Gabriel Graph-Based Classifiers by a Hardware Co-Processor for Embedded System Applications," in IEEE Transactions on Industrial Informatics, vol. 17, no. 2, Feb. 2021.
@@ -71,6 +89,17 @@ where \( \mathcal{A}(\mathbf{x}_i) \) is the vertex degree and \( \hat{\mathcal{
     \bibitem{torres2015} L. C. B. Torres, C. L. Castro and A. P. Braga, "A parameterless mixture model for large margin classification," 2015 International Joint Conference on Neural Networks (IJCNN), Killarney, Ireland, 2015.
     \bibitem{torres2021} L. C. B. Torres, C. L. Castro, F. Coelho and A. P. Braga, "Large Margin Gaussian Mixture Classifier With a Gabriel Graph Geometric Representation of Data Set Structure," in IEEE Transactions on Neural Networks and Learning Systems, vol. 32, no. 3, March 2021.
     \bibitem{torres2015b} L. C. B. Torres, C. L. Castro, F. Coelho, F. Sill Torres and A. P. Braga, "Distance-based large margin classifier suitable for integrated circuit implementation," Manuscript, 2015.
+
+    % datasets
+    \bibitem{uci_breast_cancer} D. Dua and C. Graff, "Breast Cancer Wisconsin (Diagnostic) Data Set," UCI Machine Learning Repository, 1995. [Online]. Available: \url{https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)}
+    \bibitem{pima_diabetes} J. Brownlee, "Pima Indians Diabetes Dataset," GitHub Repository, 2020. [Online]. Available: \url{https://github.com/jbrownlee/Datasets}
+    \bibitem{uci_haberman} D. Dua and C. Graff, "Haberman's Survival Data Set," UCI Machine Learning Repository, 1995. [Online]. Available: \url{https://archive.ics.uci.edu/ml/datasets/Haberman's+Survival}
+    \bibitem{uci_banknote} D. Dua and C. Graff, "Data Banknote Authentication Data Set," UCI Machine Learning Repository, 1995. [Online]. Available: \url{https://archive.ics.uci.edu/ml/datasets/banknote+authentication}
+    \bibitem{uci_sonar} D. Dua and C. Graff, "Connectionist Bench (Sonar, Mines vs. Rocks) Data Set," UCI Machine Learning Repository, 1995. [Online]. Available: \url{https://archive.ics.uci.edu/ml/datasets/connectionist+bench+(sonar,+mines+vs.+rocks)}
+    \bibitem{uci_adult} D. Dua and C. Graff, "Adult Data Set," UCI Machine Learning Repository, 1995. [Online]. Available: \url{https://archive.ics.uci.edu/ml/datasets/adult}
+    \bibitem{uci_ionosphere} D. Dua and C. Graff, "Ionosphere Data Set," UCI Machine Learning Repository, 1995. [Online]. Available: \url{https://archive.ics.uci.edu/ml/datasets/ionosphere}
+    \bibitem{uci_spect_heart} D. Dua and C. Graff, "SPECT Heart Data Set," UCI Machine Learning Repository, 1995. [Online]. Available: \url{https://archive.ics.uci.edu/ml/datasets/SPECT+Heart}
+    \bibitem{sklearn_digits} L. Breiman et al., "Optical Recognition of Handwritten Digits Data Set," Scikit-learn Documentation, 1998. [Online]. Available: \url{https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html}
 \end{thebibliography}
 
 \end{document}
