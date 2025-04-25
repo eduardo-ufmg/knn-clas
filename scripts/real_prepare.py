@@ -3,10 +3,9 @@ import csv
 import pandas as pd
 import numpy as np
 from sklearn.datasets import load_breast_cancer, load_digits, fetch_openml
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.model_selection import StratifiedKFold
-from sklearn.feature_selection import mutual_info_classif
+from sklearn.feature_selection import mutual_info_classif, VarianceThreshold
 from sklearn.metrics import mutual_info_score
 import classifier_pb2 as pb
 from store_proto import store_dataset, store_test_samples
@@ -36,37 +35,49 @@ def create_proto_test_samples(X, y):
       entry.ground_truth.target_str = str(target[0])
   return samples
 
-def preprocess_data(X, y, mi_threshold=0.01):
-  """
-  Normalize X to [-1, 1] and remove features with low mutual information.
-  """
-  # Normalize to [-1, 1]
-  scaler = MinMaxScaler(feature_range=(-1, 1))
-  X_scaled = scaler.fit_transform(X)
-
-  # Compute mutual information
-  mi = mutual_info_classif(X_scaled, y.ravel(), discrete_features='auto')
-  
-  # Keep only features with sufficient MI
-  informative_idx = np.where(mi > mi_threshold)[0]
-  X_filtered = X_scaled[:, informative_idx]
-
-  return X_filtered, y
+def remove_correlated(X_train, X_test, threshold=0.95):
+  """Remove highly correlated features based on training data."""
+  corr_matrix = np.corrcoef(X_train, rowvar=False)
+  upper = np.triu(corr_matrix, k=1)
+  to_drop = set()
+  for i in range(upper.shape[0]):
+    for j in range(i + 1, upper.shape[1]):
+      if abs(upper[i, j]) > threshold:
+        to_drop.add(j)
+  mask = [i for i in range(X_train.shape[1]) if i not in to_drop]
+  return X_train[:, mask], X_test[:, mask]
 
 def store_real_dataset(X, y, name, n_splits=10):
-  # Preprocess before splitting
-  X, y = preprocess_data(X, y)
-
   skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
   for fold, (train_idx, test_idx) in enumerate(skf.split(X, y)):
-    X_train, X_test = X[train_idx], X[test_idx]
+    X_train_raw, X_test_raw = X[train_idx], X[test_idx]
     y_train, y_test = y[train_idx], y[test_idx]
 
-    train_dataset = create_proto_dataset(X_train, y_train)
+    # 1. Normalize to [-1, 1]
+    scaler = MinMaxScaler(feature_range=(-1, 1))
+    X_train_scaled = scaler.fit_transform(X_train_raw)
+    X_test_scaled = scaler.transform(X_test_raw)
+
+    # 2. Remove low-variance features
+    var_selector = VarianceThreshold(threshold=0.01)
+    X_train_var = var_selector.fit_transform(X_train_scaled)
+    X_test_var = var_selector.transform(X_test_scaled)
+
+    # 3. Remove highly correlated features
+    X_train_corr, X_test_corr = remove_correlated(X_train_var, X_test_var, 0.95)
+
+    # 4. Select informative features based on mutual information
+    mi = mutual_info_classif(X_train_corr, y_train.ravel(), discrete_features='auto')
+    informative_idx = np.where(mi > 0.01)[0]
+    X_train_final = X_train_corr[:, informative_idx]
+    X_test_final = X_test_corr[:, informative_idx]
+
+    # Store processed datasets
+    train_dataset = create_proto_dataset(X_train_final, y_train)
     train_filename = f"data/{name}_fold{fold}_train.pb"
     store_dataset(train_dataset, train_filename)
 
-    test_samples = create_proto_test_samples(X_test, y_test)
+    test_samples = create_proto_test_samples(X_test_final, y_test)
     test_filename = f"data/{name}_fold{fold}_test.pb"
     store_test_samples(test_samples, test_filename)
 
@@ -181,7 +192,6 @@ def load_all_datasets():
     "Haberman": load_haberman_survival(),
     "Banknote": load_banknote_authentication(),
     "Sonar": load_sonar(),
-    # "Adult": load_adult_census(),
     "Binary Digits": load_digits_binary(),
     "Ionosphere": load_ionosphere(),
     "SPECT Heart": load_spect_heart(),
