@@ -5,6 +5,8 @@ import numpy as np
 from sklearn.datasets import load_breast_cancer, load_digits, fetch_openml
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import StratifiedKFold
+from sklearn.feature_selection import mutual_info_classif
+from sklearn.metrics import mutual_info_score
 import classifier_pb2 as pb
 from store_proto import store_dataset, store_test_samples
 
@@ -173,21 +175,59 @@ def load_all_datasets():
 
   return datasets
 
+def compute_statistics(X, y):
+  y_flat = y.ravel()
+  class_counts = np.bincount(y_flat)
+  class_ratio = class_counts[0] / class_counts[1] if class_counts[1] != 0 else np.inf
+
+  # Average mutual information
+  avg_mi = mutual_info_classif(X, y_flat, discrete_features='auto').mean()
+
+  # Fisher score: mean diff squared over var sum
+  mean0 = X[y_flat == 0].mean(axis=0)
+  mean1 = X[y_flat == 1].mean(axis=0)
+  var0 = X[y_flat == 0].var(axis=0)
+  var1 = X[y_flat == 1].var(axis=0)
+  fisher_scores = (mean0 - mean1)**2 / (var0 + var1 + 1e-6)
+  avg_fisher = np.mean(fisher_scores)
+
+  # Overlap score: average number of features where class means are within 1 std
+  std0 = X[y_flat == 0].std(axis=0)
+  std1 = X[y_flat == 1].std(axis=0)
+  overlap = np.mean(np.abs(mean0 - mean1) < (std0 + std1) / 2)
+
+  # Imbalance ratio: max(counts) / min(counts)
+  imbalance_ratio = max(class_counts) / min(class_counts) if min(class_counts) != 0 else np.inf
+
+  return class_ratio, avg_mi, avg_fisher, overlap, imbalance_ratio
+
 if __name__ == "__main__":
-  # Ensure the directory exists
   os.makedirs("scripts/comparison_results", exist_ok=True)
 
-  # Prepare metadata
   metadata = []
   for name, (X, y) in load_all_datasets().items():
     nsamples, nfeatures = X.shape
-    metadata.append({"name": name, "nsamples": nsamples, "nfeatures": nfeatures})
+    class_ratio, avg_mi, avg_fisher, overlap, imbalance_ratio = compute_statistics(X, y)
+    metadata.append({
+      "name": name,
+      "nsamples": nsamples,
+      "nfeatures": nfeatures,
+      "class_ratio": round(class_ratio, 2),
+      "avg_mutual_info": round(avg_mi, 2),
+      "fisher_score": round(avg_fisher, 2),
+      "overlap_score": round(overlap, 2),
+      "imbalance_ratio": round(imbalance_ratio, 2),
+    })
 
-  # Write metadata to CSV
   csv_path = "scripts/comparison_results/setsmetadata.csv"
   with open(csv_path, mode="w", newline="") as csvfile:
-    writer = csv.DictWriter(csvfile, fieldnames=["name", "nsamples", "nfeatures"])
+    writer = csv.DictWriter(csvfile, fieldnames=[
+      "name", "nsamples", "nfeatures",
+      "class_ratio", "avg_mutual_info", "fisher_score",
+      "overlap_score", "imbalance_ratio"
+    ])
     writer.writeheader()
     writer.writerows(metadata)
 
-  print(f"Metadata saved to {csv_path}")
+  print(f"Extended metadata saved to {csv_path}")
+

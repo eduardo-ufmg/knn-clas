@@ -2,9 +2,24 @@ import csv
 from collections import defaultdict
 from pathlib import Path
 
-def csv_to_separate_latex_tables(csv_path, output_base_path):
+def csv_to_separate_latex_tables(metadata_csv_path, results_csv_path, output_base_path):
+  # Load metadata
+  metadata = {}
+  with open(metadata_csv_path, 'r') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+      metadata[row['name']] = {
+        'samples': row['nsamples'],
+        'features': row['nfeatures'],
+        'class_ratio': row.get('class_ratio', ''),
+        'mutual_info': row.get('avg_mutual_info', ''),
+        'fisher': row.get('fisher_score', ''),
+        'overlap': row.get('overlap_score', ''),
+        'imbalance': row.get('imbalance_ratio', '')
+      }
+
   datasets = defaultdict(dict)
-  with open(csv_path, 'r') as f:
+  with open(results_csv_path, 'r') as f:
     reader = csv.DictReader(f)
     for row in reader:
       dataset = row['Dataset'].strip()
@@ -12,9 +27,10 @@ def csv_to_separate_latex_tables(csv_path, output_base_path):
       k = row['k'].strip()
       
       if dataset not in datasets:
+        meta = metadata.get(dataset, {})
         datasets[dataset] = {
-          'samples': row['nSamples'],
-          'features': row['nFeatures'],
+          'samples': meta.get('samples', ''),
+          'features': meta.get('features', ''),
           'nn-clas': {'acc': None, 'train': None, 'pred': None, 'support': None},
           'knn-clas': {
             'train': None,
@@ -36,14 +52,13 @@ def csv_to_separate_latex_tables(csv_path, output_base_path):
         key = f'{k}nn'
         if not datasets[dataset]['knn-clas']['support']:
           datasets[dataset]['knn-clas']['support'] = row['SupportCount']
+        if not datasets[dataset]['knn-clas']['train']:
+          datasets[dataset]['knn-clas']['train'] = row['TrainTime']
         datasets[dataset]['knn-clas'][key] = {
           'acc': row['Accuracy'],
           'pred': row['PredTime']
         }
-        if not datasets[dataset]['knn-clas']['train']:
-          datasets[dataset]['knn-clas']['train'] = row['TrainTime']
 
-  # Generate Dataset Metadata Table
   metadata_table = [
     r"\begin{table}[htbp]",
     r"\caption{Dataset Metadata}",
@@ -53,7 +68,15 @@ def csv_to_separate_latex_tables(csv_path, output_base_path):
     r"\textbf{Dataset} & \textbf{Samples} & \textbf{Features} \\ \hline"
   ]
 
-  # Generate Accuracy Table
+  statistics_table = [
+    r"\begin{table}[htbp]",
+    r"\caption{Dataset Statistics}",
+    r"\begin{center}",
+    r"\begin{tabular}{|c|c|c|c|c|c|}",
+    r"\hline",
+    r"\textbf{Dataset} & \textbf{C0/C1} & \textbf{MI} & \textbf{Fisher} & \textbf{Overlap} & \textbf{Imb.Ratio} \\ \hline"
+  ]
+
   accuracy_table = [
     r"\begin{table}[htbp]",
     r"\caption{Model Accuracy Comparison}",
@@ -64,7 +87,6 @@ def csv_to_separate_latex_tables(csv_path, output_base_path):
     r" & \textbf{nn} & \textbf{1nn} & \textbf{3nn} & \textbf{5nn} \\ \hline"
   ]
 
-  # Generate Timing Table
   timing_table = [
     r"\begin{table}[htbp]",
     r"\caption{Training and Prediction Times}",
@@ -75,7 +97,6 @@ def csv_to_separate_latex_tables(csv_path, output_base_path):
     r" & \textbf{nn} & \textbf{knn} & \textbf{nn} & \textbf{1nn} & \textbf{3nn} & \textbf{5nn} \\ \hline"
   ]
 
-  # Generate Support Count Table
   support_table = [
     r"\begin{table}[htbp]",
     r"\caption{Support Samples Count}",
@@ -87,24 +108,28 @@ def csv_to_separate_latex_tables(csv_path, output_base_path):
   ]
 
   for dataset, data in datasets.items():
+    meta = metadata[dataset]
 
-    meta_row = [
+    metadata_table.append(f"{dataset} & {data['samples']} & {data['features']} \\\\ \\hline")
+
+    statistics_table.append(" & ".join([
       dataset,
-      data['samples'],
-      data['features']
-    ]
-    metadata_table.append(" & ".join(meta_row) + r" \\ \hline")
+      meta.get('class_ratio', ''),
+      meta.get('mutual_info', ''),
+      meta.get('fisher', ''),
+      meta.get('overlap', ''),
+      meta.get('imbalance', '')
+    ]) + r" \\ \hline")
 
-    acc_row = [
+    accuracy_table.append(" & ".join([
       dataset,
       data['nn-clas']['acc'],
       data['knn-clas']['1nn']['acc'],
       data['knn-clas']['3nn']['acc'],
       data['knn-clas']['5nn']['acc']
-    ]
-    accuracy_table.append(" & ".join(acc_row) + r" \\ \hline")
+    ]) + r" \\ \hline")
 
-    time_row = [
+    timing_table.append(" & ".join([
       dataset,
       data['nn-clas']['train'],
       data['knn-clas']['train'],
@@ -112,64 +137,42 @@ def csv_to_separate_latex_tables(csv_path, output_base_path):
       data['knn-clas']['1nn']['pred'],
       data['knn-clas']['3nn']['pred'],
       data['knn-clas']['5nn']['pred']
-    ]
-    timing_table.append(" & ".join(time_row) + r" \\ \hline")
+    ]) + r" \\ \hline")
 
-    support_row = [
+    support_table.append(" & ".join([
       dataset,
       data['nn-clas']['support'],
       data['knn-clas']['support']
-    ]
-    support_table.append(" & ".join(support_row) + r" \\ \hline")
+    ]) + r" \\ \hline")
 
-  metadata_table.extend([
-    r"\end{tabular}",
-    r"\label{tab:metadata}",
-    r"\end{center}",
-    r"\end{table}"
-  ])
-
-  accuracy_table.extend([
-    r"\end{tabular}",
-    r"\label{tab:accuracy}",
-    r"\end{center}",
-    r"\end{table}"
-  ])
-
-  timing_table.extend([
-    r"\end{tabular}",
-    r"\label{tab:timing}",
-    r"\end{center}",
-    r"\end{table}"
-  ])
-
-  support_table.extend([
-    r"\end{tabular}",
-    r"\label{tab:support}",
-    r"\end{center}",
-    r"\end{table}"
-  ])
+  for table, name in zip(
+    [metadata_table, statistics_table, accuracy_table, timing_table, support_table],
+    ['metadata', 'statistics', 'accuracy', 'timing', 'support']
+  ):
+    table.extend([
+      r"\end{tabular}",
+      fr"\label{{tab:{name}}}",
+      r"\end{center}",
+      r"\end{table}"
+    ])
 
   output_path = Path(output_base_path)
-  metadata_path = output_path.with_name(f"{output_path.stem}_metadata.tex")
-  accuracy_path = output_path.with_name(f"{output_path.stem}_accuracy.tex")
-  timing_path = output_path.with_name(f"{output_path.stem}_timing.tex")
-  support_path = output_path.with_name(f"{output_path.stem}_support.tex")
+  output_files = {
+    'metadata': metadata_table,
+    'statistics': statistics_table,
+    'accuracy': accuracy_table,
+    'timing': timing_table,
+    'support': support_table
+  }
 
-  with open(metadata_path, 'w') as f:
-    f.write("\n".join(metadata_table))
-
-  with open(accuracy_path, 'w') as f:
-    f.write("\n".join(accuracy_table))
-  
-  with open(timing_path, 'w') as f:
-    f.write("\n".join(timing_table))
-
-  with open(support_path, 'w') as f:
-    f.write("\n".join(support_table))
+  for key, content in output_files.items():
+    file_path = output_path.with_name(f"{output_path.stem}_{key}.tex")
+    with open(file_path, 'w') as f:
+      f.write("\n".join(content))
 
 if __name__ == "__main__":
   csv_to_separate_latex_tables(
+    "scripts/comparison_results/setsmetadata.csv",
     "scripts/comparison_results/setsresults.csv",
     "scripts/comparison_results/setsresults.tex"
   )

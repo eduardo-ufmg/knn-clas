@@ -10,10 +10,6 @@
 #include "bimap.hpp"
 #include "squaredDistance.hpp"
 
-#if DEBUG
-#include <iostream>
-#endif
-
 using namespace std;
 
 using Distances = vector<float>;
@@ -32,10 +28,6 @@ const PredictedSamples kNSSpred(const TestSamples& testSample, const SupportSamp
   Bimap bimap = createbimap(supportSamples);
 
   PredictedSamples predictedSamples;
-
-  #if DEBUG
-  unsigned int zeroCounterForDebuging = 0;
-  #endif
 
   for (const auto& sample : testSample) {
     
@@ -60,9 +52,6 @@ const PredictedSamples kNSSpred(const TestSamples& testSample, const SupportSamp
     int decisionSign = sign(decisionSum);
 
     if (decisionSign == 0) {
-      #if DEBUG
-      ++ zeroCounterForDebuging;
-      #endif
       decisionSign = 1;
     }
 
@@ -72,10 +61,6 @@ const PredictedSamples kNSSpred(const TestSamples& testSample, const SupportSamp
 
     predictedSamples.emplace_back(sample.id, sampleCoords, predictedTarget);
   }
-
-  #if DEBUG
-  cout << "Ties: " << zeroCounterForDebuging << endl;
-  #endif
 
   return predictedSamples;
 }

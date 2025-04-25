@@ -148,11 +148,9 @@ def main():
       dataset_meta = metadata_dict.get(dataset, {})
       avg_train = np.mean(nn_metrics['train_time']).item() if nn_metrics['train_time'] else 0.0
       avg_pred = np.mean(nn_metrics['pred_time']).item() if nn_metrics['pred_time'] else 0.0
-      avg_support = np.mean(nn_metrics['support_count']).item() if nn_metrics['support_count'] else 0.0  # Added
+      avg_support = np.mean(nn_metrics['support_count']).item() if nn_metrics['support_count'] else 0.0
       results.append({
         'Dataset': dataset,
-        'nSamples': dataset_meta.get('nsamples', ''),
-        'nFeatures': dataset_meta.get('nfeatures', ''),
         'Model': 'nn-clas',
         'k': '',
         'Accuracy': np.mean(nn_metrics['accuracy']),
@@ -167,11 +165,9 @@ def main():
         dataset_meta = metadata_dict.get(dataset, {})
         avg_train = np.mean(knn_metrics['train_time']).item() if knn_metrics['train_time'] else 0.0
         avg_pred = np.mean(knn_metrics['k_metrics'][k]['pred_time']).item() if knn_metrics['k_metrics'][k]['pred_time'] else 0.0
-        avg_support = np.mean(knn_metrics['support_count']).item() if knn_metrics['support_count'] else 0.0  # Added
+        avg_support = np.mean(knn_metrics['support_count']).item() if knn_metrics['support_count'] else 0.0
         results.append({
           'Dataset': dataset,
-          'nSamples': dataset_meta.get('nsamples', ''),
-          'nFeatures': dataset_meta.get('nfeatures', ''),
           'Model': 'knn-clas',
           'k': k,
           'Accuracy': np.mean(knn_metrics['k_metrics'][k]['accuracy']),
@@ -182,11 +178,11 @@ def main():
 
   # Print results
   print("\nComparison Results:")
-  print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<10} {:<10} {:<10} {:<10}".format(
-    "Dataset", "nSamples", "nFeatures", "Model", "k", "Accuracy", "TrainTime", "PredTime", "SupportCnt"))
+  print("{:<20} {:<10} {:<5} {:<10} {:<10} {:<10} {:<10}".format(
+    "Dataset", "Model", "k", "Accuracy", "TrainTime", "PredTime", "SupportCnt"))
   for res in results:
-    print("{:<20} {:<10} {:<10} {:<10} {:<5} {:<10.2f} {:<10.2f} {:<10.2f} {:<10}".format(
-      res['Dataset'], res['nSamples'], res['nFeatures'], res['Model'], res['k'],
+    print("{:<20} {:<10} {:<5} {:<10.2f} {:<10.2f} {:<10.2f} {:<10}".format(
+      res['Dataset'], res['Model'], res['k'],
       res['Accuracy'], res['TrainTime'], res['PredTime'], int(res['SupportCount'])
     ))
 
@@ -195,19 +191,16 @@ def main():
   output_dir.mkdir(exist_ok=True)
   output_file = output_dir / "setsresults.csv"
   with open(output_file, "w") as f:
-    f.write("Dataset,nSamples,nFeatures,Model,k,Accuracy,TrainTime,PredTime,SupportCount\n")
+    f.write("Dataset,Model,k,Accuracy,TrainTime,PredTime,SupportCount\n")
     for res in results:
       line = (
         f"{res['Dataset']},"
-        f"{res['nSamples']},"
-        f"{res['nFeatures']},"
         f"{res['Model']},"
         f"{res['k']},"
         f"{res['Accuracy']:.2f},"
         f"{res['TrainTime']:.2f},"
         f"{res['PredTime']:.2f},"
-        f"{int(res['SupportCount'])},"
-        "\n"
+        f"{int(res['SupportCount'])},\n"
       )
       f.write(line)
 

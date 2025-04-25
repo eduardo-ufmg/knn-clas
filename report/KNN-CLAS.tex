@@ -24,20 +24,34 @@ eduardohbc@ufmg.br}
 \maketitle
 
 \begin{abstract}
-
+This document proposes and analyzes an alternative to the NN-CLAS method proposed by Arias-Garcia et al. (2021). The KNN-CLAS leverages the voting mechanism of the K-nearest neighbors (KNN) classifier to eliminate the computationally expensive filtering step required during the training phase of NN-CLAS. The original NN-CLAS relies on Gabriel graph computations and a vertex-degree-based noise filtering process to identify structural support edges (SEs) for classification. In contrast, KNN-CLAS bypasses this filtering by aggregating decisions from multiple neighbors, thereby reducing training complexity while maintaining competitive accuracy. Experimental results on benchmark datasets demonstrate that the proposed method achieves comparable performance to NN-CLAS, with significant efficiency improvements. The methodology is particularly suited for embedded systems due to its reduced computational overhead and parameter-free design.
 \end{abstract}
 
 \begin{IEEEkeywords}
-
+pattern recognition, large margin classifiers, Gabriel graph, KNN classifier, embedded systems
 \end{IEEEkeywords}
 
 \section{Introduction}
+
+Large margin classifiers, such as support vector machines (SVMs), rely on optimization techniques to maximize separation between classes. However, their computational complexity and dependency on user-defined parameters limit their applicability in embedded systems. The NN-CLAS framework, introduced by Torres et al. (2016), addresses these limitations by constructing classifiers directly from the geometric structure of the training data using Gabriel graphs (GGs). The GG encodes pairwise relationships between data points, and support edges (SEs) connecting vertices of opposing classes define local hyperplanes that collectively form a large-margin decision boundary \cite{torres2016}. While effective, NN-CLAS requires a filtering step to remove noisy vertices, which involves evaluating the quality of each vertex based on its neighborhood structure. This process, though critical for robustness, incurs significant computational costs, especially for large datasets \cite{souza2019, arias2021}.
+
+The proposed KNN-CLAS eliminates the need for explicit filtering by leveraging the inherent noise resilience of the KNN voting mechanism. Instead of pruning the dataset during training, KNN-CLAS directly uses the GG's SEs and assigns class labels through a majority vote among the nearest neighbors. This approach retains the structural benefits of GG-based classification while simplifying the training pipeline. The remainder of this section details the original NN-CLAS filtering methodology and its computational challenges.
+
+\subsection{Filtering}
+
+The NN-CLAS framework constructs a Gabriel graph \( G_G \) from the training set \( \mathcal{D} = \{(\mathbf{x}_i, y_i)\} \), where edges connect vertices \( \mathbf{x}_i \) and \( \mathbf{x}_j \) if no other point lies within the hypersphere defined by their diameter \cite{torres2016}. To handle overlapping classes, a quality measure \( q(\mathbf{x}_i) \) evaluates the ratio of same-class neighbors to total neighbors for each vertex:
+\[
+q(\mathbf{x}_i) = \frac{\hat{\mathcal{A}}(\mathbf{x}_i)}{\mathcal{A}(\mathbf{x}_i)},
+\]
+where \( \mathcal{A}(\mathbf{x}_i) \) is the vertex degree and \( \hat{\mathcal{A}}(\mathbf{x}_i) \) counts neighbors sharing \( \mathbf{x}_i \)'s class label \cite{souza2019}. Vertices with \( q(\mathbf{x}_i) \) below class-specific thresholds \( t^+ \) and \( t^- \)—calculated as the mean quality per class—are discarded as noise. This filtering ensures SEs lie near the true class boundaries but requires \( O(n^2) \) distance computations and iterative quality evaluations, making it impractical for resource-constrained systems \cite{arias2021}. The KNN-CLAS circumvents this bottleneck by integrating neighbor voting, thereby avoiding explicit structural filtering while preserving classification accuracy.
 
 \section{Methodology}
 
 \section{Results}
 
 \input{../scripts/comparison_results/setsresults_metadata.tex}
+
+\input{../scripts/comparison_results/setsresults_statistics.tex}
 
 \input{../scripts/comparison_results/setsresults_accuracy.tex}
 
