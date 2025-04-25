@@ -5,8 +5,8 @@
 │   ├── nn-fit
 │   └── nn-pred
 ├── build
+├── CMakeLists.txt
 ├── data
-│   ├── < PROTOBUFERS >
 ├── include
 │   ├── bimap.hpp
 │   ├── classifier.pb.h
@@ -28,28 +28,28 @@
 │   └── compile.sh
 ├── README.md
 ├── report
-│   ├── knn-clas.pdf
-│   └── knn-clas.TeX
+│   ├── IEEEtran.cls
+│   ├── KNN-CLAS.pdf
+│   └── KNN-CLAS.tex
 ├── scripts
 │   ├── classifier_pb2.py
-│   ├── compare_real.py
-│   ├── compare_spirals.py
 │   ├── comparison_results
+│   │   ├── setsmetadata.csv
 │   │   ├── setsresults.csv
-│   │   ├── setsresults.tex
-│   │   └── setsmetadata.csv
 │   ├── generate.py
 │   ├── load_proto.py
-│   ├── make_latex_table.py
 │   ├── plot.py
-│   ├── prepare_real.py
-│   ├── prepare_spirals.py
 │   ├── pvenv
-│   ├── run.py
-|   ├── run_and_measure_time.sh
-│   ├── store_proto.py
-│   ├── validate_prepare_spirals.py
-│   └── validate_run_spirals.py
+│   ├── real_compare.py
+│   ├── real_make_latex_table.py
+│   ├── real_prepare.py
+│   ├── run_and_measure_time.sh
+│   ├── spirals_compare.py
+│   ├── spirals_prepare.py
+│   ├── spirals_run.py
+│   ├── spirals_validate_prepare.py
+│   ├── spirals_validate_run.py
+│   └── store_proto.py
 ├── src
 │   ├── common
 │   │   ├── bimap.cpp
