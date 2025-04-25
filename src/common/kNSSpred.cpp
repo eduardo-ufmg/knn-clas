@@ -10,6 +10,10 @@
 #include "bimap.hpp"
 #include "squaredDistance.hpp"
 
+#if DEBUG
+#include <iostream>
+#endif
+
 using namespace std;
 
 using Distances = vector<float>;
@@ -29,6 +33,10 @@ const PredictedSamples kNSSpred(const TestSamples& testSample, const SupportSamp
 
   PredictedSamples predictedSamples;
 
+  #if DEBUG
+  unsigned int zeroCounterForDebuging = 0;
+  #endif
+
   for (const auto& sample : testSample) {
     
     const auto& sampleCoords = sample.coordinates;
@@ -40,21 +48,34 @@ const PredictedSamples kNSSpred(const TestSamples& testSample, const SupportSamp
     float decisionSum = 0.0f;
 
     for (int i = 0; i < k; ++i) {
-      const auto& index = sortedIndices[i];
-      const auto& supportSample = supportSamples[index];
-      const auto& sqDistance = distances[index];
-      const auto& supportTarget = supportSample.target;
+      const int index = sortedIndices[i];
+      const SupportSample& supportSample = supportSamples[index];
+      const float sqDistance = distances[index];
+      const Target& supportTarget = supportSample.target;
 
-      const auto& kernelValue = kernel(sqDistance);
+      const float kernelValue = kernel(sqDistance);
       decisionSum += kernelValue * bimap.get_int(supportTarget);
     }
 
-    const int& decision = sign(decisionSum);
+    int decisionSign = sign(decisionSum);
+
+    if (decisionSign == 0) {
+      #if DEBUG
+      ++ zeroCounterForDebuging;
+      #endif
+      decisionSign = 1;
+    }
+
+    const int decision = decisionSign;
                             
-    const auto& predictedTarget = bimap.get_target(decision);
+    const Target& predictedTarget = bimap.get_target(decision);
 
     predictedSamples.emplace_back(sample.id, sampleCoords, predictedTarget);
   }
+
+  #if DEBUG
+  cout << "Ties: " << zeroCounterForDebuging << endl;
+  #endif
 
   return predictedSamples;
 }
@@ -87,8 +108,7 @@ Indices sortIndices(const Distances& distances)
 
 int sign(const float x)
 {
-  // biased towards 1
-  return static_cast<int>(0 <= x) - static_cast<int>(x < 0);
+  return static_cast<int>(0 < x) - static_cast<int>(x < 0);
 }
 
 const Bimap createbimap(const SupportSamples& supportSamples)

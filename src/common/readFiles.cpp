@@ -20,13 +20,6 @@ Samples readDataset(const string& filename)
   ifstream file = openFileRead(filename);
 
   if (!pb_dataset.ParseFromIstream(&file)) {
-
-    #if DEBUG
-    cout << "DEBUG_START: DATASET PARSE ERROR" << endl;
-    pb_dataset.PrintDebugString();
-    cout << "DEBUG_END: DATASET PARSE ERROR" << endl;
-    #endif
-
     throw runtime_error("Error: could not parse dataset");
   }
 
@@ -36,23 +29,7 @@ Samples readDataset(const string& filename)
   Clusters clusters;
   SampleID vcounter = 0;
 
-  #if DEBUG
-  cout << "DEBUG_START: PRINT PARSED DATASET" << endl;
-  pb_dataset.PrintDebugString();
-  cout << "DEBUG_END: PRINT PARSED DATASET" << endl;
-  #endif
-
-  #if DEBUG
-  int debug_counter = 0;
-  #endif
-
   for (const auto& sample : pb_dataset.entries()) {
-
-    #if DEBUG
-    cout << "DEBUG_START: VERTEX " << debug_counter << endl;
-    sample.PrintDebugString();
-    cout << "DEBUG_END: VERTEX " << debug_counter ++ << endl;
-    #endif
 
     const SampleID id = vcounter ++;
     const Coordinates coordinates(sample.features().begin(), sample.features().end());
@@ -62,14 +39,8 @@ Samples readDataset(const string& filename)
 
     samples.emplace_back(id, coordinates, clusters.at(cid));
 
-    #if DEBUG
-    cout << "DEBUG: VERTEX PARSED" << endl;
-    #endif
   }
 
-  #if DEBUG
-  cout << "DEBUG: ALL VERTICES PARSED" << endl;
-  #endif
 
   return samples;
 }

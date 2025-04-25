@@ -9,7 +9,7 @@ endif()
 set(CMAKE_CXX_STANDARD 20)
 
 # Configure compiler flags based on build type
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -DDEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 -DNDEBUG -Wall -Wextra -Werror -Wpedantic")
 
 # Set output directories
