@@ -170,6 +170,6 @@ def csv_to_separate_latex_tables(csv_path, output_base_path):
 
 if __name__ == "__main__":
   csv_to_separate_latex_tables(
-    "scripts/comparison_results/real_sets.csv",
-    "scripts/comparison_results/real_sets_results.tex"
+    "scripts/comparison_results/setsresults.csv",
+    "scripts/comparison_results/setsresults.tex"
   )

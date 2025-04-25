@@ -193,7 +193,7 @@ def main():
   # Write results to CSV
   output_dir = script_dir / "comparison_results"
   output_dir.mkdir(exist_ok=True)
-  output_file = output_dir / "real_sets.csv"
+  output_file = output_dir / "setsresults.csv"
   with open(output_file, "w") as f:
     f.write("Dataset,nSamples,nFeatures,Model,k,Accuracy,TrainTime,PredTime,SupportCount\n")
     for res in results:

@@ -35,8 +35,8 @@
 │   ├── compare_real.py
 │   ├── compare_spirals.py
 │   ├── comparison_results
-│   │   ├── real_sets.csv
-│   │   ├── real_sets_results.tex
+│   │   ├── setsresults.csv
+│   │   ├── setsresults.tex
 │   │   └── setsmetadata.csv
 │   ├── generate.py
 │   ├── load_proto.py
