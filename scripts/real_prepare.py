@@ -48,6 +48,13 @@ def remove_correlated(X_train, X_test, threshold=0.95):
   return X_train[:, mask], X_test[:, mask]
 
 def store_real_dataset(X, y, name, n_splits=10):
+
+  complete_dataset_to_fit_name = f"data/{name}_complete_fit.pb"
+  complete_dataset_to_pred_name = f"data/{name}_complete_pred.pb"
+
+  store_dataset(create_proto_dataset(X, y), complete_dataset_to_fit_name)
+  store_test_samples(create_proto_test_samples(X, y), complete_dataset_to_pred_name)
+
   skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
   for fold, (train_idx, test_idx) in enumerate(skf.split(X, y)):
     X_train_raw, X_test_raw = X[train_idx], X[test_idx]
