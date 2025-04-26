@@ -6,6 +6,6 @@
 using Likelihoods = std::pair<float, float>;
 using LikelihoodsVec = std::vector<Likelihoods>;
 
-Likelihoods getKNSSLikelihood(const Coordinates& sampleCoords, const SupportSamples& supportSamples, const int k);
+LikelihoodsVec getKNSSLikelihood(const TestSamples& testSamples, const SupportSamples& supportSamples, const int k);
 
 #endif // KNSSLIKELIHOOD_HPP

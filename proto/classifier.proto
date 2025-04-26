@@ -47,3 +47,12 @@ message PredictedSampleEntry {
 message PredictedSamples {
   repeated PredictedSampleEntry entries = 1;
 }
+
+message Likelihood {
+  float likelihood0 = 1;
+  float likelihood1 = 2;
+}
+
+message Likelihoods {
+  repeated Likelihood likelihoods = 1;
+}
