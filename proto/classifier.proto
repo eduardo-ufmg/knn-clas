@@ -38,21 +38,19 @@ message TestSamples {
   repeated TestSampleEntry entries = 1;
 }
 
-message PredictedSampleEntry {
-  int32 sample_id = 1;
-  repeated float features = 2;
-  Target target = 3;
-}
-
-message PredictedSamples {
-  repeated PredictedSampleEntry entries = 1;
-}
-
-message Likelihood {
+message Likelihoods {
   float likelihood0 = 1;
   float likelihood1 = 2;
 }
 
-message Likelihoods {
-  repeated Likelihood likelihoods = 1;
+message PredictedSampleEntry {
+  int32 sample_id = 1;
+  repeated float features = 2;
+  Target target = 3;
+  
+  Likelihoods likelihoods = 4;
+}
+
+message PredictedSamples {
+  repeated PredictedSampleEntry entries = 1;
 }

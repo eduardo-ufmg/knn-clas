@@ -82,6 +82,34 @@ int writePredictedSamples(const PredictedSamples& predictedSamples, const string
   return 0;
 }
 
+int writeLikelihoods(const PredictedSamples& predictedSamples, const std::string& filename)
+{
+  classifierpb::PredictedSamples pb_predictedSamples;
+
+  for (const PredictedSample& sample : predictedSamples) {
+    classifierpb::PredictedSampleEntry* pb_sample = pb_predictedSamples.add_entries();
+
+    pb_sample->set_sample_id(sample.id);
+
+    for (const float coord : sample.coordinates) {
+      pb_sample->add_features(coord);
+    }
+
+    classifierpb::Likelihoods* pb_likelihoods = pb_sample->mutable_likelihoods();
+    pb_likelihoods->set_likelihood0(sample.likelihoods.first);
+    pb_likelihoods->set_likelihood1(sample.likelihoods.second);
+  }
+
+  ofstream file = openFileWrite(filename);
+  if (!pb_predictedSamples.SerializeToOstream(&file)) {
+    cerr << "Error: could not write likelihoods to file " << filename << endl;
+    return 1;
+  }
+  file.close();
+
+  return 0;
+}
+
 ofstream openFileWrite(const string& filename)
 {
   GOOGLE_PROTOBUF_VERIFY_VERSION;

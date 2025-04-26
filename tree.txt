@@ -1,9 +1,5 @@
 .
 ├── bin
-│   ├── knn-fit
-│   ├── knn-pred
-│   ├── nn-fit
-│   └── nn-pred
 ├── build
 ├── CMakeLists.txt
 ├── data
@@ -16,8 +12,6 @@
 │   ├── filter.hpp
 │   ├── gabrielGraph.hpp
 │   ├── isgabrielEdge.hpp
-│   ├── kNSSpred.hpp
-│   ├── nearestSSpred.hpp
 │   ├── readFiles.hpp
 │   ├── squaredDistance.hpp
 │   ├── types.hpp
@@ -34,8 +28,6 @@
 ├── scripts
 │   ├── classifier_pb2.py
 │   ├── comparison_results
-│   │   ├── setsmetadata.csv
-│   │   ├── setsresults.csv
 │   ├── generate.py
 │   ├── load_proto.py
 │   ├── plot.py
@@ -60,8 +52,6 @@
 │   │   ├── filter.cpp
 │   │   ├── gabrielGraph.cpp
 │   │   ├── isgabrielEdge.cpp
-│   │   ├── kNSSpred.cpp
-│   │   ├── nearestSSpred.cpp
 │   │   ├── readFiles.cpp
 │   │   ├── squaredDistance.cpp
 │   │   ├── types.cpp
@@ -69,9 +59,16 @@
 │   ├── knn-clas
 │   │   ├── CMakeLists.txt
 │   │   ├── knn-fit.cpp
-│   │   └── knn-pred.cpp
+│   │   ├── knn-pred.cpp
+│   │   ├── kNSSpred.cpp
+│   │   ├── kNSSpred.hpp
+│   │   ├── kNSSvoting.cpp
+│   │   ├── kNSSvoting.hpp
+│   │   └── likelihoods
 │   └── nn-clas
 │       ├── CMakeLists.txt
+│       ├── nearestSSpred.cpp
+│       ├── nearestSSpred.hpp
 │       ├── nn-fit.cpp
 │       └── nn-pred.cpp
 └── tree.txt

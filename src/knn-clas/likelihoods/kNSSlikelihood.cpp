@@ -13,10 +13,10 @@ using TargetIntMap = map<Target, int>;
 
 const TargetIntMap createTargetIntMap(const unordered_set<Target>& targets);
 
-LikelihoodsVec getKNSSLikelihood(const TestSamples& testSamples, const SupportSamples& supportSamples, const int k)
+PredictedSamples getKNSSLikelihood(const TestSamples& testSamples, const SupportSamples& supportSamples, const int k)
 {
-  LikelihoodsVec likelihoods;
-  likelihoods.reserve(testSamples.size());
+  PredictedSamples predictedSamples;
+  predictedSamples.reserve(testSamples.size());
 
   unordered_set<Target> targets;
 
@@ -49,11 +49,14 @@ LikelihoodsVec getKNSSLikelihood(const TestSamples& testSamples, const SupportSa
     float likelihood0 = decisionSum0 / (decisionSum0 + decisionSum1);
     float likelihood1 = decisionSum1 / (decisionSum0 + decisionSum1);
 
-    likelihoods.emplace_back(likelihood0, likelihood1);
+    predictedSamples.emplace_back(
+      sample.id,
+      make_pair(likelihood0, likelihood1)
+    );
 
   }
 
-  return likelihoods;
+  return predictedSamples;
 }
 
 const TargetIntMap createTargetIntMap(const unordered_set<Target>& targets)

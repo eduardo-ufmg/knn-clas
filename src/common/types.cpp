@@ -62,3 +62,7 @@ TestSample::TestSample(const SampleID id, const Coordinates& coordinates, const 
 PredictedSample::PredictedSample(const SampleID id, const Coordinates coordinates, const Target target)
   : BaseSample(id, coordinates), target(target)
 {}
+
+PredictedSample::PredictedSample(const SampleID id, const Likelihoods likelihoods)
+  : BaseSample(id, Coordinates()), target(0), likelihoods(likelihoods)
+{}

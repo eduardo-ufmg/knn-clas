@@ -2,10 +2,8 @@
 #define KNSSLIKELIHOOD_HPP
 
 #include "types.hpp"
+#include "kNSSvoting.hpp"
 
-using Likelihoods = std::pair<float, float>;
-using LikelihoodsVec = std::vector<Likelihoods>;
-
-LikelihoodsVec getKNSSLikelihood(const TestSamples& testSamples, const SupportSamples& supportSamples, const int k);
+PredictedSamples getKNSSLikelihood(const TestSamples& testSamples, const SupportSamples& supportSamples, const int k);
 
 #endif // KNSSLIKELIHOOD_HPP

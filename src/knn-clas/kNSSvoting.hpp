@@ -11,6 +11,10 @@ using Index = int;
 using Indices = std::vector<Index>;
 using SSampleDistancePairVec = std::vector< std::pair<const SupportSample *, Distance> >;
 
+namespace knn_clas {
+  const int DEFAULT_K = 2;
+}
+
 float kernel(const Distance sqDistance);
 SSampleDistancePairVec getKNSS(const Coordinates& sampleCoords, const SupportSamples& supportSamples, const int k);
 

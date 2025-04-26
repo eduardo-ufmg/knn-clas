@@ -6,5 +6,6 @@
 
 int writeSSs(const SupportSamples& supportSamples, const std::string& filename);
 int writePredictedSamples(const PredictedSamples& predictedSamples, const std::string& filename);
+int writeLikelihoods(const PredictedSamples& predictedSamples, const std::string& filename);
 
 #endif // WRITEFILES_HPP

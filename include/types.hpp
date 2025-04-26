@@ -82,13 +82,17 @@ public:
 };
 
 using TestSamples = std::vector<TestSample>;
+using Likelihoods = std::pair<float, float>;
 
 class PredictedSample : public BaseSample
 {
 public:
   const Target target;
+  const Likelihoods likelihoods;
 
   PredictedSample(const SampleID id, const Coordinates coordinates, const Target target);
+
+  PredictedSample(const SampleID id, const Likelihoods likelihoods);
 };
 
 using PredictedSamples = std::vector<PredictedSample>;
