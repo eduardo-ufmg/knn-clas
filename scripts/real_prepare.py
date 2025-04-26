@@ -47,37 +47,46 @@ def remove_correlated(X_train, X_test, threshold=0.95):
   mask = [i for i in range(X_train.shape[1]) if i not in to_drop]
   return X_train[:, mask], X_test[:, mask]
 
+def preprocess_dataset(X_train_raw, X_test_raw, y_train, y_test):
+  # 1. Normalize to [-1, 1]
+  scaler = MinMaxScaler(feature_range=(-1, 1))
+  X_train_scaled = scaler.fit_transform(X_train_raw)
+  X_test_scaled = scaler.transform(X_test_raw)
+
+  # 2. Remove low-variance features
+  var_selector = VarianceThreshold(threshold=0.01)
+  X_train_var = var_selector.fit_transform(X_train_scaled)
+  X_test_var = var_selector.transform(X_test_scaled)
+
+  # 3. Remove highly correlated features
+  X_train_corr, X_test_corr = remove_correlated(X_train_var, X_test_var, 0.95)
+
+  # 4. Select informative features based on mutual information
+  mi = mutual_info_classif(X_train_corr, y_train.ravel(), discrete_features='auto')
+  informative_idx = np.where(mi > 0.01)[0]
+  X_train_final = X_train_corr[:, informative_idx]
+  X_test_final = X_test_corr[:, informative_idx]
+
+  return X_train_final, X_test_final
+
 def store_real_dataset(X, y, name, n_splits=10):
 
   complete_dataset_to_fit_name = f"data/{name}_complete_fit.pb"
   complete_dataset_to_pred_name = f"data/{name}_complete_pred.pb"
 
-  store_dataset(create_proto_dataset(X, y), complete_dataset_to_fit_name)
-  store_test_samples(create_proto_test_samples(X, y), complete_dataset_to_pred_name)
+  # Preprocess the complete dataset
+  X_preprocessed, X_preprocessed = preprocess_dataset(X, X, y, y)
+
+  store_dataset(create_proto_dataset(X_preprocessed, y), complete_dataset_to_fit_name)
+  store_test_samples(create_proto_test_samples(X_preprocessed, y), complete_dataset_to_pred_name)
 
   skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
   for fold, (train_idx, test_idx) in enumerate(skf.split(X, y)):
     X_train_raw, X_test_raw = X[train_idx], X[test_idx]
     y_train, y_test = y[train_idx], y[test_idx]
 
-    # 1. Normalize to [-1, 1]
-    scaler = MinMaxScaler(feature_range=(-1, 1))
-    X_train_scaled = scaler.fit_transform(X_train_raw)
-    X_test_scaled = scaler.transform(X_test_raw)
-
-    # 2. Remove low-variance features
-    var_selector = VarianceThreshold(threshold=0.01)
-    X_train_var = var_selector.fit_transform(X_train_scaled)
-    X_test_var = var_selector.transform(X_test_scaled)
-
-    # 3. Remove highly correlated features
-    X_train_corr, X_test_corr = remove_correlated(X_train_var, X_test_var, 0.95)
-
-    # 4. Select informative features based on mutual information
-    mi = mutual_info_classif(X_train_corr, y_train.ravel(), discrete_features='auto')
-    informative_idx = np.where(mi > 0.01)[0]
-    X_train_final = X_train_corr[:, informative_idx]
-    X_test_final = X_test_corr[:, informative_idx]
+    # Preprocess the dataset
+    X_train_final, X_test_final = preprocess_dataset(X_train_raw, X_test_raw, y_train, y_test)
 
     # Store processed datasets
     train_dataset = create_proto_dataset(X_train_final, y_train)
