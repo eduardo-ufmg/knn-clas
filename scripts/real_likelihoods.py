@@ -82,10 +82,7 @@ def main():
 
     # Create scatter plot
     plt.figure(figsize=(10, 8))
-    scatter = plt.scatter(likelihood0, likelihood1, c=y_true, cmap='viridis', alpha=0.6)
-    plt.colorbar(scatter, label='Class')
-    plt.xlabel('Likelihood0')
-    plt.ylabel('Likelihood1')
+    plt.scatter(likelihood0, likelihood1, c=y_true)
     plt.title(f'Likelihood Scatter Plot for {name} (k={k})')
     plt.grid(True)
     
