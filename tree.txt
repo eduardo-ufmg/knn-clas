@@ -1,5 +1,10 @@
 .
 ├── bin
+│   ├── knn-fit
+│   ├── knn-pred
+│   ├── nn-fit
+│   ├── nn-pred
+│   └── knn-like
 ├── build
 ├── CMakeLists.txt
 ├── data

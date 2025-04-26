@@ -26,6 +26,8 @@ PredictedSamples getKNSSLikelihood(const TestSamples& testSamples, const Support
 
   const TargetIntMap targetIntMap = createTargetIntMap(targets);
 
+  vector< pair<SampleID, Likelihoods> > unnormalizedLikelihoods;
+
   for (const auto& sample : testSamples) {
     const SSampleDistancePairVec knss = getKNSS(sample.coordinates, supportSamples, k);
 
@@ -46,14 +48,23 @@ PredictedSamples getKNSSLikelihood(const TestSamples& testSamples, const Support
       }
     }
 
-    float likelihood0 = decisionSum0 / (decisionSum0 + decisionSum1);
-    float likelihood1 = decisionSum1 / (decisionSum0 + decisionSum1);
+    unnormalizedLikelihoods.emplace_back(sample.id, Likelihoods{decisionSum0, decisionSum1});
 
-    predictedSamples.emplace_back(
-      sample.id,
-      make_pair(likelihood0, likelihood1)
-    );
+  }
 
+  float likelihoodSum = accumulate(unnormalizedLikelihoods.begin(), unnormalizedLikelihoods.end(), 0.0f,
+    [](float sum, const auto& pair) {
+      return sum + pair.second.first + pair.second.second;
+    });
+
+  for (const auto& pair : unnormalizedLikelihoods) {
+    const SampleID& sampleID = pair.first;
+    const Likelihoods& likelihoods = pair.second;
+
+    float normalizedLikelihood0 = likelihoods.first / likelihoodSum;
+    float normalizedLikelihood1 = likelihoods.second / likelihoodSum;
+
+    predictedSamples.emplace_back(sampleID, Likelihoods{normalizedLikelihood0, normalizedLikelihood1});
   }
 
   return predictedSamples;
