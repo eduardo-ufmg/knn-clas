@@ -25,7 +25,7 @@ eduardohbc@ufmg.br}
 \maketitle
 
 \begin{abstract}
-This document proposes and analyzes an alternative to the NN-CLAS method proposed by Arias-Garcia et al. (2021). The KNN-CLAS leverages the voting mechanism of the K-nearest neighbors (KNN) classifier to eliminate the computationally expensive filtering step required during the training phase of NN-CLAS. The original NN-CLAS relies on Gabriel graph computations and a vertex-degree-based noise filtering process to identify structural support edges (SEs) for classification. In contrast, KNN-CLAS bypasses this filtering by aggregating decisions from multiple neighbors, thereby reducing training complexity while maintaining competitive accuracy. Experimental results on benchmark datasets demonstrate that the proposed method achieves comparable performance to NN-CLAS, with significant efficiency improvements. The methodology is particularly suited for embedded systems due to its reduced computational overhead and parameter-free design.
+    This document proposes and analyzes KNN-CLAS, an alternative to NN-CLAS that eliminates its computationally expensive filtering step. While NN-CLAS constructs classifiers using Gabriel Graphs (GGs) and filters vertices via neighborhood quality metrics, KNN-CLAS leverages the GG structure to select support edges (SEs) connecting samples of opposing classes. During prediction, it aggregates decisions from the \( k \)-nearest neighbors among these SEs using weighted voting, bypassing explicit noise filtering. Experiments on benchmark datasets show that KNN-CLAS achieves comparable accuracy to NN-CLAS while significantly reducing training complexity. The method is particularly suited for embedded systems due to its parameter-free design and reduced computational overhead.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -47,26 +47,21 @@ q(\mathbf{x}_i) = \frac{\hat{\mathcal{A}}(\mathbf{x}_i)}{\mathcal{A}(\mathbf{x}_
 where \( \mathcal{A}(\mathbf{x}_i) \) is the vertex degree and \( \hat{\mathcal{A}}(\mathbf{x}_i) \) counts neighbors sharing \( \mathbf{x}_i \)'s class label \cite{souza2019}. Vertices with \( q(\mathbf{x}_i) \) below class-specific thresholds \( t^+ \) and \( t^- \)—calculated as the mean quality per class—are discarded as noise. This filtering ensures SEs lie near the true class boundaries but requires \( O(n^2) \) distance computations and iterative quality evaluations, making it impractical for resource-constrained systems \cite{arias2021}. The KNN-CLAS circumvents this bottleneck by integrating neighbor voting, thereby avoiding explicit structural filtering while preserving classification accuracy.
 
 \subsection{KNN-CLAS}
-
-The KNN-CLAS method simplifies the NN-CLAS framework by eliminating the filtering step and leveraging the K-nearest neighbors (KNN) voting mechanism for classification. The methodology can be summarized as follows:
+The KNN-CLAS method modifies the NN-CLAS framework by integrating GG-based support edge selection with a KNN voting mechanism. The methodology operates as follows:
 
 \begin{itemize}
-    \item \textbf{K-Nearest Neighbors}: For a given test sample \( \mathbf{z}_j \), compute the distances to all training samples \( \mathbf{x}_i \) and identify the \( k \)-nearest neighbors, denoted as \( \mathcal{N}_k(\mathbf{z}_j) \).
+    \item \textbf{Gabriel Graph Construction}: During training, a Gabriel graph \( G_G \) is built from the dataset \( \mathcal{D} \). Edges connect vertices \( \mathbf{x}_i \) and \( \mathbf{x}_j \) if no other sample lies within the hypersphere defined by their diameter. Only edges linking samples of \textit{opposite classes} (inter-class edges) are retained as support edges (SEs).
 
-    \item \textbf{Weighted Voting}: Assign weights to the neighbors using a kernel function \( K(d) \), such as the Gaussian kernel \( K(d) = e^{-d} \), where \( d \) is the distance between \( \mathbf{z}_j \) and \( \mathbf{x}_i \).
+    \item \textbf{Support Edge Selection}: Unlike NN-CLAS, which filters vertices based on neighborhood quality, KNN-CLAS directly uses all SEs as support samples. This avoids iterative filtering while preserving structural boundary information.
 
-    \item \textbf{Decision Sum}: Compute the decision sum for \( \mathbf{z}_j \) by aggregating the weighted contributions of the neighbors' class labels:
+    \item \textbf{Classification}: For a test sample \( \mathbf{z}_j \), distances are computed only to the SE-connected support samples. The \( k \)-nearest neighbors from this subset, \( \mathcal{N}_k(\mathbf{z}_j) \), are identified, and their class labels are aggregated using a Gaussian kernel-weighted vote:
     \[
-    S(\mathbf{z}_j) = \sum_{(\mathbf{x}_i, y_i) \in \mathcal{N}_k(\mathbf{z}_j)} y_i \cdot K(d(\mathbf{z}_j, \mathbf{x}_i)).
+    S(\mathbf{z}_j) = \sum_{(\mathbf{x}_i, y_i) \in \mathcal{N}_k(\mathbf{z}_j)} y_i \cdot e^{-d(\mathbf{z}_j, \mathbf{x}_i)}.
     \]
-
-    \item \textbf{Classification}: Assign the class label \( \hat{y}_j \) based on the sign of the decision sum:
-    \[
-    \hat{y}_j = \text{sign}(S(\mathbf{z}_j)).
-    \]
+    The final class label is assigned as \( \hat{y}_j = \text{sign}(S(\mathbf{z}_j)) \).
 \end{itemize}
 
-This approach bypasses the computationally expensive filtering step of NN-CLAS while maintaining competitive accuracy. By directly aggregating decisions from multiple neighbors, KNN-CLAS reduces training complexity and is particularly suited for embedded systems with limited computational resources.
+By restricting neighbors to SEs and employing multi-neighbor voting, KNN-CLAS mitigates noise without explicit filtering, reducing training complexity from \( O(n^2) \) to \( O(n) \) for edge selection.
 
 \section{Methodology}
 
@@ -81,7 +76,7 @@ The diversity in dataset sizes and feature dimensions ensures a comprehensive ev
 
 \subsection{Accuracy Comparison}
 \input{../scripts/comparison_results/setsresults_accuracy.tex}
-Table \ref{tab:accuracy} shows the accuracy of NN-CLAS and KNN-CLAS across various datasets. KNN-CLAS achieves comparable accuracy to NN-CLAS, with slight improvements in datasets such as Sonar and SPECT Heart.
+Table \ref{tab:accuracy} demonstrates that KNN-CLAS achieves accuracy comparable to NN-CLAS. Notably, it outperforms NN-CLAS on datasets like Sonar (0.89 vs. 0.73) and SPECT Heart (0.86 vs. 0.68), where multi-neighbor voting improves robustness to ambiguous boundaries.
 
 \subsection{Training and Prediction Times}
 \input{../scripts/comparison_results/setsresults_timing.tex}
@@ -89,7 +84,7 @@ Table \ref{tab:timing} highlights the significant reduction in training time ach
 
 \subsection{Support Samples}
 \input{../scripts/comparison_results/setsresults_support.tex}
-Table \ref{tab:support} presents the number of support samples used by each method. KNN-CLAS generally requires more support samples, which may increase memory usage but simplifies the training process.
+Table \ref{tab:support} compares the number of support samples used by NN-CLAS (filtered vertices) and KNN-CLAS (unfiltered SEs). While KNN-CLAS retains more support samples than NN-CLAS (e.g., 252 vs. 111 for Ionosphere), these correspond to inter-class edges that inherently encode boundary information. The increase in memory usage is offset by the elimination of filtering overhead.
 
 \subsection{Dataset Characteristics}
 \input{../scripts/comparison_results/setsresults_statistics.tex}
@@ -153,15 +148,35 @@ Table \ref{tab:statistics} summarizes the dataset characteristics, including cla
     \label{fig:spect_heart_likelihood}
 \end{figure}
 
+\subsection{Likelihood Analysis}
+
+The likelihood distributions for each dataset, as shown in Figures \ref{fig:banknote_likelihood} to \ref{fig:spect_heart_likelihood}, provide insights into the performance of the KNN classifier across different scenarios. Each plot represents the sum of weighted votes for class 0 (x-axis) and class 1 (y-axis), with each point corresponding to a sample. The following observations can be made:
+
+\begin{itemize}
+    \item \textbf{Clear Separation:} Datasets such as Banknote, Breast Cancer, and Binary Digits exhibit well-separated clusters along the axes. This indicates that the KNN classifier assigns high confidence to most samples, resulting in distinct class boundaries. These datasets are characterized by low class overlap and high separability, which aligns with the high accuracy observed in Table \ref{tab:accuracy}.
+
+    \item \textbf{Moderate Overlap:} Datasets like Ionosphere, Pima Diabetes, and Sonar show moderate overlap between the two classes. While the clusters are still distinguishable, a significant number of points lie near the diagonal, indicating ambiguous classifications. This overlap may contribute to slightly lower accuracy compared to datasets with clear separation.
+
+    \item \textbf{Significant Overlap:} Haberman and SPECT Heart datasets display substantial overlap, with many points concentrated near the diagonal. This suggests that the KNN classifier struggles to confidently assign class labels, likely due to inherent noise or feature overlap in the data. These datasets also exhibit lower accuracy and higher ambiguity in classification.
+
+    \item \textbf{Outliers:} Some datasets, such as Sonar and Ionosphere, contain outliers far from the main clusters. These points may correspond to misclassified or hard-to-classify samples, which could impact the overall performance of the classifier.
+
+\end{itemize}
+
+The likelihood analysis highlights the strengths and limitations of the KNN-CLAS method. Datasets with well-separated classes benefit from the simplicity and efficiency of KNN-CLAS, while those with significant overlap or noise present greater challenges. These findings emphasize the importance of dataset characteristics, such as class separability and feature overlap, in determining the effectiveness of the proposed method.
+
 \section{Discussion}
 
-The results demonstrate that KNN-CLAS offers a practical alternative to NN-CLAS, particularly for resource-constrained environments. While NN-CLAS relies on computationally expensive filtering, KNN-CLAS leverages the KNN voting mechanism to achieve similar accuracy with reduced training times. However, the increased number of support samples in KNN-CLAS may pose challenges for memory-constrained systems.
+The results confirm that KNN-CLAS effectively replaces NN-CLAS's filtering step with a Gabriel Graph (GG)-based support edge selection and KNN voting mechanism. While both methods utilize Gabriel Graphs, KNN-CLAS avoids vertex pruning by relying on inter-class edges and multi-neighbor consensus. This approach reduces training time by up to 82\% (e.g., Banknote dataset) but increases memory usage due to larger support sets.
 
-The performance of KNN-CLAS is influenced by dataset characteristics such as class imbalance and feature overlap. For example, in datasets with high imbalance ratios (e.g., Haberman), KNN-CLAS maintains competitive accuracy, showcasing its robustness.
+KNN-CLAS demonstrates robustness to class imbalance (e.g., Haberman, Imbalance Ratio = 2.78) by relying on boundary-proximate support edges, which are less affected by skewed distributions. However, the increased number of support samples may pose challenges for memory-constrained systems.
 
-Future work could explore hybrid approaches that combine the strengths of both methods, such as selective filtering to reduce support samples while retaining efficiency.
+Compared to NN-CLAS, which relies on computationally expensive filtering, KNN-CLAS achieves similar accuracy with significantly reduced training times. This makes it a practical alternative, particularly for resource-constrained environments.
 
-\section*{Acknowledgment}
+The performance of KNN-CLAS is influenced by dataset characteristics such as class imbalance and feature overlap. For instance, in datasets with high imbalance ratios (e.g., Haberman), KNN-CLAS maintains competitive accuracy, showcasing its robustness.
+
+\section{Future Work}
+Future research could explore hybrid strategies that combine the strengths of NN-CLAS and KNN-CLAS. For example, selective filtering could minimize the number of support samples while maintaining computational efficiency. Additionally, enhancing KNN-CLAS for datasets with significant class overlap could involve techniques like feature selection, dimensionality reduction, or adaptive weighting schemes to improve class separability and classification performance.
 
 \begin{thebibliography}{00}
     % reference papers
