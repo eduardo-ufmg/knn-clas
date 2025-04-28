@@ -100,6 +100,8 @@ def store_real_dataset(X, y, name, n_splits=10):
 def load_breast_cancer_dataset():
   data = load_breast_cancer(return_X_y=False)
   X, y = data.data, data.target
+  label_map = {0: "Malignant", 1: "Benign"}
+  y = np.vectorize(label_map.get)(y)
   return X, y.reshape(-1, 1)
 
 def load_pima_diabetes():
@@ -120,29 +122,33 @@ def load_pima_diabetes():
     df[feat] = df[feat].fillna(df[feat].median())
   
   X = df.drop("Outcome", axis=1).values
-  y = df["Outcome"].values.reshape(-1, 1)
-  return X, y
+  y = df["Outcome"].values
+  label_map = {0: "Non-Diabetic", 1: "Diabetic"}
+  y = np.vectorize(label_map.get)(y)
+  return X, y.reshape(-1, 1)
 
 def load_haberman_survival():
   url = "https://archive.ics.uci.edu/ml/machine-learning-databases/haberman/haberman.data"
 
   df = pd.read_csv(url, header=None,
-                    names=["Age","YearOfOperation","PositiveNodes","SurvivalStatus"])
+                    names=["Age", "YearOfOperation", "PositiveNodes", "SurvivalStatus"])
   
   y = df["SurvivalStatus"].values
   X = df.iloc[:, :-1].values
-
+  label_map = {1: "Survived", 2: "Not Survived"}
+  y = np.vectorize(label_map.get)(y)
   return X, y.reshape(-1, 1)
 
 def load_banknote_authentication():
   url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00267/data_banknote_authentication.txt"
 
   df = pd.read_csv(url, header=None,
-                    names=["Variance","Skewness","Curtosis","Entropy","Class"])
+                    names=["Variance", "Skewness", "Curtosis", "Entropy", "Class"])
   
   X = df.iloc[:, :-1].values
   y = df["Class"].values
-  
+  label_map = {0: "Genuine", 1: "Forged"}
+  y = np.vectorize(label_map.get)(y)
   return X, y.reshape(-1, 1)
 
 def load_sonar():
@@ -154,7 +160,8 @@ def load_sonar():
   # Last column is 'M' or 'R'
   X = df.iloc[:, :-1].values
   y = df.iloc[:, -1].values
-
+  label_map = {"M": "Mine", "R": "Rock"}
+  y = np.vectorize(label_map.get)(y)
   return X, y.reshape(-1, 1)
 
 def load_adult_census():
@@ -189,7 +196,8 @@ def load_ionosphere():
 
   X = ionosphere.data.to_numpy()
   y = ionosphere.target.to_numpy()
-
+  label_map = {"b": "Bad", "g": "Good"}
+  y = np.vectorize(label_map.get)(y)
   return X, y.reshape(-1, 1)
 
 def load_spect_heart():
@@ -197,7 +205,8 @@ def load_spect_heart():
 
   X = spect.data.to_numpy()
   y = spect.target.to_numpy().astype(int)
-
+  label_map = {0: "Normal", 1: "Abnormal"}
+  y = np.vectorize(label_map.get)(y)
   return X, y.reshape(-1, 1)
 
 def load_all_datasets():

@@ -105,7 +105,14 @@ def main():
 
         nn_predicted = load_predicted_samples(str(nn_predicted_path))
         if nn_predicted:
-          y_pred = [entry.target.target_int for entry in nn_predicted.entries]
+          y_pred = [
+            entry.target.target_str if entry.target.target_str else entry.target.target_int
+            for entry in nn_predicted.entries
+          ]
+          y_true = [
+            entry.ground_truth.target_str if entry.ground_truth.target_str else entry.ground_truth.target_int
+            for entry in test_samples.entries
+          ]
           nn_metrics['accuracy'].append(accuracy_score(y_true, y_pred))
       except subprocess.CalledProcessError as e:
         print(f"nn-clas fold {fold} failed: {e}")
@@ -138,7 +145,14 @@ def main():
 
           knn_predicted = load_predicted_samples(str(knn_predicted_path))
           if knn_predicted:
-            y_pred = [entry.target.target_int for entry in knn_predicted.entries]
+            y_pred = [
+              entry.target.target_str if entry.target.target_str else entry.target.target_int
+              for entry in knn_predicted.entries
+            ]
+            y_true = [
+              entry.ground_truth.target_str if entry.ground_truth.target_str else entry.ground_truth.target_int
+              for entry in test_samples.entries
+            ]
             knn_metrics['k_metrics'][k]['accuracy'].append(accuracy_score(y_true, y_pred))
       except subprocess.CalledProcessError as e:
         print(f"knn-clas fold {fold} failed: {e}")
