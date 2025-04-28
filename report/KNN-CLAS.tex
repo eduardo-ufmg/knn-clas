@@ -65,12 +65,43 @@ By restricting neighbors to SEs and employing multi-neighbor voting, KNN-CLAS mi
 
 \section{Methodology}
 
-\subsection{Dataset Metadata}
+\subsection{Datasets and Preprocessing}
+
 \input{../scripts/comparison_results/setsresults_metadata.tex}
+Eight benchmark datasets from the UCI Machine Learning Repository \cite{uci_breast_cancer, uci_sonar, uci_spect_heart} were selected to evaluate KNN-CLAS. These include Breast Cancer, Pima Diabetes, Haberman Survival, Banknote Authentication, Sonar, Binary Digits (0 and 1), Ionosphere, and SPECT Heart. Table \ref{tab:metadata} summarizes their characteristics, such as sample count, feature dimensionality, class imbalance ratio, and feature overlap metrics. The preprocessing pipeline consisted of four stages:
 
-Table \ref{tab:metadata} provides an overview of the datasets used in this study, including the number of samples and features for each dataset. These characteristics are critical for understanding the computational complexity and scalability of the proposed KNN-CLAS method. For instance, datasets with a higher number of features, such as Binary Digits and Sonar, may require more computational resources during distance calculations, while smaller datasets like Haberman and SPECT Heart are less demanding.
+\begin{enumerate}
+    \item \textbf{Normalization}: Features were scaled to the range \([-1, 1]\) using min-max normalization to ensure uniform contribution during distance computation.
+    \item \textbf{Low-Variance Feature Removal}: Features with variance \(< 0.01\) were discarded to eliminate uninformative attributes.
+    \item \textbf{Correlated Feature Elimination}: Pairwise correlations exceeding \(0.95\) were removed to reduce redundancy.
+    \item \textbf{Mutual Information-Based Selection}: Features with mutual information scores \(> 0.01\) relative to class labels were retained to enhance separability.
+\end{enumerate}
 
-The diversity in dataset sizes and feature dimensions ensures a comprehensive evaluation of the proposed method across various scenarios. This metadata also highlights the challenges posed by datasets with fewer features, such as Pima Diabetes and Banknote, where class separability may be more dependent on the quality of the decision boundary.
+Stratified 10-fold cross-validation was employed to partition each dataset, preserving class distribution across folds. This approach mitigates bias from class imbalance, particularly critical for datasets like Haberman (imbalance ratio \(2.78:1\)).
+
+\subsection{Experimental Protocol}
+The experiments compared KNN-CLAS against NN-CLAS using the following protocol:
+
+\begin{itemize}
+    \item \textbf{KNN-CLAS Configuration}: Three \(k\) values (\(1, 3, 5\)) were tested to evaluate the impact of neighbor count on accuracy and computational efficiency.
+    \item \textbf{Gabriel Graph Construction}: For both methods, GGs were built using pairwise Euclidean distances, with inter-class edges (SEs) retained as support samples.
+    \item \textbf{Implementation}: Experiments were conducted in the same system, using C++ for classifier implementations to ensure fair timing comparisons.
+\end{itemize}
+
+\subsection{Evaluation Metrics}
+Performance was assessed using four metrics:
+\begin{itemize}
+    \item \textbf{Accuracy}: Ratio of correctly classified test samples.
+    \item \textbf{Training/Prediction Times}: Measured in milliseconds to quantify computational overhead.
+    \item \textbf{Support Sample Count}: Number of SEs (KNN-CLAS) or filtered vertices (NN-CLAS) defining the decision boundary.
+    \item \textbf{Likelihood Distributions}: Gaussian kernel-weighted votes for each class, visualized to analyze separability and confidence (Figures \ref{fig:banknote_likelihood}--\ref{fig:spect_heart_likelihood}).
+\end{itemize}
+
+\subsection{Statistical Analysis}
+Dataset characteristics such as class overlap (mean Fisher score), feature relevance (average mutual information), and separability (overlap score) were computed to contextualize results. These metrics, detailed in Table \ref{tab:statistics}, explain performance variations across datasets. For instance, high overlap in SPECT Heart correlates with ambiguous likelihood distributions (Figure \ref{fig:spect_heart_likelihood}), while low overlap in Banknote aligns with distinct class clusters (Figure \ref{fig:banknote_likelihood}).
+
+\subsection{Support Edge Selection}
+KNN-CLAS retains all inter-class SEs from the GG during training, avoiding vertex filtering. In contrast, NN-CLAS discards vertices with neighborhood quality \(q(\mathbf{x}_i)\) below class-specific thresholds. This distinction reduces KNN-CLAS's training complexity from \(O(n^2)\) to \(O(n)\), as shown in Table \ref{tab:timing}, while increasing memory usage due to larger support sets (Table \ref{tab:support}).
 
 \section{Results}
 
