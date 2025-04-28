@@ -46,37 +46,120 @@ q(\mathbf{x}_i) = \frac{\hat{\mathcal{A}}(\mathbf{x}_i)}{\mathcal{A}(\mathbf{x}_
 \]
 where \( \mathcal{A}(\mathbf{x}_i) \) is the vertex degree and \( \hat{\mathcal{A}}(\mathbf{x}_i) \) counts neighbors sharing \( \mathbf{x}_i \)'s class label \cite{souza2019}. Vertices with \( q(\mathbf{x}_i) \) below class-specific thresholds \( t^+ \) and \( t^- \)—calculated as the mean quality per class—are discarded as noise. This filtering ensures SEs lie near the true class boundaries but requires \( O(n^2) \) distance computations and iterative quality evaluations, making it impractical for resource-constrained systems \cite{arias2021}. The KNN-CLAS circumvents this bottleneck by integrating neighbor voting, thereby avoiding explicit structural filtering while preserving classification accuracy.
 
+\subsection{KNN-CLAS}
+
+The KNN-CLAS method simplifies the NN-CLAS framework by eliminating the filtering step and leveraging the K-nearest neighbors (KNN) voting mechanism for classification. The methodology can be summarized as follows:
+
+\begin{itemize}
+    \item \textbf{K-Nearest Neighbors}: For a given test sample \( \mathbf{z}_j \), compute the distances to all training samples \( \mathbf{x}_i \) and identify the \( k \)-nearest neighbors, denoted as \( \mathcal{N}_k(\mathbf{z}_j) \).
+
+    \item \textbf{Weighted Voting}: Assign weights to the neighbors using a kernel function \( K(d) \), such as the Gaussian kernel \( K(d) = e^{-d} \), where \( d \) is the distance between \( \mathbf{z}_j \) and \( \mathbf{x}_i \).
+
+    \item \textbf{Decision Sum}: Compute the decision sum for \( \mathbf{z}_j \) by aggregating the weighted contributions of the neighbors' class labels:
+    \[
+    S(\mathbf{z}_j) = \sum_{(\mathbf{x}_i, y_i) \in \mathcal{N}_k(\mathbf{z}_j)} y_i \cdot K(d(\mathbf{z}_j, \mathbf{x}_i)).
+    \]
+
+    \item \textbf{Classification}: Assign the class label \( \hat{y}_j \) based on the sign of the decision sum:
+    \[
+    \hat{y}_j = \text{sign}(S(\mathbf{z}_j)).
+    \]
+\end{itemize}
+
+This approach bypasses the computationally expensive filtering step of NN-CLAS while maintaining competitive accuracy. By directly aggregating decisions from multiple neighbors, KNN-CLAS reduces training complexity and is particularly suited for embedded systems with limited computational resources.
+
 \section{Methodology}
 
-% eight datasets cite() were downloaded from UCI ML repository and sklearn. 
-% preprocessing: drop NaN, encode categorical variables, encode targets
-% cross-validation: 10-fold stratified
-% measurements made by the same script, with the same criteria and parameters
-% run in the same hardware under the same conditions
+\subsection{Dataset Metadata}
+\input{../scripts/comparison_results/setsresults_metadata.tex}
+
+Table \ref{tab:metadata} provides an overview of the datasets used in this study, including the number of samples and features for each dataset. These characteristics are critical for understanding the computational complexity and scalability of the proposed KNN-CLAS method. For instance, datasets with a higher number of features, such as Binary Digits and Sonar, may require more computational resources during distance calculations, while smaller datasets like Haberman and SPECT Heart are less demanding.
+
+The diversity in dataset sizes and feature dimensions ensures a comprehensive evaluation of the proposed method across various scenarios. This metadata also highlights the challenges posed by datasets with fewer features, such as Pima Diabetes and Banknote, where class separability may be more dependent on the quality of the decision boundary.
 
 \section{Results}
 
-% metadata table
-\input{../scripts/comparison_results/setsresults_metadata.tex}
-%
-
-% statistics table
-\input{../scripts/comparison_results/setsresults_statistics.tex}
-%
-
-% accuracy table
+\subsection{Accuracy Comparison}
 \input{../scripts/comparison_results/setsresults_accuracy.tex}
-%
+Table \ref{tab:accuracy} shows the accuracy of NN-CLAS and KNN-CLAS across various datasets. KNN-CLAS achieves comparable accuracy to NN-CLAS, with slight improvements in datasets such as Sonar and SPECT Heart.
 
-% timing table
+\subsection{Training and Prediction Times}
 \input{../scripts/comparison_results/setsresults_timing.tex}
-%
+Table \ref{tab:timing} highlights the significant reduction in training time achieved by KNN-CLAS compared to NN-CLAS. For instance, in the Banknote dataset, KNN-CLAS reduces training time from 434.70 ms to 75.00 ms, making it more suitable for embedded systems.
 
-% support table
+\subsection{Support Samples}
 \input{../scripts/comparison_results/setsresults_support.tex}
-%
+Table \ref{tab:support} presents the number of support samples used by each method. KNN-CLAS generally requires more support samples, which may increase memory usage but simplifies the training process.
+
+\subsection{Dataset Characteristics}
+\input{../scripts/comparison_results/setsresults_statistics.tex}
+Table \ref{tab:statistics} summarizes the dataset characteristics, including class imbalance and feature overlap. These factors influence the performance of both methods, with KNN-CLAS showing robustness to class imbalance.
+
+\subsection{Likelihood}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{../scripts/comparison_results/Banknote_likelihood.png}
+    \caption{Likelihood comparison for the Banknote dataset.}
+    \label{fig:banknote_likelihood}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{../scripts/comparison_results/Binary Digits_likelihood.png}
+    \caption{Likelihood comparison for the Binary Digits dataset.}
+    \label{fig:binary_digits_likelihood}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{../scripts/comparison_results/Breast Cancer_likelihood.png}
+    \caption{Likelihood comparison for the Breast Cancer dataset.}
+    \label{fig:breast_cancer_likelihood}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{../scripts/comparison_results/Haberman_likelihood.png}
+    \caption{Likelihood comparison for the Haberman dataset.}
+    \label{fig:haberman_likelihood}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{../scripts/comparison_results/Ionosphere_likelihood.png}
+    \caption{Likelihood comparison for the Ionosphere dataset.}
+    \label{fig:ionosphere_likelihood}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{../scripts/comparison_results/Pima Diabetes_likelihood.png}
+    \caption{Likelihood comparison for the Pima Diabetes dataset.}
+    \label{fig:pima_diabetes_likelihood}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{../scripts/comparison_results/Sonar_likelihood.png}
+    \caption{Likelihood comparison for the Sonar dataset.}
+    \label{fig:sonar_likelihood}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{../scripts/comparison_results/SPECT Heart_likelihood.png}
+    \caption{Likelihood comparison for the SPECT Heart dataset.}
+    \label{fig:spect_heart_likelihood}
+\end{figure}
 
 \section{Discussion}
+
+The results demonstrate that KNN-CLAS offers a practical alternative to NN-CLAS, particularly for resource-constrained environments. While NN-CLAS relies on computationally expensive filtering, KNN-CLAS leverages the KNN voting mechanism to achieve similar accuracy with reduced training times. However, the increased number of support samples in KNN-CLAS may pose challenges for memory-constrained systems.
+
+The performance of KNN-CLAS is influenced by dataset characteristics such as class imbalance and feature overlap. For example, in datasets with high imbalance ratios (e.g., Haberman), KNN-CLAS maintains competitive accuracy, showcasing its robustness.
+
+Future work could explore hybrid approaches that combine the strengths of both methods, such as selective filtering to reduce support samples while retaining efficiency.
 
 \section*{Acknowledgment}
 
