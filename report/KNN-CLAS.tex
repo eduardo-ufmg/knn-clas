@@ -44,7 +44,7 @@ The NN-CLAS framework constructs a Gabriel graph \( G_G \) from the training set
 \[
 q(\mathbf{x}_i) = \frac{\hat{\mathcal{A}}(\mathbf{x}_i)}{\mathcal{A}(\mathbf{x}_i)},
 \]
-where \( \mathcal{A}(\mathbf{x}_i) \) is the vertex degree and \( \hat{\mathcal{A}}(\mathbf{x}_i) \) counts neighbors sharing \( \mathbf{x}_i \)'s class label \cite{souza2019}. Vertices with \( q(\mathbf{x}_i) \) below class-specific thresholds \( t^+ \) and \( t^- \)—calculated as the mean quality per class—are discarded as noise. This filtering ensures SEs lie near the true class boundaries but requires \( O(n^2) \) distance computations and iterative quality evaluations, making it impractical for resource-constrained systems \cite{arias2021}. The KNN-CLAS circumvents this bottleneck by integrating neighbor voting, thereby avoiding explicit structural filtering while preserving classification accuracy.
+where \( \mathcal{A}(\mathbf{x}_i) \) is the vertex degree and \( \hat{\mathcal{A}}(\mathbf{x}_i) \) counts neighbors sharing \( \mathbf{x}_i \)'s class label \cite{souza2019}. Vertices with \( q(\mathbf{x}_i) \) below class-specific thresholds \( t^+ \) and \( t^- \)—calculated as the mean quality per class—are discarded as noise. This filtering ensures SEs lie near the true class boundaries but requires three steps of \( O(n^2) \) distance computations and iterative quality evaluations -the first GG construction, the filtering and the second construction, making it impractical for resource-constrained systems \cite{arias2021}. The KNN-CLAS circumvents this bottleneck by integrating neighbor voting, thereby avoiding explicit structural filtering while preserving classification accuracy.
 
 \subsection{KNN-CLAS}
 The KNN-CLAS method modifies the NN-CLAS framework by integrating GG-based support edge selection with a KNN voting mechanism. The methodology operates as follows:
@@ -61,7 +61,7 @@ The KNN-CLAS method modifies the NN-CLAS framework by integrating GG-based suppo
     The final class label is assigned as \( \hat{y}_j = \text{sign}(S(\mathbf{z}_j)) \).
 \end{itemize}
 
-By restricting neighbors to SEs and employing multi-neighbor voting, KNN-CLAS mitigates noise without explicit filtering, reducing training complexity from \( O(n^2) \) to \( O(n) \) for edge selection.
+By restricting neighbors to SEs and employing multi-neighbor voting, KNN-CLAS mitigates noise without explicit filtering, reducing training complexity from \( O(3n^2) \) to \( O(n^2) \) for edge selection.
 
 \section{Methodology}
 
@@ -101,7 +101,7 @@ Performance was assessed using four metrics:
 Dataset characteristics such as class overlap (mean Fisher score), feature relevance (average mutual information), and separability (overlap score) were computed to contextualize results. These metrics, detailed in Table \ref{tab:statistics}, explain performance variations across datasets. For instance, high overlap in SPECT Heart correlates with ambiguous likelihood distributions (Figure \ref{fig:spect_heart_likelihood}), while low overlap in Banknote aligns with distinct class clusters (Figure \ref{fig:banknote_likelihood}).
 
 \subsection{Support Edge Selection}
-KNN-CLAS retains all inter-class SEs from the GG during training, avoiding vertex filtering. In contrast, NN-CLAS discards vertices with neighborhood quality \(q(\mathbf{x}_i)\) below class-specific thresholds. This distinction reduces KNN-CLAS's training complexity from \(O(n^2)\) to \(O(n)\), as shown in Table \ref{tab:timing}, while increasing memory usage due to larger support sets (Table \ref{tab:support}).
+KNN-CLAS retains all inter-class SEs from the GG during training, avoiding vertex filtering. In contrast, NN-CLAS discards vertices with neighborhood quality \(q(\mathbf{x}_i)\) below class-specific thresholds. This distinction reduces KNN-CLAS's training complexity from \( O(3n^2) \) to \( O(n^2) \), as shown in Table \ref{tab:timing}, while increasing memory usage due to larger support sets (Table \ref{tab:support}).
 
 \section{Results}
 

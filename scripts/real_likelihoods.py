@@ -121,19 +121,16 @@ def main():
       print(f"Skipping {name} due to errors in processing some k values")
       continue
 
-    # Create a figure with three subplots
-    plt.figure(figsize=(20, 6))
-    plt.suptitle(f'Likelihood Scatter Plots for {name}', fontsize=14)
+    # Extract likelihoods for k=5
+    k5_likelihoods = next((l0, l1) for k, l0, l1 in all_likelihoods if k == 5)
 
-    for idx, (k, l0, l1) in enumerate(all_likelihoods, 1):
-      plt.subplot(1, 3, idx)
-      plt.scatter(l0, l1, c=y_true_encoded, alpha=0.6)
-      plt.title(f'k = {k}')
-      plt.xlabel(target_labels[0])
-      plt.ylabel(target_labels[1])
-      plt.grid(True)
-
-    plt.tight_layout()
+    # Create a single plot
+    plt.figure()
+    plt.scatter(k5_likelihoods[0], k5_likelihoods[1], c=y_true_encoded)
+    plt.title(f'Likelihood Scatter Plot for {name} (k=5)', fontsize=14)
+    plt.xlabel(target_labels[0])
+    plt.ylabel(target_labels[1])
+    plt.grid(True)
 
     # Save plot
     plot_dir = script_dir / "comparison_results"
