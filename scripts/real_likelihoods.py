@@ -1,6 +1,7 @@
 import subprocess
 from pathlib import Path
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
 from load_proto import load_test_samples, load_predicted_samples
 
 def main():
@@ -75,17 +76,39 @@ def main():
     likelihood0 = []
     likelihood1 = []
     y_true = []
+    target_labels = set()  # Collect unique target labels for axis labeling
     for pred_entry, test_entry in zip(predicted_samples.entries, test_samples.entries):
-      likelihood0.append(pred_entry.likelihoods.likelihood0)
-      likelihood1.append(pred_entry.likelihoods.likelihood1)
-      y_true.append(test_entry.ground_truth.target_int)
+      # Access likelihoods from the Likelihoods message
+      likelihood0.append(pred_entry.likelihoods.likelihood0.likelihood)
+      likelihood1.append(pred_entry.likelihoods.likelihood1.likelihood)
+
+      # Access the ground truth target (assuming target_int is used)
+      if test_entry.ground_truth.HasField("target_int"):
+        y_true.append(test_entry.ground_truth.target_int)
+        target_labels.add(test_entry.ground_truth.target_int)
+      elif test_entry.ground_truth.HasField("target_str"):
+        y_true.append(test_entry.ground_truth.target_str)
+        target_labels.add(test_entry.ground_truth.target_str)
+      else:
+        print(f"Unknown ground truth format for {name}")
+        continue
+
+    # Sort target labels for consistent axis labeling
+    target_labels = sorted(target_labels)
 
     # Create scatter plot
     plt.figure(figsize=(10, 8))
-    plt.scatter(likelihood0, likelihood1, c=y_true)
+
+    # Map y_true to integers for coloring
+    label_encoder = LabelEncoder()
+    y_true_encoded = label_encoder.fit_transform(y_true)
+
+    scatter = plt.scatter(likelihood0, likelihood1, c=y_true_encoded)
     plt.title(f'Likelihood Scatter Plot for {name} (k={k})')
+    plt.xlabel(target_labels[0])
+    plt.ylabel(target_labels[1])
     plt.grid(True)
-    
+
     # Save plot
     plot_path = script_dir / f"comparison_results/{name}_likelihood_scatter_k{k}.png"
     plt.savefig(plot_path)

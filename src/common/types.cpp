@@ -64,7 +64,7 @@ PredictedSample::PredictedSample(const SampleID id, const Coordinates coordinate
 {}
 
 PredictedSample::PredictedSample(const SampleID id, const Likelihoods likelihoods)
-  : BaseSample(id, Coordinates()), target(
-    likelihoods.first > likelihoods.second ? Target(0) : Target(1)
-  ), likelihoods(likelihoods)
+  : BaseSample(id, Coordinates()),
+    target((likelihoods.first.first > likelihoods.second.first) ? likelihoods.first.second : likelihoods.second.second),
+    likelihoods(likelihoods)
 {}

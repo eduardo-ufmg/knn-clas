@@ -129,8 +129,7 @@ def load_haberman_survival():
   df = pd.read_csv(url, header=None,
                     names=["Age","YearOfOperation","PositiveNodes","SurvivalStatus"])
   
-  # Map SurvivalStatus: 1 → survived ≥5 yrs (1), 2 → died within 5 yrs (0)
-  y = df["SurvivalStatus"].map({1: 1, 2: 0}).values
+  y = df["SurvivalStatus"].values
   X = df.iloc[:, :-1].values
 
   return X, y.reshape(-1, 1)
@@ -154,7 +153,7 @@ def load_sonar():
 
   # Last column is 'M' or 'R'
   X = df.iloc[:, :-1].values
-  y = df.iloc[:, -1].map({'M': 1, 'R': 0}).values
+  y = df.iloc[:, -1].values
 
   return X, y.reshape(-1, 1)
 
@@ -169,8 +168,8 @@ def load_adult_census():
                     na_values=" ?", skipinitialspace=True)
   
   df.dropna(inplace=True)
-  # Encode Income and categoricals
-  df["Income"] = df["Income"].map({"<=50K": 0, ">50K": 1})
+
+  # Keep Income as is and encode categoricals
   X = pd.get_dummies(df.drop("Income", axis=1), drop_first=True).values
   y = df["Income"].values
 
@@ -189,7 +188,7 @@ def load_ionosphere():
   ionosphere = fetch_openml(data_id=59, parser='auto')
 
   X = ionosphere.data.to_numpy()
-  y = LabelEncoder().fit_transform(ionosphere.target)
+  y = ionosphere.target.to_numpy()
 
   return X, y.reshape(-1, 1)
 
@@ -221,23 +220,31 @@ def load_all_datasets():
 
 def compute_statistics(X, y):
   y_flat = y.ravel()
-  class_counts = np.bincount(y_flat)
+  unique_classes = np.unique(y_flat)
+  if len(unique_classes) != 2:
+    raise ValueError("The dataset must have exactly two unique classes.")
+  
+  class0, class1 = unique_classes
+  class0_mask = y_flat == class0
+  class1_mask = y_flat == class1
+  
+  class_counts = [np.sum(class0_mask), np.sum(class1_mask)]
   class_ratio = class_counts[0] / class_counts[1] if class_counts[1] != 0 else np.inf
 
   # Average mutual information
   avg_mi = mutual_info_classif(X, y_flat, discrete_features='auto').mean()
 
   # Fisher score: mean diff squared over var sum
-  mean0 = X[y_flat == 0].mean(axis=0)
-  mean1 = X[y_flat == 1].mean(axis=0)
-  var0 = X[y_flat == 0].var(axis=0)
-  var1 = X[y_flat == 1].var(axis=0)
+  mean0 = X[class0_mask].mean(axis=0)
+  mean1 = X[class1_mask].mean(axis=0)
+  var0 = X[class0_mask].var(axis=0)
+  var1 = X[class1_mask].var(axis=0)
   fisher_scores = (mean0 - mean1)**2 / (var0 + var1 + 1e-6)
   avg_fisher = np.mean(fisher_scores)
 
   # Overlap score: average number of features where class means are within 1 std
-  std0 = X[y_flat == 0].std(axis=0)
-  std1 = X[y_flat == 1].std(axis=0)
+  std0 = X[class0_mask].std(axis=0)
+  std1 = X[class1_mask].std(axis=0)
   overlap = np.mean(np.abs(mean0 - mean1) < (std0 + std1) / 2)
 
   # Imbalance ratio: max(counts) / min(counts)

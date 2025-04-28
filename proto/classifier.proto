@@ -38,9 +38,14 @@ message TestSamples {
   repeated TestSampleEntry entries = 1;
 }
 
+message Likelihood {
+  float likelihood = 1;
+  Target target = 2;
+}
+
 message Likelihoods {
-  float likelihood0 = 1;
-  float likelihood1 = 2;
+  Likelihood likelihood0 = 1;
+  Likelihood likelihood1 = 2;
 }
 
 message PredictedSampleEntry {

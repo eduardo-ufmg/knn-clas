@@ -51,6 +51,9 @@ extern DatasetDefaultTypeInternal _Dataset_default_instance_;
 class DatasetEntry;
 struct DatasetEntryDefaultTypeInternal;
 extern DatasetEntryDefaultTypeInternal _DatasetEntry_default_instance_;
+class Likelihood;
+struct LikelihoodDefaultTypeInternal;
+extern LikelihoodDefaultTypeInternal _Likelihood_default_instance_;
 class Likelihoods;
 struct LikelihoodsDefaultTypeInternal;
 extern LikelihoodsDefaultTypeInternal _Likelihoods_default_instance_;
@@ -79,6 +82,7 @@ extern TestSamplesDefaultTypeInternal _TestSamples_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::classifierpb::Dataset* Arena::CreateMaybeMessage<::classifierpb::Dataset>(Arena*);
 template<> ::classifierpb::DatasetEntry* Arena::CreateMaybeMessage<::classifierpb::DatasetEntry>(Arena*);
+template<> ::classifierpb::Likelihood* Arena::CreateMaybeMessage<::classifierpb::Likelihood>(Arena*);
 template<> ::classifierpb::Likelihoods* Arena::CreateMaybeMessage<::classifierpb::Likelihoods>(Arena*);
 template<> ::classifierpb::PredictedSampleEntry* Arena::CreateMaybeMessage<::classifierpb::PredictedSampleEntry>(Arena*);
 template<> ::classifierpb::PredictedSamples* Arena::CreateMaybeMessage<::classifierpb::PredictedSamples>(Arena*);
@@ -1319,6 +1323,174 @@ class TestSamples final :
 };
 // -------------------------------------------------------------------
 
+class Likelihood final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.Likelihood) */ {
+ public:
+  inline Likelihood() : Likelihood(nullptr) {}
+  ~Likelihood() override;
+  explicit PROTOBUF_CONSTEXPR Likelihood(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  Likelihood(const Likelihood& from);
+  Likelihood(Likelihood&& from) noexcept
+    : Likelihood() {
+    *this = ::std::move(from);
+  }
+
+  inline Likelihood& operator=(const Likelihood& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Likelihood& operator=(Likelihood&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const Likelihood& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const Likelihood* internal_default_instance() {
+    return reinterpret_cast<const Likelihood*>(
+               &_Likelihood_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  friend void swap(Likelihood& a, Likelihood& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Likelihood* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Likelihood* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  Likelihood* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Likelihood>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const Likelihood& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const Likelihood& from) {
+    Likelihood::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Likelihood* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "classifierpb.Likelihood";
+  }
+  protected:
+  explicit Likelihood(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTargetFieldNumber = 2,
+    kLikelihoodFieldNumber = 1,
+  };
+  // .classifierpb.Target target = 2;
+  bool has_target() const;
+  private:
+  bool _internal_has_target() const;
+  public:
+  void clear_target();
+  const ::classifierpb::Target& target() const;
+  PROTOBUF_NODISCARD ::classifierpb::Target* release_target();
+  ::classifierpb::Target* mutable_target();
+  void set_allocated_target(::classifierpb::Target* target);
+  private:
+  const ::classifierpb::Target& _internal_target() const;
+  ::classifierpb::Target* _internal_mutable_target();
+  public:
+  void unsafe_arena_set_allocated_target(
+      ::classifierpb::Target* target);
+  ::classifierpb::Target* unsafe_arena_release_target();
+
+  // float likelihood = 1;
+  void clear_likelihood();
+  float likelihood() const;
+  void set_likelihood(float value);
+  private:
+  float _internal_likelihood() const;
+  void _internal_set_likelihood(float value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:classifierpb.Likelihood)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::classifierpb::Target* target_;
+    float likelihood_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_classifier_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Likelihoods final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:classifierpb.Likelihoods) */ {
  public:
@@ -1367,7 +1539,7 @@ class Likelihoods final :
                &_Likelihoods_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(Likelihoods& a, Likelihoods& b) {
     a.Swap(&b);
@@ -1443,23 +1615,41 @@ class Likelihoods final :
     kLikelihood0FieldNumber = 1,
     kLikelihood1FieldNumber = 2,
   };
-  // float likelihood0 = 1;
+  // .classifierpb.Likelihood likelihood0 = 1;
+  bool has_likelihood0() const;
+  private:
+  bool _internal_has_likelihood0() const;
+  public:
   void clear_likelihood0();
-  float likelihood0() const;
-  void set_likelihood0(float value);
+  const ::classifierpb::Likelihood& likelihood0() const;
+  PROTOBUF_NODISCARD ::classifierpb::Likelihood* release_likelihood0();
+  ::classifierpb::Likelihood* mutable_likelihood0();
+  void set_allocated_likelihood0(::classifierpb::Likelihood* likelihood0);
   private:
-  float _internal_likelihood0() const;
-  void _internal_set_likelihood0(float value);
+  const ::classifierpb::Likelihood& _internal_likelihood0() const;
+  ::classifierpb::Likelihood* _internal_mutable_likelihood0();
   public:
+  void unsafe_arena_set_allocated_likelihood0(
+      ::classifierpb::Likelihood* likelihood0);
+  ::classifierpb::Likelihood* unsafe_arena_release_likelihood0();
 
-  // float likelihood1 = 2;
-  void clear_likelihood1();
-  float likelihood1() const;
-  void set_likelihood1(float value);
+  // .classifierpb.Likelihood likelihood1 = 2;
+  bool has_likelihood1() const;
   private:
-  float _internal_likelihood1() const;
-  void _internal_set_likelihood1(float value);
+  bool _internal_has_likelihood1() const;
   public:
+  void clear_likelihood1();
+  const ::classifierpb::Likelihood& likelihood1() const;
+  PROTOBUF_NODISCARD ::classifierpb::Likelihood* release_likelihood1();
+  ::classifierpb::Likelihood* mutable_likelihood1();
+  void set_allocated_likelihood1(::classifierpb::Likelihood* likelihood1);
+  private:
+  const ::classifierpb::Likelihood& _internal_likelihood1() const;
+  ::classifierpb::Likelihood* _internal_mutable_likelihood1();
+  public:
+  void unsafe_arena_set_allocated_likelihood1(
+      ::classifierpb::Likelihood* likelihood1);
+  ::classifierpb::Likelihood* unsafe_arena_release_likelihood1();
 
   // @@protoc_insertion_point(class_scope:classifierpb.Likelihoods)
  private:
@@ -1469,8 +1659,8 @@ class Likelihoods final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    float likelihood0_;
-    float likelihood1_;
+    ::classifierpb::Likelihood* likelihood0_;
+    ::classifierpb::Likelihood* likelihood1_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1526,7 +1716,7 @@ class PredictedSampleEntry final :
                &_PredictedSampleEntry_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(PredictedSampleEntry& a, PredictedSampleEntry& b) {
     a.Swap(&b);
@@ -1738,7 +1928,7 @@ class PredictedSamples final :
                &_PredictedSamples_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(PredictedSamples& a, PredictedSamples& b) {
     a.Swap(&b);
@@ -2577,46 +2767,300 @@ TestSamples::entries() const {
 
 // -------------------------------------------------------------------
 
+// Likelihood
+
+// float likelihood = 1;
+inline void Likelihood::clear_likelihood() {
+  _impl_.likelihood_ = 0;
+}
+inline float Likelihood::_internal_likelihood() const {
+  return _impl_.likelihood_;
+}
+inline float Likelihood::likelihood() const {
+  // @@protoc_insertion_point(field_get:classifierpb.Likelihood.likelihood)
+  return _internal_likelihood();
+}
+inline void Likelihood::_internal_set_likelihood(float value) {
+  
+  _impl_.likelihood_ = value;
+}
+inline void Likelihood::set_likelihood(float value) {
+  _internal_set_likelihood(value);
+  // @@protoc_insertion_point(field_set:classifierpb.Likelihood.likelihood)
+}
+
+// .classifierpb.Target target = 2;
+inline bool Likelihood::_internal_has_target() const {
+  return this != internal_default_instance() && _impl_.target_ != nullptr;
+}
+inline bool Likelihood::has_target() const {
+  return _internal_has_target();
+}
+inline void Likelihood::clear_target() {
+  if (GetArenaForAllocation() == nullptr && _impl_.target_ != nullptr) {
+    delete _impl_.target_;
+  }
+  _impl_.target_ = nullptr;
+}
+inline const ::classifierpb::Target& Likelihood::_internal_target() const {
+  const ::classifierpb::Target* p = _impl_.target_;
+  return p != nullptr ? *p : reinterpret_cast<const ::classifierpb::Target&>(
+      ::classifierpb::_Target_default_instance_);
+}
+inline const ::classifierpb::Target& Likelihood::target() const {
+  // @@protoc_insertion_point(field_get:classifierpb.Likelihood.target)
+  return _internal_target();
+}
+inline void Likelihood::unsafe_arena_set_allocated_target(
+    ::classifierpb::Target* target) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.target_);
+  }
+  _impl_.target_ = target;
+  if (target) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:classifierpb.Likelihood.target)
+}
+inline ::classifierpb::Target* Likelihood::release_target() {
+  
+  ::classifierpb::Target* temp = _impl_.target_;
+  _impl_.target_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::classifierpb::Target* Likelihood::unsafe_arena_release_target() {
+  // @@protoc_insertion_point(field_release:classifierpb.Likelihood.target)
+  
+  ::classifierpb::Target* temp = _impl_.target_;
+  _impl_.target_ = nullptr;
+  return temp;
+}
+inline ::classifierpb::Target* Likelihood::_internal_mutable_target() {
+  
+  if (_impl_.target_ == nullptr) {
+    auto* p = CreateMaybeMessage<::classifierpb::Target>(GetArenaForAllocation());
+    _impl_.target_ = p;
+  }
+  return _impl_.target_;
+}
+inline ::classifierpb::Target* Likelihood::mutable_target() {
+  ::classifierpb::Target* _msg = _internal_mutable_target();
+  // @@protoc_insertion_point(field_mutable:classifierpb.Likelihood.target)
+  return _msg;
+}
+inline void Likelihood::set_allocated_target(::classifierpb::Target* target) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.target_;
+  }
+  if (target) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(target);
+    if (message_arena != submessage_arena) {
+      target = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, target, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.target_ = target;
+  // @@protoc_insertion_point(field_set_allocated:classifierpb.Likelihood.target)
+}
+
+// -------------------------------------------------------------------
+
 // Likelihoods
 
-// float likelihood0 = 1;
+// .classifierpb.Likelihood likelihood0 = 1;
+inline bool Likelihoods::_internal_has_likelihood0() const {
+  return this != internal_default_instance() && _impl_.likelihood0_ != nullptr;
+}
+inline bool Likelihoods::has_likelihood0() const {
+  return _internal_has_likelihood0();
+}
 inline void Likelihoods::clear_likelihood0() {
-  _impl_.likelihood0_ = 0;
+  if (GetArenaForAllocation() == nullptr && _impl_.likelihood0_ != nullptr) {
+    delete _impl_.likelihood0_;
+  }
+  _impl_.likelihood0_ = nullptr;
 }
-inline float Likelihoods::_internal_likelihood0() const {
-  return _impl_.likelihood0_;
+inline const ::classifierpb::Likelihood& Likelihoods::_internal_likelihood0() const {
+  const ::classifierpb::Likelihood* p = _impl_.likelihood0_;
+  return p != nullptr ? *p : reinterpret_cast<const ::classifierpb::Likelihood&>(
+      ::classifierpb::_Likelihood_default_instance_);
 }
-inline float Likelihoods::likelihood0() const {
+inline const ::classifierpb::Likelihood& Likelihoods::likelihood0() const {
   // @@protoc_insertion_point(field_get:classifierpb.Likelihoods.likelihood0)
   return _internal_likelihood0();
 }
-inline void Likelihoods::_internal_set_likelihood0(float value) {
-  
-  _impl_.likelihood0_ = value;
+inline void Likelihoods::unsafe_arena_set_allocated_likelihood0(
+    ::classifierpb::Likelihood* likelihood0) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.likelihood0_);
+  }
+  _impl_.likelihood0_ = likelihood0;
+  if (likelihood0) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:classifierpb.Likelihoods.likelihood0)
 }
-inline void Likelihoods::set_likelihood0(float value) {
-  _internal_set_likelihood0(value);
-  // @@protoc_insertion_point(field_set:classifierpb.Likelihoods.likelihood0)
+inline ::classifierpb::Likelihood* Likelihoods::release_likelihood0() {
+  
+  ::classifierpb::Likelihood* temp = _impl_.likelihood0_;
+  _impl_.likelihood0_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::classifierpb::Likelihood* Likelihoods::unsafe_arena_release_likelihood0() {
+  // @@protoc_insertion_point(field_release:classifierpb.Likelihoods.likelihood0)
+  
+  ::classifierpb::Likelihood* temp = _impl_.likelihood0_;
+  _impl_.likelihood0_ = nullptr;
+  return temp;
+}
+inline ::classifierpb::Likelihood* Likelihoods::_internal_mutable_likelihood0() {
+  
+  if (_impl_.likelihood0_ == nullptr) {
+    auto* p = CreateMaybeMessage<::classifierpb::Likelihood>(GetArenaForAllocation());
+    _impl_.likelihood0_ = p;
+  }
+  return _impl_.likelihood0_;
+}
+inline ::classifierpb::Likelihood* Likelihoods::mutable_likelihood0() {
+  ::classifierpb::Likelihood* _msg = _internal_mutable_likelihood0();
+  // @@protoc_insertion_point(field_mutable:classifierpb.Likelihoods.likelihood0)
+  return _msg;
+}
+inline void Likelihoods::set_allocated_likelihood0(::classifierpb::Likelihood* likelihood0) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.likelihood0_;
+  }
+  if (likelihood0) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(likelihood0);
+    if (message_arena != submessage_arena) {
+      likelihood0 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, likelihood0, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.likelihood0_ = likelihood0;
+  // @@protoc_insertion_point(field_set_allocated:classifierpb.Likelihoods.likelihood0)
 }
 
-// float likelihood1 = 2;
+// .classifierpb.Likelihood likelihood1 = 2;
+inline bool Likelihoods::_internal_has_likelihood1() const {
+  return this != internal_default_instance() && _impl_.likelihood1_ != nullptr;
+}
+inline bool Likelihoods::has_likelihood1() const {
+  return _internal_has_likelihood1();
+}
 inline void Likelihoods::clear_likelihood1() {
-  _impl_.likelihood1_ = 0;
+  if (GetArenaForAllocation() == nullptr && _impl_.likelihood1_ != nullptr) {
+    delete _impl_.likelihood1_;
+  }
+  _impl_.likelihood1_ = nullptr;
 }
-inline float Likelihoods::_internal_likelihood1() const {
-  return _impl_.likelihood1_;
+inline const ::classifierpb::Likelihood& Likelihoods::_internal_likelihood1() const {
+  const ::classifierpb::Likelihood* p = _impl_.likelihood1_;
+  return p != nullptr ? *p : reinterpret_cast<const ::classifierpb::Likelihood&>(
+      ::classifierpb::_Likelihood_default_instance_);
 }
-inline float Likelihoods::likelihood1() const {
+inline const ::classifierpb::Likelihood& Likelihoods::likelihood1() const {
   // @@protoc_insertion_point(field_get:classifierpb.Likelihoods.likelihood1)
   return _internal_likelihood1();
 }
-inline void Likelihoods::_internal_set_likelihood1(float value) {
-  
-  _impl_.likelihood1_ = value;
+inline void Likelihoods::unsafe_arena_set_allocated_likelihood1(
+    ::classifierpb::Likelihood* likelihood1) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.likelihood1_);
+  }
+  _impl_.likelihood1_ = likelihood1;
+  if (likelihood1) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:classifierpb.Likelihoods.likelihood1)
 }
-inline void Likelihoods::set_likelihood1(float value) {
-  _internal_set_likelihood1(value);
-  // @@protoc_insertion_point(field_set:classifierpb.Likelihoods.likelihood1)
+inline ::classifierpb::Likelihood* Likelihoods::release_likelihood1() {
+  
+  ::classifierpb::Likelihood* temp = _impl_.likelihood1_;
+  _impl_.likelihood1_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::classifierpb::Likelihood* Likelihoods::unsafe_arena_release_likelihood1() {
+  // @@protoc_insertion_point(field_release:classifierpb.Likelihoods.likelihood1)
+  
+  ::classifierpb::Likelihood* temp = _impl_.likelihood1_;
+  _impl_.likelihood1_ = nullptr;
+  return temp;
+}
+inline ::classifierpb::Likelihood* Likelihoods::_internal_mutable_likelihood1() {
+  
+  if (_impl_.likelihood1_ == nullptr) {
+    auto* p = CreateMaybeMessage<::classifierpb::Likelihood>(GetArenaForAllocation());
+    _impl_.likelihood1_ = p;
+  }
+  return _impl_.likelihood1_;
+}
+inline ::classifierpb::Likelihood* Likelihoods::mutable_likelihood1() {
+  ::classifierpb::Likelihood* _msg = _internal_mutable_likelihood1();
+  // @@protoc_insertion_point(field_mutable:classifierpb.Likelihoods.likelihood1)
+  return _msg;
+}
+inline void Likelihoods::set_allocated_likelihood1(::classifierpb::Likelihood* likelihood1) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.likelihood1_;
+  }
+  if (likelihood1) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(likelihood1);
+    if (message_arena != submessage_arena) {
+      likelihood1 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, likelihood1, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.likelihood1_ = likelihood1;
+  // @@protoc_insertion_point(field_set_allocated:classifierpb.Likelihoods.likelihood1)
 }
 
 // -------------------------------------------------------------------
@@ -2917,6 +3361,8 @@ PredictedSamples::entries() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

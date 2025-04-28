@@ -15,12 +15,10 @@ using namespace std;
 
 int sign(const float x);
 
-const Bimap createbimap(const SupportSamples& supportSamples);
-
 const PredictedSamples kNSSpred(const TestSamples& testSample, const SupportSamples& supportSamples, const int k)
 {
   
-  Bimap bimap = createbimap(supportSamples);
+  const Bimap bimap(supportSamples);
 
   PredictedSamples predictedSamples;
 
@@ -61,43 +59,4 @@ const PredictedSamples kNSSpred(const TestSamples& testSample, const SupportSamp
 int sign(const float x)
 {
   return static_cast<int>(0 < x) - static_cast<int>(x < 0);
-}
-
-const Bimap createbimap(const SupportSamples& supportSamples)
-{
-  vector<Target> targets;
-  targets.reserve(supportSamples.size());
-
-  for (const SupportSample& sample : supportSamples) {
-    targets.push_back(sample.target);
-  }
-
-  unordered_set<Target> uniqueTargets(targets.begin(), targets.end());
-
-  const bool isOdd = uniqueTargets.size() % 2 == 1;
-
-  const bool shouldIncludeZero = isOdd;
-
-  const int n_targets = uniqueTargets.size();
-
-  const int intstart =
-      isOdd ?
-        -floor(n_targets / 2) :
-        -(n_targets / 2);
-
-  int intcounter = intstart;
-
-  Bimap bimap;
-
-  for (const Target& target : uniqueTargets) {
-    if (intcounter == 0 && !shouldIncludeZero) {
-      ++intcounter;
-    }
-
-    bimap.insert(target, intcounter);
-
-    ++intcounter;
-  }
-
-  return bimap;
 }

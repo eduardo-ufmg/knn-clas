@@ -15,6 +15,8 @@ public:
   const targettointmap& get_targettoint() const;
   const inttotargetmap& get_inttotarget() const;
 
+  Bimap(const SupportSamples& supportSamples);
+
 private:
   targettointmap targettoint;
   inttotargetmap inttotarget;

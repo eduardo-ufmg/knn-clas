@@ -96,8 +96,20 @@ int writeLikelihoods(const PredictedSamples& predictedSamples, const std::string
     }
 
     classifierpb::Likelihoods* pb_likelihoods = pb_sample->mutable_likelihoods();
-    pb_likelihoods->set_likelihood0(sample.likelihoods.first);
-    pb_likelihoods->set_likelihood1(sample.likelihoods.second);
+
+    classifierpb::Likelihood* pb_likelihood0 = pb_likelihoods->mutable_likelihood0();
+    pb_likelihood0->set_likelihood(sample.likelihoods.first.first);
+    visit(overloaded{
+      [pb_likelihood0](const int id) { pb_likelihood0->mutable_target()->set_target_int(id); },
+      [pb_likelihood0](const std::string& id) { pb_likelihood0->mutable_target()->set_target_str(id); }
+    }, sample.likelihoods.first.second);
+
+    classifierpb::Likelihood* pb_likelihood1 = pb_likelihoods->mutable_likelihood1();
+    pb_likelihood1->set_likelihood(sample.likelihoods.second.first);
+    visit(overloaded{
+      [pb_likelihood1](const int id) { pb_likelihood1->mutable_target()->set_target_int(id); },
+      [pb_likelihood1](const std::string& id) { pb_likelihood1->mutable_target()->set_target_str(id); }
+    }, sample.likelihoods.second.second);
   }
 
   ofstream file = openFileWrite(filename);

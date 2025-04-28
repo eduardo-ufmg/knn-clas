@@ -1,5 +1,9 @@
 #include "bimap.hpp"
 
+#include <unordered_set>
+#include <stdexcept>
+#include <cmath>
+
 using namespace std;
 
 void Bimap::insert(const Target& target, const int integer)
@@ -34,4 +38,40 @@ const targettointmap& Bimap::get_targettoint() const
 const inttotargetmap& Bimap::get_inttotarget() const
 {
   return inttotarget;
+}
+
+Bimap::Bimap(const SupportSamples& supportSamples)
+{
+  vector<Target> targets;
+  targets.reserve(supportSamples.size());
+
+  for (const SupportSample& sample : supportSamples) {
+    targets.push_back(sample.target);
+  }
+
+  unordered_set<Target> uniqueTargets(targets.begin(), targets.end());
+
+  const bool isOdd = uniqueTargets.size() % 2 == 1;
+
+  const bool shouldIncludeZero = isOdd;
+
+  const int n_targets = uniqueTargets.size();
+
+  const int intstart =
+      isOdd ?
+        -floor(n_targets / 2) :
+        -(n_targets / 2);
+
+  int intcounter = intstart;
+
+  for (const Target& target : uniqueTargets) {
+    if (intcounter == 0 && !shouldIncludeZero) {
+      ++intcounter;
+    }
+
+    this->insert(target, intcounter);
+
+    ++intcounter;
+  }
+
 }

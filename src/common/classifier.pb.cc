@@ -118,10 +118,24 @@ struct TestSamplesDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TestSamplesDefaultTypeInternal _TestSamples_default_instance_;
+PROTOBUF_CONSTEXPR Likelihood::Likelihood(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.target_)*/nullptr
+  , /*decltype(_impl_.likelihood_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct LikelihoodDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR LikelihoodDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~LikelihoodDefaultTypeInternal() {}
+  union {
+    Likelihood _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 LikelihoodDefaultTypeInternal _Likelihood_default_instance_;
 PROTOBUF_CONSTEXPR Likelihoods::Likelihoods(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.likelihood0_)*/0
-  , /*decltype(_impl_.likelihood1_)*/0
+    /*decltype(_impl_.likelihood0_)*/nullptr
+  , /*decltype(_impl_.likelihood1_)*/nullptr
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct LikelihoodsDefaultTypeInternal {
   PROTOBUF_CONSTEXPR LikelihoodsDefaultTypeInternal()
@@ -162,7 +176,7 @@ struct PredictedSamplesDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PredictedSamplesDefaultTypeInternal _PredictedSamples_default_instance_;
 }  // namespace classifierpb
-static ::_pb::Metadata file_level_metadata_classifier_2eproto[10];
+static ::_pb::Metadata file_level_metadata_classifier_2eproto[11];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_classifier_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_classifier_2eproto = nullptr;
 
@@ -224,6 +238,14 @@ const uint32_t TableStruct_classifier_2eproto::offsets[] PROTOBUF_SECTION_VARIAB
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::classifierpb::TestSamples, _impl_.entries_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::classifierpb::Likelihood, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::classifierpb::Likelihood, _impl_.likelihood_),
+  PROTOBUF_FIELD_OFFSET(::classifierpb::Likelihood, _impl_.target_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::classifierpb::Likelihoods, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -257,9 +279,10 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 33, -1, -1, sizeof(::classifierpb::SupportSamples)},
   { 40, -1, -1, sizeof(::classifierpb::TestSampleEntry)},
   { 49, -1, -1, sizeof(::classifierpb::TestSamples)},
-  { 56, -1, -1, sizeof(::classifierpb::Likelihoods)},
-  { 64, -1, -1, sizeof(::classifierpb::PredictedSampleEntry)},
-  { 74, -1, -1, sizeof(::classifierpb::PredictedSamples)},
+  { 56, -1, -1, sizeof(::classifierpb::Likelihood)},
+  { 64, -1, -1, sizeof(::classifierpb::Likelihoods)},
+  { 72, -1, -1, sizeof(::classifierpb::PredictedSampleEntry)},
+  { 82, -1, -1, sizeof(::classifierpb::PredictedSamples)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -270,6 +293,7 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::classifierpb::_SupportSamples_default_instance_._instance,
   &::classifierpb::_TestSampleEntry_default_instance_._instance,
   &::classifierpb::_TestSamples_default_instance_._instance,
+  &::classifierpb::_Likelihood_default_instance_._instance,
   &::classifierpb::_Likelihoods_default_instance_._instance,
   &::classifierpb::_PredictedSampleEntry_default_instance_._instance,
   &::classifierpb::_PredictedSamples_default_instance_._instance,
@@ -289,20 +313,24 @@ const char descriptor_table_protodef_classifier_2eproto[] PROTOBUF_SECTION_VARIA
   "mpleEntry\022\021\n\tsample_id\030\001 \001(\005\022\020\n\010features"
   "\030\002 \003(\002\022*\n\014ground_truth\030\003 \001(\0132\024.classifie"
   "rpb.Target\"=\n\013TestSamples\022.\n\007entries\030\001 \003"
-  "(\0132\035.classifierpb.TestSampleEntry\"7\n\013Lik"
-  "elihoods\022\023\n\013likelihood0\030\001 \001(\002\022\023\n\013likelih"
-  "ood1\030\002 \001(\002\"\221\001\n\024PredictedSampleEntry\022\021\n\ts"
-  "ample_id\030\001 \001(\005\022\020\n\010features\030\002 \003(\002\022$\n\006targ"
-  "et\030\003 \001(\0132\024.classifierpb.Target\022.\n\013likeli"
-  "hoods\030\004 \001(\0132\031.classifierpb.Likelihoods\"G"
-  "\n\020PredictedSamples\0223\n\007entries\030\001 \003(\0132\".cl"
-  "assifierpb.PredictedSampleEntryb\006proto3"
+  "(\0132\035.classifierpb.TestSampleEntry\"F\n\nLik"
+  "elihood\022\022\n\nlikelihood\030\001 \001(\002\022$\n\006target\030\002 "
+  "\001(\0132\024.classifierpb.Target\"k\n\013Likelihoods"
+  "\022-\n\013likelihood0\030\001 \001(\0132\030.classifierpb.Lik"
+  "elihood\022-\n\013likelihood1\030\002 \001(\0132\030.classifie"
+  "rpb.Likelihood\"\221\001\n\024PredictedSampleEntry\022"
+  "\021\n\tsample_id\030\001 \001(\005\022\020\n\010features\030\002 \003(\002\022$\n\006"
+  "target\030\003 \001(\0132\024.classifierpb.Target\022.\n\013li"
+  "kelihoods\030\004 \001(\0132\031.classifierpb.Likelihoo"
+  "ds\"G\n\020PredictedSamples\0223\n\007entries\030\001 \003(\0132"
+  "\".classifierpb.PredictedSampleEntryb\006pro"
+  "to3"
   ;
 static ::_pbi::once_flag descriptor_table_classifier_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_classifier_2eproto = {
-    false, false, 839, descriptor_table_protodef_classifier_2eproto,
+    false, false, 963, descriptor_table_protodef_classifier_2eproto,
     "classifier.proto",
-    &descriptor_table_classifier_2eproto_once, nullptr, 0, 10,
+    &descriptor_table_classifier_2eproto_once, nullptr, 0, 11,
     schemas, file_default_instances, TableStruct_classifier_2eproto::offsets,
     file_level_metadata_classifier_2eproto, file_level_enum_descriptors_classifier_2eproto,
     file_level_service_descriptors_classifier_2eproto,
@@ -1871,10 +1899,256 @@ void TestSamples::InternalSwap(TestSamples* other) {
 
 // ===================================================================
 
-class Likelihoods::_Internal {
+class Likelihood::_Internal {
  public:
+  static const ::classifierpb::Target& target(const Likelihood* msg);
 };
 
+const ::classifierpb::Target&
+Likelihood::_Internal::target(const Likelihood* msg) {
+  return *msg->_impl_.target_;
+}
+Likelihood::Likelihood(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:classifierpb.Likelihood)
+}
+Likelihood::Likelihood(const Likelihood& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  Likelihood* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.target_){nullptr}
+    , decltype(_impl_.likelihood_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_target()) {
+    _this->_impl_.target_ = new ::classifierpb::Target(*from._impl_.target_);
+  }
+  _this->_impl_.likelihood_ = from._impl_.likelihood_;
+  // @@protoc_insertion_point(copy_constructor:classifierpb.Likelihood)
+}
+
+inline void Likelihood::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.target_){nullptr}
+    , decltype(_impl_.likelihood_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+Likelihood::~Likelihood() {
+  // @@protoc_insertion_point(destructor:classifierpb.Likelihood)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void Likelihood::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.target_;
+}
+
+void Likelihood::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void Likelihood::Clear() {
+// @@protoc_insertion_point(message_clear_start:classifierpb.Likelihood)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.target_ != nullptr) {
+    delete _impl_.target_;
+  }
+  _impl_.target_ = nullptr;
+  _impl_.likelihood_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* Likelihood::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // float likelihood = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 13)) {
+          _impl_.likelihood_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // .classifierpb.Target target = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_target(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* Likelihood::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:classifierpb.Likelihood)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // float likelihood = 1;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_likelihood = this->_internal_likelihood();
+  uint32_t raw_likelihood;
+  memcpy(&raw_likelihood, &tmp_likelihood, sizeof(tmp_likelihood));
+  if (raw_likelihood != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(1, this->_internal_likelihood(), target);
+  }
+
+  // .classifierpb.Target target = 2;
+  if (this->_internal_has_target()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, _Internal::target(this),
+        _Internal::target(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:classifierpb.Likelihood)
+  return target;
+}
+
+size_t Likelihood::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:classifierpb.Likelihood)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .classifierpb.Target target = 2;
+  if (this->_internal_has_target()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.target_);
+  }
+
+  // float likelihood = 1;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_likelihood = this->_internal_likelihood();
+  uint32_t raw_likelihood;
+  memcpy(&raw_likelihood, &tmp_likelihood, sizeof(tmp_likelihood));
+  if (raw_likelihood != 0) {
+    total_size += 1 + 4;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData Likelihood::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    Likelihood::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*Likelihood::GetClassData() const { return &_class_data_; }
+
+
+void Likelihood::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<Likelihood*>(&to_msg);
+  auto& from = static_cast<const Likelihood&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:classifierpb.Likelihood)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_target()) {
+    _this->_internal_mutable_target()->::classifierpb::Target::MergeFrom(
+        from._internal_target());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_likelihood = from._internal_likelihood();
+  uint32_t raw_likelihood;
+  memcpy(&raw_likelihood, &tmp_likelihood, sizeof(tmp_likelihood));
+  if (raw_likelihood != 0) {
+    _this->_internal_set_likelihood(from._internal_likelihood());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void Likelihood::CopyFrom(const Likelihood& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:classifierpb.Likelihood)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Likelihood::IsInitialized() const {
+  return true;
+}
+
+void Likelihood::InternalSwap(Likelihood* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(Likelihood, _impl_.likelihood_)
+      + sizeof(Likelihood::_impl_.likelihood_)
+      - PROTOBUF_FIELD_OFFSET(Likelihood, _impl_.target_)>(
+          reinterpret_cast<char*>(&_impl_.target_),
+          reinterpret_cast<char*>(&other->_impl_.target_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata Likelihood::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
+      file_level_metadata_classifier_2eproto[7]);
+}
+
+// ===================================================================
+
+class Likelihoods::_Internal {
+ public:
+  static const ::classifierpb::Likelihood& likelihood0(const Likelihoods* msg);
+  static const ::classifierpb::Likelihood& likelihood1(const Likelihoods* msg);
+};
+
+const ::classifierpb::Likelihood&
+Likelihoods::_Internal::likelihood0(const Likelihoods* msg) {
+  return *msg->_impl_.likelihood0_;
+}
+const ::classifierpb::Likelihood&
+Likelihoods::_Internal::likelihood1(const Likelihoods* msg) {
+  return *msg->_impl_.likelihood1_;
+}
 Likelihoods::Likelihoods(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -1885,14 +2159,17 @@ Likelihoods::Likelihoods(const Likelihoods& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   Likelihoods* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.likelihood0_){}
-    , decltype(_impl_.likelihood1_){}
+      decltype(_impl_.likelihood0_){nullptr}
+    , decltype(_impl_.likelihood1_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&_impl_.likelihood0_, &from._impl_.likelihood0_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.likelihood1_) -
-    reinterpret_cast<char*>(&_impl_.likelihood0_)) + sizeof(_impl_.likelihood1_));
+  if (from._internal_has_likelihood0()) {
+    _this->_impl_.likelihood0_ = new ::classifierpb::Likelihood(*from._impl_.likelihood0_);
+  }
+  if (from._internal_has_likelihood1()) {
+    _this->_impl_.likelihood1_ = new ::classifierpb::Likelihood(*from._impl_.likelihood1_);
+  }
   // @@protoc_insertion_point(copy_constructor:classifierpb.Likelihoods)
 }
 
@@ -1901,8 +2178,8 @@ inline void Likelihoods::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.likelihood0_){0}
-    , decltype(_impl_.likelihood1_){0}
+      decltype(_impl_.likelihood0_){nullptr}
+    , decltype(_impl_.likelihood1_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -1918,6 +2195,8 @@ Likelihoods::~Likelihoods() {
 
 inline void Likelihoods::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.likelihood0_;
+  if (this != internal_default_instance()) delete _impl_.likelihood1_;
 }
 
 void Likelihoods::SetCachedSize(int size) const {
@@ -1930,9 +2209,14 @@ void Likelihoods::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&_impl_.likelihood0_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.likelihood1_) -
-      reinterpret_cast<char*>(&_impl_.likelihood0_)) + sizeof(_impl_.likelihood1_));
+  if (GetArenaForAllocation() == nullptr && _impl_.likelihood0_ != nullptr) {
+    delete _impl_.likelihood0_;
+  }
+  _impl_.likelihood0_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.likelihood1_ != nullptr) {
+    delete _impl_.likelihood1_;
+  }
+  _impl_.likelihood1_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1942,19 +2226,19 @@ const char* Likelihoods::_InternalParse(const char* ptr, ::_pbi::ParseContext* c
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // float likelihood0 = 1;
+      // .classifierpb.Likelihood likelihood0 = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 13)) {
-          _impl_.likelihood0_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_likelihood0(), ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // float likelihood1 = 2;
+      // .classifierpb.Likelihood likelihood1 = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 21)) {
-          _impl_.likelihood1_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_likelihood1(), ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -1987,24 +2271,18 @@ uint8_t* Likelihoods::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // float likelihood0 = 1;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_likelihood0 = this->_internal_likelihood0();
-  uint32_t raw_likelihood0;
-  memcpy(&raw_likelihood0, &tmp_likelihood0, sizeof(tmp_likelihood0));
-  if (raw_likelihood0 != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(1, this->_internal_likelihood0(), target);
+  // .classifierpb.Likelihood likelihood0 = 1;
+  if (this->_internal_has_likelihood0()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::likelihood0(this),
+        _Internal::likelihood0(this).GetCachedSize(), target, stream);
   }
 
-  // float likelihood1 = 2;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_likelihood1 = this->_internal_likelihood1();
-  uint32_t raw_likelihood1;
-  memcpy(&raw_likelihood1, &tmp_likelihood1, sizeof(tmp_likelihood1));
-  if (raw_likelihood1 != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(2, this->_internal_likelihood1(), target);
+  // .classifierpb.Likelihood likelihood1 = 2;
+  if (this->_internal_has_likelihood1()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, _Internal::likelihood1(this),
+        _Internal::likelihood1(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2023,22 +2301,18 @@ size_t Likelihoods::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // float likelihood0 = 1;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_likelihood0 = this->_internal_likelihood0();
-  uint32_t raw_likelihood0;
-  memcpy(&raw_likelihood0, &tmp_likelihood0, sizeof(tmp_likelihood0));
-  if (raw_likelihood0 != 0) {
-    total_size += 1 + 4;
+  // .classifierpb.Likelihood likelihood0 = 1;
+  if (this->_internal_has_likelihood0()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.likelihood0_);
   }
 
-  // float likelihood1 = 2;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_likelihood1 = this->_internal_likelihood1();
-  uint32_t raw_likelihood1;
-  memcpy(&raw_likelihood1, &tmp_likelihood1, sizeof(tmp_likelihood1));
-  if (raw_likelihood1 != 0) {
-    total_size += 1 + 4;
+  // .classifierpb.Likelihood likelihood1 = 2;
+  if (this->_internal_has_likelihood1()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.likelihood1_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -2059,19 +2333,13 @@ void Likelihoods::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PR
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_likelihood0 = from._internal_likelihood0();
-  uint32_t raw_likelihood0;
-  memcpy(&raw_likelihood0, &tmp_likelihood0, sizeof(tmp_likelihood0));
-  if (raw_likelihood0 != 0) {
-    _this->_internal_set_likelihood0(from._internal_likelihood0());
+  if (from._internal_has_likelihood0()) {
+    _this->_internal_mutable_likelihood0()->::classifierpb::Likelihood::MergeFrom(
+        from._internal_likelihood0());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_likelihood1 = from._internal_likelihood1();
-  uint32_t raw_likelihood1;
-  memcpy(&raw_likelihood1, &tmp_likelihood1, sizeof(tmp_likelihood1));
-  if (raw_likelihood1 != 0) {
-    _this->_internal_set_likelihood1(from._internal_likelihood1());
+  if (from._internal_has_likelihood1()) {
+    _this->_internal_mutable_likelihood1()->::classifierpb::Likelihood::MergeFrom(
+        from._internal_likelihood1());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -2101,7 +2369,7 @@ void Likelihoods::InternalSwap(Likelihoods* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Likelihoods::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
-      file_level_metadata_classifier_2eproto[7]);
+      file_level_metadata_classifier_2eproto[8]);
 }
 
 // ===================================================================
@@ -2399,7 +2667,7 @@ void PredictedSampleEntry::InternalSwap(PredictedSampleEntry* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PredictedSampleEntry::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
-      file_level_metadata_classifier_2eproto[8]);
+      file_level_metadata_classifier_2eproto[9]);
 }
 
 // ===================================================================
@@ -2584,7 +2852,7 @@ void PredictedSamples::InternalSwap(PredictedSamples* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PredictedSamples::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_classifier_2eproto_getter, &descriptor_table_classifier_2eproto_once,
-      file_level_metadata_classifier_2eproto[9]);
+      file_level_metadata_classifier_2eproto[10]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -2617,6 +2885,10 @@ Arena::CreateMaybeMessage< ::classifierpb::TestSampleEntry >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::classifierpb::TestSamples*
 Arena::CreateMaybeMessage< ::classifierpb::TestSamples >(Arena* arena) {
   return Arena::CreateMessageInternal< ::classifierpb::TestSamples >(arena);
+}
+template<> PROTOBUF_NOINLINE ::classifierpb::Likelihood*
+Arena::CreateMaybeMessage< ::classifierpb::Likelihood >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::classifierpb::Likelihood >(arena);
 }
 template<> PROTOBUF_NOINLINE ::classifierpb::Likelihoods*
 Arena::CreateMaybeMessage< ::classifierpb::Likelihoods >(Arena* arena) {

@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10\x63lassifier.proto\x12\x0c\x63lassifierpb\">\n\x06Target\x12\x14\n\ntarget_int\x18\x01 \x01(\x05H\x00\x12\x14\n\ntarget_str\x18\x02 \x01(\tH\x00\x42\x08\n\x06target\"F\n\x0c\x44\x61tasetEntry\x12\x10\n\x08\x66\x65\x61tures\x18\x01 \x03(\x02\x12$\n\x06target\x18\x02 \x01(\x0b\x32\x14.classifierpb.Target\"6\n\x07\x44\x61taset\x12+\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x1a.classifierpb.DatasetEntry\"_\n\x12SupportSampleEntry\x12\x11\n\tsample_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12$\n\x06target\x18\x03 \x01(\x0b\x32\x14.classifierpb.Target\"C\n\x0eSupportSamples\x12\x31\n\x07\x65ntries\x18\x01 \x03(\x0b\x32 .classifierpb.SupportSampleEntry\"b\n\x0fTestSampleEntry\x12\x11\n\tsample_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12*\n\x0cground_truth\x18\x03 \x01(\x0b\x32\x14.classifierpb.Target\"=\n\x0bTestSamples\x12.\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x1d.classifierpb.TestSampleEntry\"7\n\x0bLikelihoods\x12\x13\n\x0blikelihood0\x18\x01 \x01(\x02\x12\x13\n\x0blikelihood1\x18\x02 \x01(\x02\"\x91\x01\n\x14PredictedSampleEntry\x12\x11\n\tsample_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12$\n\x06target\x18\x03 \x01(\x0b\x32\x14.classifierpb.Target\x12.\n\x0blikelihoods\x18\x04 \x01(\x0b\x32\x19.classifierpb.Likelihoods\"G\n\x10PredictedSamples\x12\x33\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\".classifierpb.PredictedSampleEntryb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10\x63lassifier.proto\x12\x0c\x63lassifierpb\">\n\x06Target\x12\x14\n\ntarget_int\x18\x01 \x01(\x05H\x00\x12\x14\n\ntarget_str\x18\x02 \x01(\tH\x00\x42\x08\n\x06target\"F\n\x0c\x44\x61tasetEntry\x12\x10\n\x08\x66\x65\x61tures\x18\x01 \x03(\x02\x12$\n\x06target\x18\x02 \x01(\x0b\x32\x14.classifierpb.Target\"6\n\x07\x44\x61taset\x12+\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x1a.classifierpb.DatasetEntry\"_\n\x12SupportSampleEntry\x12\x11\n\tsample_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12$\n\x06target\x18\x03 \x01(\x0b\x32\x14.classifierpb.Target\"C\n\x0eSupportSamples\x12\x31\n\x07\x65ntries\x18\x01 \x03(\x0b\x32 .classifierpb.SupportSampleEntry\"b\n\x0fTestSampleEntry\x12\x11\n\tsample_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12*\n\x0cground_truth\x18\x03 \x01(\x0b\x32\x14.classifierpb.Target\"=\n\x0bTestSamples\x12.\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x1d.classifierpb.TestSampleEntry\"F\n\nLikelihood\x12\x12\n\nlikelihood\x18\x01 \x01(\x02\x12$\n\x06target\x18\x02 \x01(\x0b\x32\x14.classifierpb.Target\"k\n\x0bLikelihoods\x12-\n\x0blikelihood0\x18\x01 \x01(\x0b\x32\x18.classifierpb.Likelihood\x12-\n\x0blikelihood1\x18\x02 \x01(\x0b\x32\x18.classifierpb.Likelihood\"\x91\x01\n\x14PredictedSampleEntry\x12\x11\n\tsample_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66\x65\x61tures\x18\x02 \x03(\x02\x12$\n\x06target\x18\x03 \x01(\x0b\x32\x14.classifierpb.Target\x12.\n\x0blikelihoods\x18\x04 \x01(\x0b\x32\x19.classifierpb.Likelihoods\"G\n\x10PredictedSamples\x12\x33\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\".classifierpb.PredictedSampleEntryb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'classifier_pb2', globals())
@@ -34,10 +34,12 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _TESTSAMPLEENTRY._serialized_end=490
   _TESTSAMPLES._serialized_start=492
   _TESTSAMPLES._serialized_end=553
-  _LIKELIHOODS._serialized_start=555
-  _LIKELIHOODS._serialized_end=610
-  _PREDICTEDSAMPLEENTRY._serialized_start=613
-  _PREDICTEDSAMPLEENTRY._serialized_end=758
-  _PREDICTEDSAMPLES._serialized_start=760
-  _PREDICTEDSAMPLES._serialized_end=831
+  _LIKELIHOOD._serialized_start=555
+  _LIKELIHOOD._serialized_end=625
+  _LIKELIHOODS._serialized_start=627
+  _LIKELIHOODS._serialized_end=734
+  _PREDICTEDSAMPLEENTRY._serialized_start=737
+  _PREDICTEDSAMPLEENTRY._serialized_end=882
+  _PREDICTEDSAMPLES._serialized_start=884
+  _PREDICTEDSAMPLES._serialized_end=955
 # @@protoc_insertion_point(module_scope)

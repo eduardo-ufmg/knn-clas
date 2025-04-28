@@ -82,7 +82,8 @@ public:
 };
 
 using TestSamples = std::vector<TestSample>;
-using Likelihoods = std::pair<float, float>;
+using Likelihood = std::pair<float, Target>;
+using Likelihoods = std::pair<Likelihood, Likelihood>;
 
 class PredictedSample : public BaseSample
 {
