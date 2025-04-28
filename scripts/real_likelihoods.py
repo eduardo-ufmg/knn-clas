@@ -138,7 +138,7 @@ def main():
     # Save plot
     plot_dir = script_dir / "comparison_results"
     plot_dir.mkdir(exist_ok=True)
-    plot_path = plot_dir / f"{name}_likelihood_scatter_k1-3-5.png"
+    plot_path = plot_dir / f"{name}_likelihood.png"
     plt.savefig(plot_path)
     plt.close()
     print(f"Saved scatter plot to {plot_path}")
