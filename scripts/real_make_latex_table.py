@@ -166,7 +166,7 @@ def csv_to_separate_latex_tables(metadata_csv_path, results_csv_path, output_bas
   }
 
   for key, content in output_files.items():
-    file_path = output_path.with_name(f"{output_path.stem}_{key}.tex")
+    file_path = output_path.with_name(f"{key}.tex")
     with open(file_path, 'w') as f:
       f.write("\n".join(content))
 

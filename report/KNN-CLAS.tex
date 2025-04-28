@@ -67,7 +67,7 @@ By restricting neighbors to SEs and employing multi-neighbor voting, KNN-CLAS mi
 
 \subsection{Datasets and Preprocessing}
 
-\input{../scripts/comparison_results/setsresults_metadata.tex}
+\input{../scripts/comparison_results/metadata.tex}
 Eight benchmark datasets from the UCI Machine Learning Repository \cite{uci_breast_cancer, uci_sonar, uci_spect_heart} were selected to evaluate KNN-CLAS. These include Breast Cancer, Pima Diabetes, Haberman Survival, Banknote Authentication, Sonar, Binary Digits (0 and 1), Ionosphere, and SPECT Heart. Table \ref{tab:metadata} summarizes their characteristics, such as sample count, feature dimensionality, class imbalance ratio, and feature overlap metrics. The preprocessing pipeline consisted of four stages:
 
 \begin{enumerate}
@@ -106,19 +106,19 @@ KNN-CLAS retains all inter-class SEs from the GG during training, avoiding verte
 \section{Results}
 
 \subsection{Accuracy Comparison}
-\input{../scripts/comparison_results/setsresults_accuracy.tex}
+\input{../scripts/comparison_results/accuracy.tex}
 Table \ref{tab:accuracy} demonstrates that KNN-CLAS achieves accuracy comparable to NN-CLAS. Notably, it outperforms NN-CLAS on datasets like Sonar (0.89 vs. 0.73) and SPECT Heart (0.86 vs. 0.68), where multi-neighbor voting improves robustness to ambiguous boundaries.
 
 \subsection{Training and Prediction Times}
-\input{../scripts/comparison_results/setsresults_timing.tex}
+\input{../scripts/comparison_results/timing.tex}
 Table \ref{tab:timing} highlights the significant reduction in training time achieved by KNN-CLAS compared to NN-CLAS. For instance, in the Banknote dataset, KNN-CLAS reduces training time from 434.70 ms to 75.00 ms, making it more suitable for embedded systems.
 
 \subsection{Support Samples}
-\input{../scripts/comparison_results/setsresults_support.tex}
+\input{../scripts/comparison_results/support.tex}
 Table \ref{tab:support} compares the number of support samples used by NN-CLAS (filtered vertices) and KNN-CLAS (unfiltered SEs). While KNN-CLAS retains more support samples than NN-CLAS (e.g., 252 vs. 111 for Ionosphere), these correspond to inter-class edges that inherently encode boundary information. The increase in memory usage is offset by the elimination of filtering overhead.
 
 \subsection{Dataset Characteristics}
-\input{../scripts/comparison_results/setsresults_statistics.tex}
+\input{../scripts/comparison_results/statistics.tex}
 Table \ref{tab:statistics} summarizes the dataset characteristics, including class imbalance and feature overlap. These factors influence the performance of both methods, with KNN-CLAS showing robustness to class imbalance.
 
 \subsection{Likelihood}
