@@ -1,2 +1,2 @@
-# nn-clas-study
-Likelihood-like space, hyperparameters and hardware implementation
+# knn-clas
+proposes and evaluate an alternative for nn-clas
