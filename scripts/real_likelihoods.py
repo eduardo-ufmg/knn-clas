@@ -23,7 +23,7 @@ def main():
     "SPECT Heart"
   ]
 
-  k_values = [1, 3, 5]
+  k = 5
 
   for name in datasets:
     print(f"Processing dataset: {name}")
@@ -79,55 +79,37 @@ def main():
     label_encoder = LabelEncoder()
     y_true_encoded = label_encoder.fit_transform(y_true)
 
-    # Process each k value
-    all_likelihoods = []
-    for k in k_values:
-      likelihoods_path = data_dir / f"{name}_knn-clas_complete_likelihoods_k{k}.pb"
-      
-      # Compute likelihoods using knn-like
-      try:
-        subprocess.run(
-          [str(knn_like_bin), str(test_path), str(support_path), str(likelihoods_path), str(k)],
-          check=True,
-          stdout=subprocess.DEVNULL,
-          stderr=subprocess.DEVNULL
-        )
-      except subprocess.CalledProcessError as e:
-        print(f"Error computing likelihoods for {name} k={k}: {e}")
-        all_likelihoods = None
-        break
-      except FileNotFoundError as e:
-        print(f"Binary not found: {e}")
-        all_likelihoods = None
-        break
+    likelihoods_path = data_dir / f"{name}_knn-clas_complete_likelihoods_k{k}.pb"
+    
+    # Compute likelihoods using knn-like
+    try:
+      subprocess.run(
+        [str(knn_like_bin), str(test_path), str(support_path), str(likelihoods_path), str(k)],
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+      )
+    except subprocess.CalledProcessError as e:
+      raise RuntimeError(f"Error generating likelihoods for {name}: {e}")
+    except FileNotFoundError as e:
+      raise RuntimeError(f"Binary not found: {e}")
 
-      # Load predicted likelihoods
-      predicted_samples = load_predicted_samples(str(likelihoods_path))
-      if not predicted_samples:
-        print(f"Failed to load predicted samples for {name} k={k}")
-        all_likelihoods = None
-        break
+    # Load predicted likelihoods
+    predicted_samples = load_predicted_samples(str(likelihoods_path))
+    if not predicted_samples:
+      raise RuntimeError(f"Failed to load predicted samples for {name}")
 
-      # Extract likelihoods
-      likelihood0 = []
-      likelihood1 = []
-      for pred_entry in predicted_samples.entries:
-        likelihood0.append(pred_entry.likelihoods.likelihood0.likelihood)
-        likelihood1.append(pred_entry.likelihoods.likelihood1.likelihood)
-      
-      all_likelihoods.append((k, likelihood0, likelihood1))
-
-    if all_likelihoods is None or len(all_likelihoods) != 3:
-      print(f"Skipping {name} due to errors in processing some k values")
-      continue
-
-    # Extract likelihoods for k=5
-    k5_likelihoods = next((l0, l1) for k, l0, l1 in all_likelihoods if k == 5)
+    # Extract likelihoods
+    likelihood0 = []
+    likelihood1 = []
+    for pred_entry in predicted_samples.entries:
+      likelihood0.append(pred_entry.likelihoods.likelihood0.likelihood)
+      likelihood1.append(pred_entry.likelihoods.likelihood1.likelihood)
 
     # Create a single plot
     plt.figure()
-    plt.scatter(k5_likelihoods[0], k5_likelihoods[1], c=y_true_encoded)
-    plt.title(f'Likelihood Scatter Plot for {name} (k=5)', fontsize=14)
+    plt.scatter(likelihood0, likelihood1, c=y_true_encoded)
+    plt.title(f'Likelihood Scatter Plot for {name} (k={k})', fontsize=14)
     plt.xlabel(target_labels[0])
     plt.ylabel(target_labels[1])
     plt.grid(True)
@@ -135,7 +117,7 @@ def main():
     # Save plot
     plot_dir = script_dir / "comparison_results"
     plot_dir.mkdir(exist_ok=True)
-    plot_path = plot_dir / f"{name}_likelihood.png"
+    plot_path = plot_dir / f"{name}_likelihoodk{k}.png"
     plt.savefig(plot_path)
     plt.close()
     print(f"Saved scatter plot to {plot_path}")

@@ -1,5 +1,5 @@
 {
-  "cmake.sourceDirectory": "/home/eduardo/ufmg/eda/nn-clas-study",
+  "cmake.sourceDirectory": "/home/eduardo/ufmg/eda/knn-clas",
   "files.associations": {
     "limits": "cpp",
     "*.tcc": "cpp",
