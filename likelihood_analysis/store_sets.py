@@ -4,12 +4,21 @@ import os
 
 from sklearn.datasets import load_breast_cancer, load_digits, fetch_openml
 
-def save_dataset(X, y, name):
-  """Helper function to save X and y into the ./sets directory."""
-  base_path = os.path.join("./sets", name)
-  os.makedirs(base_path, exist_ok=True)
-  np.save(os.path.join(base_path, "X.npy"), X)
-  np.save(os.path.join(base_path, "y.npy"), y)
+def save_dataset(X: np.ndarray, y: np.ndarray, name: str):
+  """Helper function to save X and y into the ./sets directory.
+  Parameters
+  X (np.ndarray): Samples (n_samples, n_features).
+  y (np.ndarray): Labels (n_samples,).
+  name (str): Base filename (without extension) to use under ./sets/.
+  """
+
+  outdir = './sets'
+  os.makedirs(outdir, exist_ok=True)
+
+  filepath = os.path.join(outdir, f'{name}.npz')
+
+  np.savez_compressed(filepath, X=X, y=y)
+
 
 def load_breast_cancer_dataset():
   data = load_breast_cancer(return_X_y=False)
