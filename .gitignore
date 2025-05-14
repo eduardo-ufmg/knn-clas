@@ -530,5 +530,5 @@ TSWLatexianTemp*
 
 data/
 bin/
-scripts/pvenv/
 likelihood_analysis/sets/
+**/pvenv/**
