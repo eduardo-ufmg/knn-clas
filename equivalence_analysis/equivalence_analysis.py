@@ -7,19 +7,17 @@ from enum import IntEnum
 from typing import Tuple, Self
 
 from scipy.spatial.distance import cdist, squareform, pdist
-from scipy.stats import wilcoxon, ttest_rel
+from scipy.stats import wilcoxon, ttest_rel # type: ignore
 
 from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
-from sklearn.utils.validation import check_X_y, check_is_fitted
+from sklearn.utils.validation import check_X_y, check_is_fitted # type: ignore
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import KFold
 from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score, f1_score
+    accuracy_score, precision_score, recall_score, f1_score # type: ignore
 )
-
-import ot
 
 np.random.seed(0)
 
@@ -198,7 +196,6 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
         print(f"\n=== Processing {dname} ===")
         X = data['X']
         y = data['y']
-        start_time = time.time()
         
         try:
             cv_metrics = {
@@ -229,8 +226,14 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
                     
             wilcoxon_results = {}
             for metric in ['accuracy', 'precision', 'recall', 'f1']:
-                stat, pval = wilcoxon(cv_metrics['KNN'][metric], cv_metrics['KNN_CLAS'][metric])
-                wilcoxon_results[metric] = {'statistic': stat, 'p_value': pval}
+                a = np.array(cv_metrics['KNN'][metric])
+                b = np.array(cv_metrics['KNN_CLAS'][metric])
+                differences = a - b
+                if np.all(differences == 0):
+                    wilcoxon_results[metric] = {'statistic': 0.0, 'p_value': 1.0}
+                else:
+                    stat, pval = wilcoxon(differences)
+                    wilcoxon_results[metric] = {'statistic': stat, 'p_value': pval}
 
             ttest_rel_results = {}
             for metric in ['accuracy', 'precision', 'recall', 'f1']:
@@ -252,8 +255,7 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
             results[dname] = {
                 'cv_metrics': cv_metrics,
                 'statistical_tests': wilcoxon_results,
-                'ttest_rel_results': ttest_rel_results,
-                'duration': time.time() - start_time
+                'ttest_rel_results': ttest_rel_results
             }
             
         except Exception as e:
@@ -277,7 +279,6 @@ def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
         print(f"\n=== Analyzing {dname} ===")
         X = data['X']
         y = data['y']
-        start_time = time.time()
         
         try:
             knn_pipe = Pipeline([
@@ -295,16 +296,86 @@ def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
             q0_knn, q1_knn = knn_pipe.named_steps['classifier'].likelihood_score(X_transformed)
             q0_clas, q1_clas = knn_clas_pipe.named_steps['classifier'].likelihood_score(X_transformed)
             
-            centroid_knn = np.array([q0_knn.mean(), q1_knn.mean()])
-            centroid_clas = np.array([q0_clas.mean(), q1_clas.mean()])
-            centroid_dist = np.linalg.norm(centroid_knn - centroid_clas)
-            M = cdist(np.column_stack([q0_knn, q1_knn]), np.column_stack([q0_clas, q1_clas]))
-            emd = ot.emd2(np.ones(len(X))/len(X), np.ones(len(X))/len(X), M)
+            # Compute class masks
+            classifier = knn_pipe.named_steps['classifier']
+            original_class0 = classifier.inverse_map[-1]
+            original_class1 = classifier.inverse_map[1]
+            class0_mask = (y == original_class0)
+            class1_mask = (y == original_class1)
+            
+            if not (np.any(class0_mask) and np.any(class1_mask)):
+                raise ValueError("Both classes must be present for analysis")
+            
+            # 1. Centroids distance
+            centroid0 = X_transformed[class0_mask].mean(axis=0)
+            centroid1 = X_transformed[class1_mask].mean(axis=0)
+            centroid_distance = float(np.linalg.norm(centroid0 - centroid1))
+            
+            # 2. Mean distance between points of different classes
+            cross_dists = cdist(X_transformed[class0_mask], X_transformed[class1_mask], 'euclidean')
+            mean_cross_dist = float(cross_dists.mean())
+            
+            # 3. Mean distance between points of the same class
+            def compute_intra_stats(X_class):
+                if len(X_class) < 2:
+                    return 0.0, 0.0
+                dists = pdist(X_class, 'euclidean')
+                return float(dists.mean()), float(dists.var())
+            
+            intra_mean0, intra_var0 = compute_intra_stats(X_transformed[class0_mask])
+            intra_mean1, intra_var1 = compute_intra_stats(X_transformed[class1_mask])
+            mean_intra = (intra_mean0 + intra_mean1) / 2
+            
+            # 4. Mean distance to centroid
+            def centroid_distances(X_class, centroid):
+                if len(X_class) == 0:
+                    return 0.0
+                return np.linalg.norm(X_class - centroid, axis=1).mean()
+            
+            centroid_dist0 = centroid_distances(X_transformed[class0_mask], centroid0)
+            centroid_dist1 = centroid_distances(X_transformed[class1_mask], centroid1)
+            mean_centroid_dist = (centroid_dist0 + centroid_dist1) / 2
+            
+            # 5. Variance of intra-class distances
+            var_intra = (intra_var0 + intra_var1) / 2
+            
+            # 6. Variance for Q0 and Q1 per class
+            q_metrics = {}
+            for model_name, q0, q1 in [('KNN', q0_knn, q1_knn), ('KNN_CLAS', q0_clas, q1_clas)]:
+                for c in [0, 1]:
+                    mask = (y == c)
+                    q0_vals = q0[mask]
+                    q1_vals = q1[mask]
+                    
+                    var_q0 = float(np.var(q0_vals)) if len(q0_vals) >= 2 else None
+                    var_q1 = float(np.var(q1_vals)) if len(q1_vals) >= 2 else None
+                    
+                    q_metrics[f'{model_name}_class{c}_var_q0'] = var_q0
+                    q_metrics[f'{model_name}_class{c}_var_q1'] = var_q1
+            
+            # 8. Bhattacharyya's distance
+            try:
+                cov0 = np.cov(X_transformed[class0_mask], rowvar=False)
+                cov1 = np.cov(X_transformed[class1_mask], rowvar=False)
+                avg_cov = (cov0 + cov1) / 2
+                mean_diff = centroid1 - centroid0
+                
+                term1 = 0.125 * mean_diff @ np.linalg.pinv(avg_cov) @ mean_diff
+                det_avg = np.linalg.det(avg_cov)
+                det_prod = np.sqrt(np.linalg.det(cov0) * np.linalg.det(cov1))
+                term2 = 0.5 * np.log(det_avg / det_prod) if det_prod > 0 else np.nan
+                bhatt_distance = float(term1 + term2) if not np.isnan(term2) else None
+            except np.linalg.LinAlgError:
+                bhatt_distance = None
             
             spatial_results[dname] = {
-                'centroid_distance': centroid_dist,
-                'earth_movers_distance': emd,
-                'duration': time.time() - start_time
+                'centroid_distance': centroid_distance,
+                'mean_cross_class_distance': mean_cross_dist,
+                'mean_intra_class_distance': mean_intra,
+                'mean_centroid_distance': mean_centroid_dist,
+                'variance_intra_class_distances': var_intra,
+                'bhattacharyya_distance': bhatt_distance,
+                **q_metrics
             }
             
         except Exception as e:

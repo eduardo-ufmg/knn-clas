@@ -530,5 +530,7 @@ TSWLatexianTemp*
 
 data/
 bin/
-likelihood_analysis/sets/
 **/pvenv/**
+**/typings/**
+**/sets/**
+**/output/**
