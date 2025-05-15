@@ -1,0 +1,42 @@
+{
+  "breast_cancer": {
+    "centroid_distance": 0.015610975157822353,
+    "earth_movers_distance": 0.10911620869970681,
+    "duration": 0.7693483829498291
+  },
+  "pima_diabetes": {
+    "centroid_distance": 0.0048604502334955715,
+    "earth_movers_distance": 0.0266342354809398,
+    "duration": 1.292356014251709
+  },
+  "spect_heart": {
+    "centroid_distance": 0.007313123754121697,
+    "earth_movers_distance": 0.07576412255379272,
+    "duration": 3.177280902862549
+  },
+  "banknote_authentication": {
+    "centroid_distance": 0.03791089955108964,
+    "earth_movers_distance": 0.23445146451945625,
+    "duration": 4.7881834506988525
+  },
+  "digits_binary": {
+    "centroid_distance": 0.0027438394525581603,
+    "earth_movers_distance": 0.03931695330158307,
+    "duration": 3.275129556655884
+  },
+  "ionosphere": {
+    "centroid_distance": 0.014912623015311651,
+    "earth_movers_distance": 0.09295826090503388,
+    "duration": 2.0891904830932617
+  },
+  "haberman_survival": {
+    "centroid_distance": 0.04327403735453462,
+    "earth_movers_distance": 0.1429166929569546,
+    "duration": 0.14252662658691406
+  },
+  "sonar": {
+    "centroid_distance": 0.0,
+    "earth_movers_distance": 0.0,
+    "duration": 0.755103349685669
+  }
+}
