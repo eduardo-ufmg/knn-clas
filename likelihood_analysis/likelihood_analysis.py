@@ -1,7 +1,15 @@
+import os
+import time
+import json
 import numpy as np
+
 from enum import IntEnum
-from scipy.spatial.distance import cdist
-from sklearn.base import BaseEstimator, ClassifierMixin
+from typing import Tuple, Self
+
+from scipy.spatial.distance import cdist, squareform, pdist
+from scipy.stats import wilcoxon, ttest_rel
+
+from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
 from sklearn.utils.validation import check_X_y, check_is_fitted
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.preprocessing import StandardScaler
@@ -10,17 +18,8 @@ from sklearn.model_selection import KFold
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score
 )
-from sklearn.utils import resample
-from scipy.stats import wilcoxon, ttest_rel
-from functools import partial
-from tqdm import tqdm
+
 import ot
-import json
-import time
-import os
-from typing import Tuple, Self
-from scipy.spatial.distance import squareform, pdist
-from sklearn.base import BaseEstimator, TransformerMixin
 
 np.random.seed(0)
 
@@ -28,10 +27,6 @@ class Adjacency(IntEnum):
     NOT_ADJACENT = 0
     GABRIEL_EDGE = 1
     SUPPORT_EDGE = 2
-
-def sq_distance(a: np.ndarray, b: np.ndarray) -> float:
-    """Squared Euclidean distance between two vectors."""
-    return np.sum((a - b) ** 2)
 
 def vectorized_kernel(X: np.ndarray, Y: np.ndarray, cov: np.ndarray) -> np.ndarray:
     """Vectorized Gaussian kernel computation."""
@@ -207,8 +202,8 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
         
         try:
             cv_metrics = {
-                'KNN': {'accuracy': [], 'precision': [], 'recall': [], 'f1': []},
-                'KNN_CLAS': {'accuracy': [], 'precision': [], 'recall': [], 'f1': []}
+                'KNN': {'accuracy': [], 'precision': [], 'recall': [], 'f1': [], 'expert_count': []},
+                'KNN_CLAS': {'accuracy': [], 'precision': [], 'recall': [], 'f1': [], 'expert_count': []}
             }
             
             for train_idx, test_idx in KFold(n_splits=30).split(X):
@@ -226,6 +221,11 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
                     cv_metrics[mname]['precision'].append(precision_score(y_test, preds, average='weighted', zero_division=0))
                     cv_metrics[mname]['recall'].append(recall_score(y_test, preds, average='weighted', zero_division=0))
                     cv_metrics[mname]['f1'].append(f1_score(y_test, preds, average='weighted', zero_division=0))
+
+                    if mname == 'KNN_CLAS':
+                        cv_metrics[mname]['expert_count'].append(model.named_steps['classifier'].expert_X_.shape[0])
+                    else:
+                        cv_metrics[mname]['expert_count'].append(model.named_steps['classifier'].X_train_.shape[0])
                     
             wilcoxon_results = {}
             for metric in ['accuracy', 'precision', 'recall', 'f1']:
