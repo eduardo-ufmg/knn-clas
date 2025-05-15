@@ -1,0 +1,170 @@
+{
+  "breast_cancer": {
+    "dataset": "breast_cancer",
+    "start_time": "2025-05-15 09:06:31",
+    "spatial_metrics": {
+      "centroid_distance": 0.09097780589849647,
+      "mahalanobis_distance": 0.9187934143561373,
+      "earth_movers_distance": 0.046533249253506895,
+      "knn_mean": [
+        0.27430626716872264,
+        0.15472073128432007
+      ],
+      "knn_clas_mean": [
+        0.19407149755254763,
+        0.11183317002532776
+      ]
+    },
+    "completed": true,
+    "error": null,
+    "end_time": "2025-05-15 09:06:33",
+    "duration": 1.8827323913574219
+  },
+  "pima_diabetes": {
+    "dataset": "pima_diabetes",
+    "start_time": "2025-05-15 09:06:33",
+    "spatial_metrics": {
+      "centroid_distance": 9.144821868329253e-05,
+      "mahalanobis_distance": 0.0938491384723969,
+      "earth_movers_distance": 2.4171857252811545e-08,
+      "knn_mean": [
+        0.0009663103707470136,
+        0.00216475808846441
+      ],
+      "knn_clas_mean": [
+        0.0009684788769779939,
+        0.0020733355842268127
+      ]
+    },
+    "completed": true,
+    "error": null,
+    "end_time": "2025-05-15 09:06:36",
+    "duration": 2.6287314891815186
+  },
+  "spect_heart": {
+    "dataset": "spect_heart",
+    "start_time": "2025-05-15 09:06:36",
+    "spatial_metrics": {
+      "centroid_distance": 7.568777735035701e-09,
+      "mahalanobis_distance": 0.1656463481390334,
+      "earth_movers_distance": 9.057528769111962e-15,
+      "knn_mean": [
+        8.873772385891039e-08,
+        4.567419679659723e-08
+      ],
+      "knn_clas_mean": [
+        8.116894612387468e-08,
+        4.567419679659723e-08
+      ]
+    },
+    "completed": true,
+    "error": null,
+    "end_time": "2025-05-15 09:06:42",
+    "duration": 6.367138624191284
+  },
+  "banknote_authentication": {
+    "dataset": "banknote_authentication",
+    "start_time": "2025-05-15 09:06:42",
+    "spatial_metrics": {
+      "centroid_distance": 0.05320982139353098,
+      "mahalanobis_distance": 1.9610877167185692,
+      "earth_movers_distance": 0.007386464395427815,
+      "knn_mean": [
+        0.13180198274251526,
+        0.16229242390314946
+      ],
+      "knn_clas_mean": [
+        0.10494744032800689,
+        0.11635639616414227
+      ]
+    },
+    "completed": true,
+    "error": null,
+    "end_time": "2025-05-15 09:06:51",
+    "duration": 8.422261238098145
+  },
+  "digits_binary": {
+    "dataset": "digits_binary",
+    "start_time": "2025-05-15 09:06:51",
+    "spatial_metrics": {
+      "centroid_distance": 1.725927115815115e-07,
+      "mahalanobis_distance": 0.4946262111844337,
+      "earth_movers_distance": 5.413919931834348e-13,
+      "knn_mean": [
+        1.107603240161362e-06,
+        1.133711582315831e-06
+      ],
+      "knn_clas_mean": [
+        9.955985132683024e-07,
+        1.002398272843143e-06
+      ]
+    },
+    "completed": true,
+    "error": null,
+    "end_time": "2025-05-15 09:06:57",
+    "duration": 6.12173056602478
+  },
+  "ionosphere": {
+    "dataset": "ionosphere",
+    "start_time": "2025-05-15 09:06:57",
+    "spatial_metrics": {
+      "centroid_distance": 1.7580266030731122e-09,
+      "mahalanobis_distance": 0.3148659667747093,
+      "earth_movers_distance": 9.220579759104301e-17,
+      "knn_mean": [
+        2.3508234534574754e-09,
+        8.995330581088505e-09
+      ],
+      "knn_clas_mean": [
+        2.272461931371007e-09,
+        7.239051272729759e-09
+      ]
+    },
+    "completed": true,
+    "error": null,
+    "end_time": "2025-05-15 09:06:58",
+    "duration": 1.1831860542297363
+  },
+  "haberman_survival": {
+    "dataset": "haberman_survival",
+    "start_time": "2025-05-15 09:06:58",
+    "spatial_metrics": {
+      "centroid_distance": 0.016184381234764567,
+      "mahalanobis_distance": 0.1767068673451198,
+      "earth_movers_distance": 0.0010623722583937788,
+      "knn_mean": [
+        0.07101778888341262,
+        0.22196751298314885
+      ],
+      "knn_clas_mean": [
+        0.07994073072366564,
+        0.20846509450097828
+      ]
+    },
+    "completed": true,
+    "error": null,
+    "end_time": "2025-05-15 09:06:58",
+    "duration": 0.352907657623291
+  },
+  "sonar": {
+    "dataset": "sonar",
+    "start_time": "2025-05-15 09:06:58",
+    "spatial_metrics": {
+      "centroid_distance": 0.0,
+      "mahalanobis_distance": 0.0,
+      "earth_movers_distance": 7.601720633629458e-18,
+      "knn_mean": [
+        1.2218920994364752e-06,
+        1.0675554510173667e-06
+      ],
+      "knn_clas_mean": [
+        1.2218920994364752e-06,
+        1.0675554510173667e-06
+      ]
+    },
+    "completed": true,
+    "error": null,
+    "end_time": "2025-05-15 09:07:02",
+    "duration": 3.376772880554199
+  }
+}
