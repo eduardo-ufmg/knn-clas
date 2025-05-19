@@ -62,21 +62,11 @@ def support_graph(gabriel_adj: np.ndarray, y: np.ndarray) -> np.ndarray:
 class KNN(BaseEstimator, ClassifierMixin):
     def __init__(self, k: int = 3):
         self.k = k
-        self.label_map = {}
-        self.inverse_map = {}
-
-    def _validate_labels(self, y: np.ndarray) -> None:
-        unique = np.unique(y)
-        if len(unique) != 2:
-            raise ValueError("KNN currently only supports binary classification")
-        self.label_map = {unique[0]: -1, unique[1]: 1}
-        self.inverse_map = {-1: unique[0], 1: unique[1]}
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> Self:
         X, y = check_X_y(X, y)
-        self._validate_labels(y)
         self.X_train_ = X
-        self.y_train_ = np.vectorize(self.label_map.get)(y)
+        self.y_train_ = y
         self.cov_ = np.cov(X, rowvar=False) + 1e-6 * np.eye(X.shape[1])
         return self
 
@@ -87,9 +77,9 @@ class KNN(BaseEstimator, ClassifierMixin):
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
         
         kernels = vectorized_kernel(X[:, np.newaxis], self.X_train_[nearest], self.cov_)
-        scores = np.sum(kernels * self.y_train_[nearest], axis=2)
+        scores = np.sum(kernels * self.y_train_[nearest], axis=1)
         
-        return np.vectorize(self.inverse_map.get)(np.where(scores.mean(1) > 0, 1, -1))
+        return np.where(scores.mean(1) > 0, 1, -1)
 
     def likelihood_score(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         check_is_fitted(self)
@@ -101,8 +91,9 @@ class KNN(BaseEstimator, ClassifierMixin):
         q1 = np.sum(kernels * (self.y_train_[nearest] == 1), axis=1)
 
         q_total = q0 + q1
-        q0_norm = q0 / q_total
-        q1_norm = q1 / q_total
+        q_sum = np.sum(q_total)
+        q0_norm = q0 / q_sum
+        q1_norm = q1 / q_sum
         
         return q0_norm, q1_norm
 
@@ -125,7 +116,6 @@ class KNN_CLAS(KNN):
     def fit(self, X: np.ndarray, y: np.ndarray) -> Self:
         super().fit(X, y)
         self.expert_X_, self.expert_y_ = self._get_experts(X, y)
-        self.expert_y_ = np.vectorize(self.label_map.get)(self.expert_y_)
         return self
 
     def predict(self, X: np.ndarray) -> np.ndarray:
@@ -134,9 +124,9 @@ class KNN_CLAS(KNN):
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
         
         kernels = vectorized_kernel(X[:, np.newaxis], self.expert_X_[nearest], self.cov_)
-        scores = np.sum(kernels * self.expert_y_[nearest], axis=2)
+        scores = np.sum(kernels * self.expert_y_[nearest], axis=1)
         
-        return np.vectorize(self.inverse_map.get)(np.where(scores.mean(1) > 0, 1, -1))
+        return np.where(scores.mean(1) > 0, 1, -1)
     
     def likelihood_score(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         check_is_fitted(self)
@@ -147,8 +137,9 @@ class KNN_CLAS(KNN):
         q1 = np.sum(kernels * (self.expert_y_[nearest] == 1), axis=1)
 
         q_total = q0 + q1
-        q0_norm = q0 / q_total
-        q1_norm = q1 / q_total
+        q_sum = np.sum(q_total)
+        q0_norm = q0 / q_sum
+        q1_norm = q1 / q_sum
         
         return q0_norm, q1_norm
 
@@ -296,12 +287,9 @@ def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
             q0_knn, q1_knn = knn_pipe.named_steps['classifier'].likelihood_score(X_transformed)
             q0_clas, q1_clas = knn_clas_pipe.named_steps['classifier'].likelihood_score(X_transformed)
             
-            # Compute class masks
-            classifier = knn_pipe.named_steps['classifier']
-            original_class0 = classifier.inverse_map[-1]
-            original_class1 = classifier.inverse_map[1]
-            class0_mask = (y == original_class0)
-            class1_mask = (y == original_class1)
+            # Compute class masks using direct labels
+            class0_mask = (y == -1)
+            class1_mask = (y == 1)
             
             if not (np.any(class0_mask) and np.any(class1_mask)):
                 raise ValueError("Both classes must be present for analysis")
@@ -342,7 +330,7 @@ def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
             # 6. Variance for Q0 and Q1 per class
             q_metrics = {}
             for model_name, q0, q1 in [('KNN', q0_knn, q1_knn), ('KNN_CLAS', q0_clas, q1_clas)]:
-                for c in [0, 1]:
+                for c in [-1, 1]:
                     mask = (y == c)
                     q0_vals = q0[mask]
                     q1_vals = q1[mask]
