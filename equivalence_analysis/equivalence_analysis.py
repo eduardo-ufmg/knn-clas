@@ -6,7 +6,7 @@ import numpy as np
 from enum import IntEnum
 
 from typing import (
-    Tuple, Self, Any, Dict, List, cast, Optional, TypedDict
+    Tuple, Self, Any, Dict, List, cast, Optional, TypedDict, NamedTuple
 )
 
 from numpy.typing import NDArray
@@ -122,7 +122,7 @@ class KNN_CLAS(KNN):
         expert_mask = np.any(support_adj == Adjacency.SUPPORT_EDGE, axis=1)
         
         if not np.any(expert_mask):
-            print("No support edges found; using all points as experts.")
+            raise ValueError("No experts found in the dataset.")
             return X, y
         
         return X[expert_mask], y[expert_mask]
@@ -213,11 +213,15 @@ class KNNResults(TypedDict):
     ttest_rel: Dict[str, TTestResult]
 
 class StatisticalResults(TypedDict):
-    [key: str]: Dict[str, KNNResults]  # type: ignore
+    results: Dict[str, KNNResults]
+
+class TTestRelResult(NamedTuple):
+    statistic: float
+    pvalue: float
 
 def run_statistical_validation(datasets: Dict[str, DatasetType], output_dir: str = 'output') -> None:
     os.makedirs(output_dir, exist_ok=True)
-    results: StatisticalResults = {}
+    results: StatisticalResults = {'results': {}}
     
     preprocessor = Pipeline([
         ('variance_threshold', VarianceThreshold(threshold=1e-3)),
@@ -253,10 +257,10 @@ def run_statistical_validation(datasets: Dict[str, DatasetType], output_dir: str
                         mname = model.named_steps['classifier'].__class__.__name__
                         model.fit(X_train, y_train)
                         preds = model.predict(X_test)
-                        cv_metrics[mname]['accuracy'].append(accuracy_score(y_test, preds))
-                        cv_metrics[mname]['precision'].append(precision_score(y_test, preds, average='weighted', zero_division=0))
-                        cv_metrics[mname]['recall'].append(recall_score(y_test, preds, average='weighted', zero_division=0))
-                        cv_metrics[mname]['f1'].append(f1_score(y_test, preds, average='weighted', zero_division=0))
+                        cv_metrics[mname]['accuracy'].append(float(accuracy_score(y_test, preds)))
+                        cv_metrics[mname]['precision'].append(float(precision_score(y_test, preds, average='weighted', zero_division=0)))
+                        cv_metrics[mname]['recall'].append(float(recall_score(y_test, preds, average='weighted', zero_division=0)))
+                        cv_metrics[mname]['f1'].append(float(f1_score(y_test, preds, average='weighted', zero_division=0)))
 
                         if mname == 'KNN_CLAS':
                             expert_count = model.named_steps['classifier'].expert_X_.shape[0]
@@ -303,7 +307,9 @@ def run_statistical_validation(datasets: Dict[str, DatasetType], output_dir: str
                                 cohen_d = 1e12 if mean_diff > 0 else -1e12
                         else:
                             try:
-                                stat, pval = ttest_rel(a, b)
+                                ttest_rel_result = cast(TTestRelResult, ttest_rel(a, b))
+                                stat = ttest_rel_result.statistic
+                                pval = ttest_rel_result.pvalue
                             except:
                                 stat = 0.0
                                 pval = 1.0
@@ -417,7 +423,7 @@ def run_likelihood_analysis(datasets: Dict[str, DatasetType], output_dir: str = 
                         centroid_distance = np.linalg.norm(centroid_class0 - centroid_class1)
                     else:
                         centroid_distance = 0.0
-                    metrics['centroid_distance'] = centroid_distance
+                    metrics['centroid_distance'] = cast(float, centroid_distance)
                     
                     # 2. Mean distance between samples from opposite classes
                     if len(points_class0) > 0 and len(points_class1) > 0:
@@ -425,16 +431,16 @@ def run_likelihood_analysis(datasets: Dict[str, DatasetType], output_dir: str = 
                         mean_distance_opposite = np.mean(distances_opposite)
                     else:
                         mean_distance_opposite = 0.0
-                    metrics['mean_distance_opposite'] = mean_distance_opposite
+                    metrics['mean_distance_opposite'] = cast(float, mean_distance_opposite)
                     
                     # 3. Mean distance between samples from same class
                     same_distances: List[float] = []
                     if len(points_class0) >= 2:
-                        same_distances.append(np.mean(pdist(points_class0, 'euclidean')))
+                        same_distances.append(cast(float, np.mean(pdist(points_class0, 'euclidean'))))
                     if len(points_class1) >= 2:
-                        same_distances.append(np.mean(pdist(points_class1, 'euclidean')))
+                        same_distances.append(cast(float, np.mean(pdist(points_class1, 'euclidean'))))
                     mean_distance_same = np.mean(same_distances) if same_distances else 0.0
-                    metrics['mean_distance_same'] = mean_distance_same
+                    metrics['mean_distance_same'] = cast(float, mean_distance_same)
                     
                     # 4. Mean distance between samples and their class centroid
                     centroid_dists: List[float] = []
@@ -445,7 +451,7 @@ def run_likelihood_analysis(datasets: Dict[str, DatasetType], output_dir: str = 
                         dists = np.linalg.norm(points_class1 - centroid_class1, axis=1)
                         centroid_dists.append(np.mean(dists) if len(dists) > 0 else 0.0)
                     mean_dist_centroid = np.mean(centroid_dists) if centroid_dists else 0.0
-                    metrics['mean_dist_centroid'] = mean_dist_centroid
+                    metrics['mean_dist_centroid'] = cast(float, mean_dist_centroid)
                     
                     # 5. Bhattacharyya distance
                     if len(points_class0) > 0 and len(points_class1) > 0 and centroid_class0 is not None and centroid_class1 is not None:
@@ -477,46 +483,46 @@ def run_likelihood_analysis(datasets: Dict[str, DatasetType], output_dir: str = 
                         bhattacharyya = term1 + term2
                     else:
                         bhattacharyya = 0.0
-                    metrics['bhattacharyya_distance'] = bhattacharyya
+                    metrics['bhattacharyya_distance'] = cast(float, bhattacharyya)
                     
                     # 6. Variance of distances between same-class samples
                     same_variances: List[float] = []
                     if len(points_class0) >= 2:
-                        same_variances.append(np.var(pdist(points_class0, 'euclidean')))
+                        same_variances.append(cast(float, np.var(pdist(points_class0, 'euclidean'))))
                     if len(points_class1) >= 2:
-                        same_variances.append(np.var(pdist(points_class1, 'euclidean')))
+                        same_variances.append(cast(float, np.var(pdist(points_class1, 'euclidean'))))
                     var_dist_same = np.mean(same_variances) if same_variances else 0.0
-                    metrics['var_dist_same'] = var_dist_same
+                    metrics['var_dist_same'] = cast(float, var_dist_same)
                     
                     # 7. Variance of distances to centroid
                     centroid_variances: List[float] = []
                     if len(points_class0) > 0 and centroid_class0 is not None:
                         dists = np.linalg.norm(points_class0 - centroid_class0, axis=1)
-                        centroid_variances.append(np.var(dists) if len(dists) > 0 else 0.0)
+                        centroid_variances.append(cast(float, np.var(dists) if len(dists) > 0 else 0.0))
                     if len(points_class1) > 0 and centroid_class1 is not None:
                         dists = np.linalg.norm(points_class1 - centroid_class1, axis=1)
-                        centroid_variances.append(np.var(dists) if len(dists) > 0 else 0.0)
+                        centroid_variances.append(cast(float, np.var(dists) if len(dists) > 0 else 0.0))
                     var_dist_centroid = np.mean(centroid_variances) if centroid_variances else 0.0
-                    metrics['var_dist_centroid'] = var_dist_centroid
+                    metrics['var_dist_centroid'] = cast(float, var_dist_centroid)
                     
                     # 8. Variance for Q0 within same class
                     var_q0: float = 0.0
                     q0_vars: List[float] = []
                     if len(q0_class0) > 0:
-                        q0_vars.append(np.var(q0_class0))
+                        q0_vars.append(cast(float, np.var(q0_class0)))
                     if len(q0_class1) > 0:
-                        q0_vars.append(np.var(q0_class1))
-                    var_q0 = np.mean(q0_vars) if q0_vars else 0.0
+                        q0_vars.append(cast(float, np.var(q0_class1)))
+                    var_q0 = cast(float, np.mean(q0_vars)) if q0_vars else 0.0
                     metrics['var_q0'] = var_q0
                     
                     # 9. Variance for Q1 within same class
                     var_q1: float = 0.0
                     q1_vars: List[float] = []
                     if len(q1_class0) > 0:
-                        q1_vars.append(np.var(q1_class0))
+                        q1_vars.append(cast(float, np.var(q1_class0)))
                     if len(q1_class1) > 0:
-                        q1_vars.append(np.var(q1_class1))
-                    var_q1 = np.mean(q1_vars) if q1_vars else 0.0
+                        q1_vars.append(cast(float, np.var(q1_class1)))
+                    var_q1 = cast(float, np.mean(q1_vars)) if q1_vars else 0.0
                     metrics['var_q1'] = var_q1
             
                     spatial_results[dname][str(k)][model_name] = metrics
