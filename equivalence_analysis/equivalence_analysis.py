@@ -21,7 +21,7 @@ from sklearn.metrics import (
 
 np.random.seed(0)
 
-k_values = [1, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+k_values = [1, 3]#, 5, 7, 11, 13, 17, 19, 23, 29]
 
 class Adjacency(IntEnum):
     NOT_ADJACENT = 0
@@ -223,6 +223,10 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
                         else:
                             expert_count = model.named_steps['classifier'].X_train_.shape[0]
                         cv_metrics[mname]['expert_count'].append(expert_count)
+
+                avg_expert_count = {}
+                for name in ['KNN', 'KNN_CLAS']:
+                    avg_expert_count[name] = int(np.mean(cv_metrics[name]['expert_count']))
                 
                 wilcoxon_results = {}
                 for metric in ['accuracy', 'precision', 'recall', 'f1']:
@@ -239,16 +243,50 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
                 for metric in ['accuracy', 'precision', 'recall', 'f1']:
                     a = np.array(cv_metrics['KNN'][metric])
                     b = np.array(cv_metrics['KNN_CLAS'][metric])
-                    stat, pval = ttest_rel(a, b)
                     diff = a - b
-                    std_diff = diff.std(ddof=1)
-                    cohen_d = diff.mean() / std_diff if std_diff != 0 else np.inf
-                    ttest_rel_results[metric] = {'statistic': stat, 'p_value': pval, 'cohen_d': cohen_d}
+
+                    if len(diff) == 0:
+                        stat = 0.0
+                        pval = 1.0
+                        cohen_d = 0.0
+                    else:
+                        all_same = np.all(diff == diff[0])
+                        if all_same:
+                            mean_diff = diff.mean()
+                            if mean_diff == 0:
+                                stat = 0.0
+                                pval = 1.0
+                                cohen_d = 0.0
+                            else:
+                                stat = 1e12 if mean_diff > 0 else -1e12
+                                pval = 0.0
+                                cohen_d = 1e12 if mean_diff > 0 else -1e12
+                        else:
+                            try:
+                                stat, pval = ttest_rel(a, b)
+                            except:
+                                stat = 0.0
+                                pval = 1.0
+                            mean_diff = diff.mean()
+                            std_diff = diff.std(ddof=1)
+                            if std_diff == 0:
+                                cohen_d = 1e12 if mean_diff != 0 else 0.0
+                            else:
+                                cohen_d = mean_diff / std_diff
+
+                    stat = stat if np.isfinite(stat) else (1e12 if stat > 0 else -1e12)
+                    cohen_d = cohen_d if np.isfinite(cohen_d) else (1e12 if cohen_d > 0 else -1e12)
+
+                    ttest_rel_results[metric] = {
+                        'statistic': float(stat),
+                        'p_value': float(pval),
+                        'cohen_d': float(cohen_d)
+                    }                          
                 
                 results[dname][str(k)] = {
-                    'cv_metrics': cv_metrics,
-                    'statistical_tests': wilcoxon_results,
-                    'ttest_rel_results': ttest_rel_results
+                    'avg_expert_count': avg_expert_count,
+                    'wilcoxon': wilcoxon_results,
+                    'ttest_rel': ttest_rel_results
                 }
             
         except Exception as e:
