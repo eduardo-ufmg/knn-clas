@@ -20,17 +20,8 @@ y = np.where(y == -1, 0, 1)  # Convert back to 0 and 1 for plotting
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-axes[0].scatter(knn_q0, knn_q1, alpha=0.5, c=y, label='Samples')
-axes[0].set_title('KNN Likelihood Space')
-axes[0].set_xlabel('q0')
-axes[0].set_ylabel('q1')
-axes[0].legend()
-
-axes[1].scatter(knn_clas_q0, knn_clas_q1, alpha=0.5, c=y, label='Samples')
-axes[1].set_title('KNN_CLAS Likelihood Space')
-axes[1].set_xlabel('q0')
-axes[1].set_ylabel('q1')
-axes[1].legend()
+axes[0].scatter(knn_q0, knn_q1)
+axes[1].scatter(knn_clas_q0, knn_clas_q1)
 
 plt.tight_layout()
 plt.show()

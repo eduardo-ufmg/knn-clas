@@ -92,10 +92,10 @@ class KNN(BaseEstimator, ClassifierMixin):
 
         q_total = q0 + q1
         q_sum = np.sum(q_total)
-        q0_norm = q0 / q_sum
-        q1_norm = q1 / q_sum
+        q0 = q0 / q_sum
+        q1 = q1 / q_sum
         
-        return q0_norm, q1_norm
+        return q0, q1
 
 class KNN_CLAS(KNN):
     def __init__(self, k: int = 3):
@@ -138,10 +138,10 @@ class KNN_CLAS(KNN):
 
         q_total = q0 + q1
         q_sum = np.sum(q_total)
-        q0_norm = q0 / q_sum
-        q1_norm = q1 / q_sum
+        q0 = q0 / q_sum
+        q1 = q1 / q_sum
         
-        return q0_norm, q1_norm
+        return q0, q1
 
 class CorrelationFilter(BaseEstimator, TransformerMixin):
     def __init__(self, threshold=0.98):
@@ -260,119 +260,182 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
 def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
     spatial_results = {}
     
-    preprocessor = Pipeline([
-        ('variance_threshold', VarianceThreshold(threshold=1e-3)),
-        ('correlation_filter', CorrelationFilter(threshold=0.9)),
-        ('scaler', StandardScaler())
-    ])
-
     for dname, data in datasets.items():
-        print(f"\n=== Analyzing {dname} ===")
         X = data['X']
         y = data['y']
+        spatial_results[dname] = {}
         
-        try:
-            knn_pipe = Pipeline([
-                ('preprocessor', preprocessor),
-                ('classifier', KNN(k=5))
-            ]).fit(X, y)
-
-            knn_clas_pipe = Pipeline([
-                ('preprocessor', preprocessor),
-                ('classifier', KNN_CLAS(k=5))
-            ]).fit(X, y)
-
-            X_transformed = knn_pipe.named_steps['preprocessor'].transform(X)
+        for model_name in ['KNN', 'KNN_CLAS']:
+            # Create a new preprocessor for each model
+            preprocessor = Pipeline([
+                ('variance_threshold', VarianceThreshold(threshold=1e-3)),
+                ('correlation_filter', CorrelationFilter(threshold=0.9)),
+                ('scaler', StandardScaler())
+            ])
             
-            q0_knn, q1_knn = knn_pipe.named_steps['classifier'].likelihood_score(X_transformed)
-            q0_clas, q1_clas = knn_clas_pipe.named_steps['classifier'].likelihood_score(X_transformed)
+            # Create the model pipeline
+            if model_name == 'KNN':
+                model = Pipeline([
+                    ('preprocessor', preprocessor),
+                    ('classifier', KNN(k=5))
+                ])
+            else:
+                model = Pipeline([
+                    ('preprocessor', preprocessor),
+                    ('classifier', KNN_CLAS(k=5))
+                ])
             
-            # Compute class masks using direct labels
-            class0_mask = (y == -1)
-            class1_mask = (y == 1)
-            
-            if not (np.any(class0_mask) and np.any(class1_mask)):
-                raise ValueError("Both classes must be present for analysis")
-            
-            # 1. Centroids distance
-            centroid0 = X_transformed[class0_mask].mean(axis=0)
-            centroid1 = X_transformed[class1_mask].mean(axis=0)
-            centroid_distance = float(np.linalg.norm(centroid0 - centroid1))
-            
-            # 2. Mean distance between points of different classes
-            cross_dists = cdist(X_transformed[class0_mask], X_transformed[class1_mask], 'euclidean')
-            mean_cross_dist = float(cross_dists.mean())
-            
-            # 3. Mean distance between points of the same class
-            def compute_intra_stats(X_class):
-                if len(X_class) < 2:
-                    return 0.0, 0.0
-                dists = pdist(X_class, 'euclidean')
-                return float(dists.mean()), float(dists.var())
-            
-            intra_mean0, intra_var0 = compute_intra_stats(X_transformed[class0_mask])
-            intra_mean1, intra_var1 = compute_intra_stats(X_transformed[class1_mask])
-            mean_intra = (intra_mean0 + intra_mean1) / 2
-            
-            # 4. Mean distance to centroid
-            def centroid_distances(X_class, centroid):
-                if len(X_class) == 0:
-                    return 0.0
-                return np.linalg.norm(X_class - centroid, axis=1).mean()
-            
-            centroid_dist0 = centroid_distances(X_transformed[class0_mask], centroid0)
-            centroid_dist1 = centroid_distances(X_transformed[class1_mask], centroid1)
-            mean_centroid_dist = (centroid_dist0 + centroid_dist1) / 2
-            
-            # 5. Variance of intra-class distances
-            var_intra = (intra_var0 + intra_var1) / 2
-            
-            # 6. Variance for Q0 and Q1 per class
-            q_metrics = {}
-            for model_name, q0, q1 in [('KNN', q0_knn, q1_knn), ('KNN_CLAS', q0_clas, q1_clas)]:
-                for c in [-1, 1]:
-                    mask = (y == c)
-                    q0_vals = q0[mask]
-                    q1_vals = q1[mask]
-                    
-                    var_q0 = float(np.var(q0_vals)) if len(q0_vals) >= 2 else None
-                    var_q1 = float(np.var(q1_vals)) if len(q1_vals) >= 2 else None
-                    
-                    q_metrics[f'{model_name}_class{c}_var_q0'] = var_q0
-                    q_metrics[f'{model_name}_class{c}_var_q1'] = var_q1
-            
-            # 8. Bhattacharyya's distance
+            # Fit the model on the entire dataset
             try:
-                cov0 = np.cov(X_transformed[class0_mask], rowvar=False)
-                cov1 = np.cov(X_transformed[class1_mask], rowvar=False)
-                avg_cov = (cov0 + cov1) / 2
-                mean_diff = centroid1 - centroid0
+                model.fit(X, y)
+            except Exception as e:
+                print(f"Error fitting {model_name} on {dname}: {e}")
+                continue
+            
+            # Transform X using the preprocessor
+            try:
+                X_transformed = model.named_steps['preprocessor'].transform(X)
+            except Exception as e:
+                print(f"Error transforming {model_name} on {dname}: {e}")
+                continue
+            
+            # Get classifier and compute likelihood scores
+            classifier = model.named_steps['classifier']
+            try:
+                q0, q1 = classifier.likelihood_score(X_transformed)
+            except Exception as e:
+                print(f"Error computing likelihood for {model_name} on {dname}: {e}")
+                continue
+            
+            # Split into classes
+            class_0_mask = (y == -1)
+            class_1_mask = (y == 1)
+            q0_class0 = q0[class_0_mask]
+            q1_class0 = q1[class_0_mask]
+            q0_class1 = q0[class_1_mask]
+            q1_class1 = q1[class_1_mask]
+            
+            # Prepare 2D points for each class
+            points_class0 = np.column_stack((q0_class0, q1_class0)) if len(q0_class0) > 0 else np.empty((0, 2))
+            points_class1 = np.column_stack((q0_class1, q1_class1)) if len(q0_class1) > 0 else np.empty((0, 2))
+            
+            # Compute metrics
+            metrics = {}
+            
+            # 1. Distance between centroids of opposite classes
+            centroid_class0 = np.mean(points_class0, axis=0) if len(points_class0) > 0 else None
+            centroid_class1 = np.mean(points_class1, axis=0) if len(points_class1) > 0 else None
+            if centroid_class0 is not None and centroid_class1 is not None:
+                centroid_distance = np.linalg.norm(centroid_class0 - centroid_class1)
+            else:
+                centroid_distance = 0.0
+            metrics['centroid_distance'] = centroid_distance
+            
+            # 2. Mean distance between samples from opposite classes
+            if len(points_class0) > 0 and len(points_class1) > 0:
+                distances_opposite = cdist(points_class0, points_class1, 'euclidean')
+                mean_distance_opposite = np.mean(distances_opposite)
+            else:
+                mean_distance_opposite = 0.0
+            metrics['mean_distance_opposite'] = mean_distance_opposite
+            
+            # 3. Mean distance between samples from same class
+            same_distances = []
+            if len(points_class0) >= 2:
+                same_distances.append(np.mean(pdist(points_class0, 'euclidean')))
+            if len(points_class1) >= 2:
+                same_distances.append(np.mean(pdist(points_class1, 'euclidean')))
+            mean_distance_same = np.mean(same_distances) if same_distances else 0.0
+            metrics['mean_distance_same'] = mean_distance_same
+            
+            # 4. Mean distance between samples and their class centroid
+            centroid_dists = []
+            if len(points_class0) > 0:
+                dists = np.linalg.norm(points_class0 - centroid_class0, axis=1) if centroid_class0 is not None else []
+                centroid_dists.append(np.mean(dists) if len(dists) > 0 else 0.0)
+            if len(points_class1) > 0:
+                dists = np.linalg.norm(points_class1 - centroid_class1, axis=1) if centroid_class1 is not None else []
+                centroid_dists.append(np.mean(dists) if len(dists) > 0 else 0.0)
+            mean_dist_centroid = np.mean(centroid_dists) if centroid_dists else 0.0
+            metrics['mean_dist_centroid'] = mean_dist_centroid
+            
+            # 5. Bhattacharyya distance
+            if len(points_class0) > 0 and len(points_class1) > 0 and centroid_class0 is not None and centroid_class1 is not None:
+                mu0 = centroid_class0
+                mu1 = centroid_class1
+                cov0 = np.cov(points_class0, rowvar=False)
+                cov1 = np.cov(points_class1, rowvar=False)
+                cov_avg = (cov0 + cov1) / 2
                 
-                term1 = 0.125 * mean_diff @ np.linalg.pinv(avg_cov) @ mean_diff
-                det_avg = np.linalg.det(avg_cov)
-                det_prod = np.sqrt(np.linalg.det(cov0) * np.linalg.det(cov1))
-                term2 = 0.5 * np.log(det_avg / det_prod) if det_prod > 0 else np.nan
-                bhatt_distance = float(term1 + term2) if not np.isnan(term2) else None
-            except np.linalg.LinAlgError:
-                bhatt_distance = None
+                diff_mu = mu0 - mu1
+                try:
+                    inv_cov_avg = np.linalg.pinv(cov_avg)
+                    term1 = 0.125 * diff_mu @ inv_cov_avg @ diff_mu.T
+                except:
+                    term1 = 0.0
+                
+                # Compute log determinants using slogdet for numerical stability
+                sign_avg, logdet_avg = np.linalg.slogdet(cov_avg + 1e-9 * np.eye(cov_avg.shape[0]))
+                sign0, logdet0 = np.linalg.slogdet(cov0 + 1e-9 * np.eye(cov0.shape[0]))
+                sign1, logdet1 = np.linalg.slogdet(cov1 + 1e-9 * np.eye(cov1.shape[0]))
+                
+                if sign_avg <= 0 or sign0 <= 0 or sign1 <= 0:
+                    term2 = 0.0
+                else:
+                    # Calculate the log ratio directly
+                    log_ratio = logdet_avg - 0.5 * (logdet0 + logdet1)
+                    term2 = 0.5 * log_ratio
+                
+                bhattacharyya = term1 + term2
+            else:
+                bhattacharyya = 0.0
+            metrics['bhattacharyya_distance'] = bhattacharyya
             
-            spatial_results[dname] = {
-                'centroid_distance': centroid_distance,
-                'mean_cross_class_distance': mean_cross_dist,
-                'mean_intra_class_distance': mean_intra,
-                'mean_centroid_distance': mean_centroid_dist,
-                'variance_intra_class_distances': var_intra,
-                'bhattacharyya_distance': bhatt_distance,
-                **q_metrics
-            }
+            # 6. Variance of distances between same-class samples
+            same_variances = []
+            if len(points_class0) >= 2:
+                same_variances.append(np.var(pdist(points_class0, 'euclidean')))
+            if len(points_class1) >= 2:
+                same_variances.append(np.var(pdist(points_class1, 'euclidean')))
+            var_dist_same = np.mean(same_variances) if same_variances else 0.0
+            metrics['var_dist_same'] = var_dist_same
             
-        except Exception as e:
-            print(f"Error analyzing {dname}: {str(e)}")
-            spatial_results[dname] = {'error': str(e)}
+            # 7. Variance of distances to centroid
+            centroid_variances = []
+            if len(points_class0) > 0 and centroid_class0 is not None:
+                dists = np.linalg.norm(points_class0 - centroid_class0, axis=1)
+                centroid_variances.append(np.var(dists) if len(dists) > 0 else 0.0)
+            if len(points_class1) > 0 and centroid_class1 is not None:
+                dists = np.linalg.norm(points_class1 - centroid_class1, axis=1)
+                centroid_variances.append(np.var(dists) if len(dists) > 0 else 0.0)
+            var_dist_centroid = np.mean(centroid_variances) if centroid_variances else 0.0
+            metrics['var_dist_centroid'] = var_dist_centroid
+            
+            # 8. Variance for Q0 within same class
+            var_q0 = 0.0
+            q0_vars = []
+            if len(q0_class0) > 0:
+                q0_vars.append(np.var(q0_class0))
+            if len(q0_class1) > 0:
+                q0_vars.append(np.var(q0_class1))
+            var_q0 = np.mean(q0_vars) if q0_vars else 0.0
+            metrics['var_q0'] = var_q0
+            
+            # 9. Variance for Q1 within same class
+            var_q1 = 0.0
+            q1_vars = []
+            if len(q1_class0) > 0:
+                q1_vars.append(np.var(q1_class0))
+            if len(q1_class1) > 0:
+                q1_vars.append(np.var(q1_class1))
+            var_q1 = np.mean(q1_vars) if q1_vars else 0.0
+            metrics['var_q1'] = var_q1
+            
+            spatial_results[dname][model_name] = metrics
     
+    os.makedirs(output_dir, exist_ok=True)
     with open(os.path.join(output_dir, 'spatial_results.json'), 'w') as f:
         json.dump(spatial_results, f, indent=2)
-
 
 if __name__ == '__main__':
     datasets = load_datasets()
