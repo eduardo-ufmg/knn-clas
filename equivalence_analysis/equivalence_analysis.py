@@ -4,7 +4,12 @@ import json
 import numpy as np
 
 from enum import IntEnum
-from typing import Tuple, Self
+
+from typing import (
+    Tuple, Self, Any, Dict, List, cast, Optional, TypedDict
+)
+
+from numpy.typing import NDArray
 
 from scipy.spatial.distance import cdist, squareform, pdist
 from scipy.stats import wilcoxon, ttest_rel # type: ignore
@@ -21,14 +26,14 @@ from sklearn.metrics import (
 
 np.random.seed(0)
 
-k_values = [1, 3]#, 5, 7, 11, 13, 17, 19, 23, 29]
+k_values: List[int] = [1, 3, 5, 7, 11, 13, 17, 19, 23, 29]
 
 class Adjacency(IntEnum):
     NOT_ADJACENT = 0
     GABRIEL_EDGE = 1
     SUPPORT_EDGE = 2
 
-def vectorized_kernel(X: np.ndarray, Y: np.ndarray, cov: np.ndarray) -> np.ndarray:
+def vectorized_kernel(X: NDArray[np.float64], Y: NDArray[np.float64], cov: NDArray[np.float64]) -> NDArray[np.float64]:
     """Vectorized Gaussian kernel computation."""
     n_features = X.shape[1]
     inv_cov = np.linalg.pinv(cov)
@@ -38,7 +43,7 @@ def vectorized_kernel(X: np.ndarray, Y: np.ndarray, cov: np.ndarray) -> np.ndarr
     norm_factor = 1.0 / np.sqrt((2 * np.pi) ** n_features * det)
     return norm_factor * np.exp(exponent)
 
-def gabriel_graph(dist_matrix: np.ndarray) -> np.ndarray:
+def gabriel_graph(dist_matrix: NDArray[np.float64]) -> NDArray[np.int64]:
     """Construct Gabriel graph from pairwise squared distance matrix."""
     n = dist_matrix.shape[0]
     adjacency = np.zeros((n, n), dtype=int)
@@ -52,7 +57,7 @@ def gabriel_graph(dist_matrix: np.ndarray) -> np.ndarray:
                 adjacency[j, i] = Adjacency.GABRIEL_EDGE
     return adjacency
 
-def support_graph(gabriel_adj: np.ndarray, y: np.ndarray) -> np.ndarray:
+def support_graph(gabriel_adj: NDArray[np.int64], y: NDArray[np.int64]) -> NDArray[np.int64]:
     """Create support graph from Gabriel graph and labels."""
     support_adj = np.zeros_like(gabriel_adj)
     diff_labels = y[:, None] != y[None, :]
@@ -62,17 +67,21 @@ def support_graph(gabriel_adj: np.ndarray, y: np.ndarray) -> np.ndarray:
     return support_adj
 
 class KNN(BaseEstimator, ClassifierMixin):
-    def __init__(self, k: int = 3):
+    X_train_: NDArray[np.float64]
+    y_train_: NDArray[np.int64]
+    cov_: NDArray[np.float64]
+
+    def __init__(self, k: int = 3) -> None:
         self.k = k
 
-    def fit(self, X: np.ndarray, y: np.ndarray) -> Self:
+    def fit(self, X: NDArray[np.float64], y: NDArray[np.int64]) -> Self:
         X, y = check_X_y(X, y)
         self.X_train_ = X
         self.y_train_ = y
         self.cov_ = np.cov(X, rowvar=False) + 1e-6 * np.eye(X.shape[1])
         return self
 
-    def predict(self, X: np.ndarray) -> np.ndarray:
+    def predict(self, X: NDArray[np.float64]) -> NDArray[np.int64]:
         check_is_fitted(self)
         X = np.atleast_2d(X)
         pairwise_dists = cdist(X, self.X_train_, metric='sqeuclidean')
@@ -81,9 +90,9 @@ class KNN(BaseEstimator, ClassifierMixin):
         kernels = vectorized_kernel(X[:, np.newaxis], self.X_train_[nearest], self.cov_)
         scores = np.sum(kernels * self.y_train_[nearest], axis=1)
         
-        return np.where(scores.mean(1) > 0, 1, -1)
+        return np.where(scores.mean(1) > 0, 1, -1).astype(np.int64)
 
-    def likelihood_score(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def likelihood_score(self, X: NDArray[np.float64]) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
         check_is_fitted(self)
         pairwise_dists = cdist(X, self.X_train_, metric='sqeuclidean')
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
@@ -100,10 +109,13 @@ class KNN(BaseEstimator, ClassifierMixin):
         return q0, q1
 
 class KNN_CLAS(KNN):
-    def __init__(self, k: int = 3):
+    expert_X_: NDArray[np.float64]
+    expert_y_: NDArray[np.int64]
+
+    def __init__(self, k: int = 3) -> None:
         super().__init__(k=k)
 
-    def _get_experts(self, X: np.ndarray, y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def _get_experts(self, X: NDArray[np.float64], y: NDArray[np.int64]) -> Tuple[NDArray[np.float64], NDArray[np.int64]]:
         dist_matrix = squareform(pdist(X, metric='sqeuclidean'))
         gabriel_adj = gabriel_graph(dist_matrix)
         support_adj = support_graph(gabriel_adj, y)
@@ -115,12 +127,12 @@ class KNN_CLAS(KNN):
         
         return X[expert_mask], y[expert_mask]
 
-    def fit(self, X: np.ndarray, y: np.ndarray) -> Self:
+    def fit(self, X: NDArray[np.float64], y: NDArray[np.int64]) -> Self:
         super().fit(X, y)
         self.expert_X_, self.expert_y_ = self._get_experts(X, y)
         return self
 
-    def predict(self, X: np.ndarray) -> np.ndarray:
+    def predict(self, X: NDArray[np.float64]) -> NDArray[np.int64]:
         check_is_fitted(self)
         pairwise_dists = cdist(X, self.expert_X_, metric='sqeuclidean')
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
@@ -128,9 +140,9 @@ class KNN_CLAS(KNN):
         kernels = vectorized_kernel(X[:, np.newaxis], self.expert_X_[nearest], self.cov_)
         scores = np.sum(kernels * self.expert_y_[nearest], axis=1)
         
-        return np.where(scores.mean(1) > 0, 1, -1)
+        return np.where(scores.mean(1) > 0, 1, -1).astype(np.int64)
     
-    def likelihood_score(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def likelihood_score(self, X: NDArray[np.float64]) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
         check_is_fitted(self)
         pairwise_dists = cdist(X, self.expert_X_, metric='sqeuclidean')
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
@@ -146,11 +158,14 @@ class KNN_CLAS(KNN):
         return q0, q1
 
 class CorrelationFilter(BaseEstimator, TransformerMixin):
-    def __init__(self, threshold=0.98):
-        self.threshold = threshold
-        self.to_drop_ = []
+    to_drop_: set[int]
+    threshold: float
 
-    def fit(self, X, y=None):
+    def __init__(self, threshold: float = 0.98) -> None:
+        self.threshold = threshold
+        self.to_drop_ = set()
+
+    def fit(self, X: NDArray[np.float64], y: Any = None) -> Self:
         corr_matrix = np.corrcoef(X, rowvar=False)
         upper = np.triu(np.ones_like(corr_matrix, dtype=bool), k=1)
         high_corr = np.where(np.abs(corr_matrix) > self.threshold)
@@ -160,24 +175,49 @@ class CorrelationFilter(BaseEstimator, TransformerMixin):
                 self.to_drop_.add(j)  # Drop the later feature
         return self
 
-    def transform(self, X):
+    def transform(self, X: NDArray[np.float64]) -> NDArray[np.float64]:
         return X[:, [i for i in range(X.shape[1]) if i not in self.to_drop_]]
 
-def load_datasets(data_dir: str = './sets') -> dict:
-    datasets = {}
+class DatasetType(TypedDict):
+    X: NDArray[np.float64]
+    y: NDArray[np.int64]
+
+def load_datasets(data_dir: str = './sets') -> Dict[str, DatasetType]:
+    datasets: Dict[str, DatasetType] = {}
     for fname in os.listdir(data_dir):
         if fname.endswith('.npz'):
-            data = np.load(os.path.join(data_dir, fname))
-            name = fname.split('.')[0]
-            X = data['X']
-            y = data['y'].squeeze()
-            datasets[name] = {'X': X, 'y': y}
-            print(f"Loaded {name}: {X.shape}")
+            try:
+                data = np.load(os.path.join(data_dir, fname))
+                name = fname.split('.')[0]
+                X = data['X']
+                y = data['y'].squeeze().astype(np.int64)
+                datasets[name] = {'X': X.astype(np.float64), 'y': y}
+                print(f"Loaded {name}: {X.shape}")
+            except Exception as e:
+                print(f"Error loading {fname}: {e}")
+                continue
     return datasets
 
-def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> None:
+class WilcoxonResult(TypedDict):
+    statistic: float
+    p_value: float
+
+class TTestResult(TypedDict):
+    statistic: float
+    p_value: float
+    cohen_d: float
+
+class KNNResults(TypedDict):
+    avg_expert_count: Dict[str, int]
+    wilcoxon: Dict[str, WilcoxonResult]
+    ttest_rel: Dict[str, TTestResult]
+
+class StatisticalResults(TypedDict):
+    [key: str]: Dict[str, KNNResults]  # type: ignore
+
+def run_statistical_validation(datasets: Dict[str, DatasetType], output_dir: str = 'output') -> None:
     os.makedirs(output_dir, exist_ok=True)
-    results = {}
+    results: StatisticalResults = {}
     
     preprocessor = Pipeline([
         ('variance_threshold', VarianceThreshold(threshold=1e-3)),
@@ -197,7 +237,7 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
             
             for k in k_values:
                 print(f"--- Evaluating k={k} ---")
-                cv_metrics = {
+                cv_metrics: Dict[str, Dict[str, List[float]]] = {
                     'KNN': {'accuracy': [], 'precision': [], 'recall': [], 'f1': [], 'expert_count': []},
                     'KNN_CLAS': {'accuracy': [], 'precision': [], 'recall': [], 'f1': [], 'expert_count': []}
                 }
@@ -224,11 +264,11 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
                             expert_count = model.named_steps['classifier'].X_train_.shape[0]
                         cv_metrics[mname]['expert_count'].append(expert_count)
 
-                avg_expert_count = {}
+                avg_expert_count: Dict[str, int] = {}
                 for name in ['KNN', 'KNN_CLAS']:
                     avg_expert_count[name] = int(np.mean(cv_metrics[name]['expert_count']))
                 
-                wilcoxon_results = {}
+                wilcoxon_results: Dict[str, WilcoxonResult] = {}
                 for metric in ['accuracy', 'precision', 'recall', 'f1']:
                     a = np.array(cv_metrics['KNN'][metric])
                     b = np.array(cv_metrics['KNN_CLAS'][metric])
@@ -239,7 +279,7 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
                         stat, pval = wilcoxon(differences)
                         wilcoxon_results[metric] = {'statistic': stat, 'p_value': pval}
 
-                ttest_rel_results = {}
+                ttest_rel_results: Dict[str, TTestResult] = {}
                 for metric in ['accuracy', 'precision', 'recall', 'f1']:
                     a = np.array(cv_metrics['KNN'][metric])
                     b = np.array(cv_metrics['KNN_CLAS'][metric])
@@ -298,9 +338,19 @@ def run_statistical_validation(datasets: dict, output_dir: str = 'output') -> No
 
     print("\n✅ Statistical validation completed! Results saved to output/statistical_results.json")
 
+class SpatialMetrics(TypedDict):
+    centroid_distance: float
+    mean_distance_opposite: float
+    mean_distance_same: float
+    mean_dist_centroid: float
+    bhattacharyya_distance: float
+    var_dist_same: float
+    var_dist_centroid: float
+    var_q0: float
+    var_q1: float
 
-def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
-    spatial_results = {}
+def run_likelihood_analysis(datasets: Dict[str, DatasetType], output_dir: str = 'output') -> None:
+    spatial_results: Dict[str, Dict[str, Dict[str, SpatialMetrics]]] = {}
     
     print("\n=== Starting likelihood analysis ===")
 
@@ -348,11 +398,21 @@ def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
                     points_class0 = np.column_stack((q0_class0, q1_class0)) if len(q0_class0) > 0 else np.empty((0, 2))
                     points_class1 = np.column_stack((q0_class1, q1_class1)) if len(q0_class1) > 0 else np.empty((0, 2))
                     
-                    metrics = {}
+                    metrics: SpatialMetrics = {
+                        'centroid_distance': 0.0,
+                        'mean_distance_opposite': 0.0,
+                        'mean_distance_same': 0.0,
+                        'mean_dist_centroid': 0.0,
+                        'bhattacharyya_distance': 0.0,
+                        'var_dist_same': 0.0,
+                        'var_dist_centroid': 0.0,
+                        'var_q0': 0.0,
+                        'var_q1': 0.0
+                    }
             
                     # 1. Distance between centroids of opposite classes
-                    centroid_class0 = np.mean(points_class0, axis=0) if len(points_class0) > 0 else None
-                    centroid_class1 = np.mean(points_class1, axis=0) if len(points_class1) > 0 else None
+                    centroid_class0: Optional[NDArray[np.float64]] = np.mean(points_class0, axis=0) if len(points_class0) > 0 else None
+                    centroid_class1: Optional[NDArray[np.float64]] = np.mean(points_class1, axis=0) if len(points_class1) > 0 else None
                     if centroid_class0 is not None and centroid_class1 is not None:
                         centroid_distance = np.linalg.norm(centroid_class0 - centroid_class1)
                     else:
@@ -368,7 +428,7 @@ def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
                     metrics['mean_distance_opposite'] = mean_distance_opposite
                     
                     # 3. Mean distance between samples from same class
-                    same_distances = []
+                    same_distances: List[float] = []
                     if len(points_class0) >= 2:
                         same_distances.append(np.mean(pdist(points_class0, 'euclidean')))
                     if len(points_class1) >= 2:
@@ -377,12 +437,12 @@ def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
                     metrics['mean_distance_same'] = mean_distance_same
                     
                     # 4. Mean distance between samples and their class centroid
-                    centroid_dists = []
-                    if len(points_class0) > 0:
-                        dists = np.linalg.norm(points_class0 - centroid_class0, axis=1) if centroid_class0 is not None else []
+                    centroid_dists: List[float] = []
+                    if len(points_class0) > 0 and centroid_class0 is not None:
+                        dists = np.linalg.norm(points_class0 - centroid_class0, axis=1)
                         centroid_dists.append(np.mean(dists) if len(dists) > 0 else 0.0)
-                    if len(points_class1) > 0:
-                        dists = np.linalg.norm(points_class1 - centroid_class1, axis=1) if centroid_class1 is not None else []
+                    if len(points_class1) > 0 and centroid_class1 is not None:
+                        dists = np.linalg.norm(points_class1 - centroid_class1, axis=1)
                         centroid_dists.append(np.mean(dists) if len(dists) > 0 else 0.0)
                     mean_dist_centroid = np.mean(centroid_dists) if centroid_dists else 0.0
                     metrics['mean_dist_centroid'] = mean_dist_centroid
@@ -420,7 +480,7 @@ def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
                     metrics['bhattacharyya_distance'] = bhattacharyya
                     
                     # 6. Variance of distances between same-class samples
-                    same_variances = []
+                    same_variances: List[float] = []
                     if len(points_class0) >= 2:
                         same_variances.append(np.var(pdist(points_class0, 'euclidean')))
                     if len(points_class1) >= 2:
@@ -429,7 +489,7 @@ def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
                     metrics['var_dist_same'] = var_dist_same
                     
                     # 7. Variance of distances to centroid
-                    centroid_variances = []
+                    centroid_variances: List[float] = []
                     if len(points_class0) > 0 and centroid_class0 is not None:
                         dists = np.linalg.norm(points_class0 - centroid_class0, axis=1)
                         centroid_variances.append(np.var(dists) if len(dists) > 0 else 0.0)
@@ -440,8 +500,8 @@ def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
                     metrics['var_dist_centroid'] = var_dist_centroid
                     
                     # 8. Variance for Q0 within same class
-                    var_q0 = 0.0
-                    q0_vars = []
+                    var_q0: float = 0.0
+                    q0_vars: List[float] = []
                     if len(q0_class0) > 0:
                         q0_vars.append(np.var(q0_class0))
                     if len(q0_class1) > 0:
@@ -450,8 +510,8 @@ def run_likelihood_analysis(datasets: dict, output_dir: str = 'output') -> None:
                     metrics['var_q0'] = var_q0
                     
                     # 9. Variance for Q1 within same class
-                    var_q1 = 0.0
-                    q1_vars = []
+                    var_q1: float = 0.0
+                    q1_vars: List[float] = []
                     if len(q1_class0) > 0:
                         q1_vars.append(np.var(q1_class0))
                     if len(q1_class1) > 0:

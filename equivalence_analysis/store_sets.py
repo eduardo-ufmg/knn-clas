@@ -119,6 +119,51 @@ def load_spect_heart():
     save_dataset(X, y, "spect_heart")
     return X, y
 
+def load_titanic():
+    titanic = fetch_openml(data_id=40945, parser='auto')
+    df = titanic.frame
+    # Drop rows with missing values and irrelevant columns
+    df = df.drop(columns=['boat', 'body', 'home.dest']).dropna()
+    # Encode categorical variables
+    X = pd.get_dummies(df.drop('survived', axis=1))
+    y = df['survived'].astype(int)
+    label_map = {0: -1, 1: 1}
+    y = np.vectorize(label_map.get)(y).reshape(-1, 1)
+    save_dataset(X.values, y, "titanic")
+    return X.values, y
+
+def load_spambase():
+    url = "https://archive.ics.uci.edu/ml/machine-learning-databases/spambase/spambase.data"
+    df = pd.read_csv(url, header=None)
+    X = df.iloc[:, :-1].values
+    y = df.iloc[:, -1].values
+    label_map = {0: -1, 1: 1}
+    y = np.vectorize(label_map.get)(y).reshape(-1, 1)
+    save_dataset(X, y, "spambase")
+    return X, y
+
+def load_heart_disease():
+    heart = fetch_openml(data_id=1497, parser='auto')
+    df = heart.frame
+    # Encode categorical variables and handle target
+    X = pd.get_dummies(df.drop('Class', axis=1))
+    y = df['Class'].astype(int)
+    # Map target: 0 = no disease, 1/2/3/4 = disease (convert to binary)
+    y = np.where(y > 0, 1, -1).reshape(-1, 1)
+    save_dataset(X.values, y, "heart_disease")
+    return X.values, y
+
+def load_credit_approval():
+    credit = fetch_openml(data_id=29, parser='auto')
+    df = credit.frame
+    # Handle missing values and encode
+    df.replace('?', np.nan, inplace=True)
+    df.dropna(inplace=True)
+    X = pd.get_dummies(df.drop('class', axis=1))
+    y = df['class'].map({'+': 1, '-': -1}).values.reshape(-1, 1)
+    save_dataset(X.values, y, "credit_approval")
+    return X.values, y
+
 def load_all_datasets():
     """Load all datasets and save them to the ./sets directory."""
     datasets = {
@@ -130,7 +175,11 @@ def load_all_datasets():
         "adult_census": load_adult_census,
         "digits_binary": load_digits_binary,
         "ionosphere": load_ionosphere,
-        "spect_heart": load_spect_heart
+        "spect_heart": load_spect_heart,
+        "titanic": load_titanic,
+        "spambase": load_spambase,
+        "heart_disease": load_heart_disease,
+        "credit_approval": load_credit_approval
     }
     for name, loader in datasets.items():
         print(f"Loading {name} dataset...")
