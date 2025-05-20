@@ -2,6 +2,7 @@ import os
 import time
 import json
 import numpy as np
+import networkx as nx
 
 from enum import IntEnum
 
@@ -11,6 +12,7 @@ from typing import (
 
 from numpy.typing import NDArray
 
+from scipy.spatial import Delaunay, Voronoi
 from scipy.spatial.distance import cdist, squareform, pdist
 from scipy.stats import wilcoxon, ttest_rel # type: ignore
 
@@ -26,7 +28,7 @@ from sklearn.metrics import (
 
 np.random.seed(0)
 
-k_values: List[int] = [1, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+k_values: List[int] = [1, 3]#, 5, 7, 11, 13, 17, 19, 23, 29]
 
 class Adjacency(IntEnum):
     NOT_ADJACENT = 0
@@ -88,9 +90,9 @@ class KNN(BaseEstimator, ClassifierMixin):
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
         
         kernels = vectorized_kernel(X[:, np.newaxis], self.X_train_[nearest], self.cov_)
-        scores = np.sum(kernels * self.y_train_[nearest], axis=1)
+        scores = np.sum(kernels * self.y_train_[nearest], axis=1).sum(axis=1)
         
-        return np.where(scores.mean(1) > 0, 1, -1).astype(np.int64)
+        return np.where(scores > 0, 1, -1).astype(np.int64)
 
     def likelihood_score(self, X: NDArray[np.float64]) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
         check_is_fitted(self)
@@ -98,8 +100,8 @@ class KNN(BaseEstimator, ClassifierMixin):
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
         
         kernels = vectorized_kernel(X[:, np.newaxis], self.X_train_[nearest], self.cov_)
-        q0 = np.sum(kernels * (self.y_train_[nearest] == -1), axis=1)
-        q1 = np.sum(kernels * (self.y_train_[nearest] == 1), axis=1)
+        q0 = np.sum(kernels * (self.y_train_[nearest] == -1), axis=1).sum(axis=1)
+        q1 = np.sum(kernels * (self.y_train_[nearest] == 1), axis=1).sum(axis=1)
 
         q_total = q0 + q1
         q_sum = np.sum(q_total)
@@ -138,17 +140,17 @@ class KNN_CLAS(KNN):
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
         
         kernels = vectorized_kernel(X[:, np.newaxis], self.expert_X_[nearest], self.cov_)
-        scores = np.sum(kernels * self.expert_y_[nearest], axis=1)
+        scores = np.sum(kernels * self.expert_y_[nearest], axis=1).sum(axis=1)
         
-        return np.where(scores.mean(1) > 0, 1, -1).astype(np.int64)
+        return np.where(scores > 0, 1, -1).astype(np.int64)
     
     def likelihood_score(self, X: NDArray[np.float64]) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
         check_is_fitted(self)
         pairwise_dists = cdist(X, self.expert_X_, metric='sqeuclidean')
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
         kernels = vectorized_kernel(X[:, np.newaxis], self.expert_X_[nearest], self.cov_)
-        q0 = np.sum(kernels * (self.expert_y_[nearest] == -1), axis=1)
-        q1 = np.sum(kernels * (self.expert_y_[nearest] == 1), axis=1)
+        q0 = np.sum(kernels * (self.expert_y_[nearest] == -1), axis=1).sum(axis=1)
+        q1 = np.sum(kernels * (self.expert_y_[nearest] == 1), axis=1).sum(axis=1)
 
         q_total = q0 + q1
         q_sum = np.sum(q_total)
@@ -158,25 +160,31 @@ class KNN_CLAS(KNN):
         return q0, q1
 
 class CorrelationFilter(BaseEstimator, TransformerMixin):
-    to_drop_: set[int]
+    to_drop_: NDArray[np.int64]
     threshold: float
 
     def __init__(self, threshold: float = 0.98) -> None:
         self.threshold = threshold
-        self.to_drop_ = set()
+        self.to_drop_: NDArray[np.int64] = np.array([], dtype=int)
 
     def fit(self, X: NDArray[np.float64], y: Any = None) -> Self:
-        corr_matrix = np.corrcoef(X, rowvar=False)
-        upper = np.triu(np.ones_like(corr_matrix, dtype=bool), k=1)
-        high_corr = np.where(np.abs(corr_matrix) > self.threshold)
-        self.to_drop_ = set()
-        for i, j in zip(*high_corr):
-            if upper[i, j]:  # Avoid duplicates
-                self.to_drop_.add(j)  # Drop the later feature
+        X = np.asarray(X, dtype=float)
+        n_samples, n_features = X.shape
+
+        corr = np.corrcoef(X, rowvar=False)
+        upper_mask = np.triu(np.ones((n_features, n_features), bool), k=1)
+        high_corr = (np.abs(corr) > self.threshold) & upper_mask
+        self.to_drop_ = np.unique(np.where(high_corr)[1])
+
         return self
 
     def transform(self, X: NDArray[np.float64]) -> NDArray[np.float64]:
-        return X[:, [i for i in range(X.shape[1]) if i not in self.to_drop_]]
+        X = np.asarray(X, dtype=float)
+
+        if X.shape[1] == 0 or self.to_drop_.size == 0:
+            return X.copy()
+        
+        return np.delete(X, self.to_drop_, axis=1)
 
 class DatasetType(TypedDict):
     X: NDArray[np.float64]
@@ -246,15 +254,15 @@ def run_statistical_validation(datasets: Dict[str, DatasetType], output_dir: str
                     'KNN_CLAS': {'accuracy': [], 'precision': [], 'recall': [], 'f1': [], 'expert_count': []}
                 }
                 
-                for train_idx, test_idx in KFold(n_splits=30).split(X):
+                for train_idx, test_idx in KFold(n_splits=10).split(X):
                     X_train, X_test = X[train_idx], X[test_idx]
                     y_train, y_test = y[train_idx], y[test_idx]
+
+                    X_train = preprocessor.fit_transform(X_train)
+                    X_test = preprocessor.transform(X_test)
                     
-                    for model in [
-                            Pipeline([('preprocessor', preprocessor), ('classifier', KNN(k=k))]),
-                            Pipeline([('preprocessor', preprocessor), ('classifier', KNN_CLAS(k=k))])
-                        ]:
-                        mname = model.named_steps['classifier'].__class__.__name__
+                    for model in [KNN(k=k), KNN_CLAS(k=k)]:
+                        mname = model.__class__.__name__
                         model.fit(X_train, y_train)
                         preds = model.predict(X_test)
                         cv_metrics[mname]['accuracy'].append(float(accuracy_score(y_test, preds)))
@@ -263,9 +271,9 @@ def run_statistical_validation(datasets: Dict[str, DatasetType], output_dir: str
                         cv_metrics[mname]['f1'].append(float(f1_score(y_test, preds, average='weighted', zero_division=0)))
 
                         if mname == 'KNN_CLAS':
-                            expert_count = model.named_steps['classifier'].expert_X_.shape[0]
+                            expert_count = model.expert_X_.shape[0]
                         else:
-                            expert_count = model.named_steps['classifier'].X_train_.shape[0]
+                            expert_count = model.X_train_.shape[0]
                         cv_metrics[mname]['expert_count'].append(expert_count)
 
                 avg_expert_count: Dict[str, int] = {}
@@ -365,34 +373,25 @@ def run_likelihood_analysis(datasets: Dict[str, DatasetType], output_dir: str = 
         X = data['X']
         y = data['y']
         spatial_results[dname] = {}
+
+        preprocessor = Pipeline([
+            ('variance_threshold', VarianceThreshold(threshold=1e-3)),
+            ('correlation_filter', CorrelationFilter(threshold=0.9)),
+            ('scaler', StandardScaler())
+        ])
+
+        X = preprocessor.fit_transform(X)
         
         for k in k_values:
             print(f"--- Evaluating k={k} ---")
             spatial_results[dname][str(k)] = {}
             
-            for model_name in ['KNN', 'KNN_CLAS']:
-                preprocessor = Pipeline([
-                    ('variance_threshold', VarianceThreshold(threshold=1e-3)),
-                    ('correlation_filter', CorrelationFilter(threshold=0.9)),
-                    ('scaler', StandardScaler())
-                ])
-                
-                if model_name == 'KNN':
-                    model = Pipeline([
-                        ('preprocessor', preprocessor),
-                        ('classifier', KNN(k=k))
-                    ])
-                else:
-                    model = Pipeline([
-                        ('preprocessor', preprocessor),
-                        ('classifier', KNN_CLAS(k=k))
-                    ])
-                
+            for model in [KNN(k=k), KNN_CLAS(k=k)]:
+                model_name = model.__class__.__name__
+
                 try:
                     model.fit(X, y)
-                    X_transformed = model.named_steps['preprocessor'].transform(X)
-                    classifier = model.named_steps['classifier']
-                    q0, q1 = classifier.likelihood_score(X_transformed)
+                    q0, q1 = model.likelihood_score(X)
                     
                     class_0_mask = (y == -1)
                     class_1_mask = (y == 1)
