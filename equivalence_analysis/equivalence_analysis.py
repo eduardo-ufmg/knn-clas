@@ -35,12 +35,10 @@ class Adjacency(IntEnum):
     SUPPORT_EDGE = 2
 
 def vectorized_kernel(X: NDArray[np.float64], Y: NDArray[np.float64],
-                      cov: NDArray[np.float64], cov_inv: NDArray[np.float64], cov_det: NDArray[np.float64]) -> NDArray[np.float64]:
+                        cov_inv: NDArray[np.float64], norm_factor: NDArray[np.float64]) -> NDArray[np.float64]:
     """Vectorized Gaussian kernel computation."""
-    n_features = X.shape[1]
     X_diff = X[:, np.newaxis, :] - Y[np.newaxis, :, :]
     exponent = -0.5 * np.einsum('...i,ij,...j->...', X_diff, cov_inv, X_diff)
-    norm_factor = 1.0 / np.sqrt((2 * np.pi) ** n_features * cov_det)
     return norm_factor * np.exp(exponent)
 
 def gabriel_graph(dist_matrix: NDArray[np.float64]) -> NDArray[np.int64]:
@@ -69,7 +67,6 @@ def support_graph(gabriel_adj: NDArray[np.int64], y: NDArray[np.int64]) -> NDArr
 class KNN(BaseEstimator, ClassifierMixin):
     X_train_: NDArray[np.float64]
     y_train_: NDArray[np.int64]
-    cov_: NDArray[np.float64]
 
     def __init__(self, k: int = 3) -> None:
         self.k = k
@@ -78,9 +75,12 @@ class KNN(BaseEstimator, ClassifierMixin):
         X, y = check_X_y(X, y)
         self.X_train_ = X
         self.y_train_ = y
-        self.cov_ = np.cov(X, rowvar=False) + 1e-6 * np.eye(X.shape[1])
-        self.cov_inv_ = np.linalg.pinv(self.cov_)
-        self.cov_det_ = np.linalg.det(self.cov_ + 1e-6 * np.eye(X.shape[1]))
+        n_features = X.shape[1]
+        I_reg = 1e-6 * np.eye(n_features)
+        cov = np.cov(X, rowvar=False) + I_reg
+        self.cov_inv_ = np.linalg.pinv(cov)
+        cov_det_ = np.linalg.det(cov)
+        self.norm_factor_ = 1.0 / np.sqrt((2 * np.pi) ** n_features * cov_det_)
         return self
 
     def predict(self, X: NDArray[np.float64]) -> NDArray[np.int64]:
@@ -89,7 +89,7 @@ class KNN(BaseEstimator, ClassifierMixin):
         pairwise_dists = cdist(X, self.X_train_, metric='sqeuclidean')
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
         
-        kernels = vectorized_kernel(X[:, np.newaxis], self.X_train_[nearest], self.cov_, self.cov_inv_, self.cov_det_)
+        kernels = vectorized_kernel(X[:, np.newaxis], self.X_train_[nearest], self.cov_inv_, self.norm_factor_)
         scores = np.sum(kernels * self.y_train_[nearest], axis=1).sum(axis=1)
         
         return np.where(scores > 0, 1, -1).astype(np.int64)
@@ -99,7 +99,7 @@ class KNN(BaseEstimator, ClassifierMixin):
         pairwise_dists = cdist(X, self.X_train_, metric='sqeuclidean')
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
         
-        kernels = vectorized_kernel(X[:, np.newaxis], self.X_train_[nearest], self.cov_, self.cov_inv_, self.cov_det_)
+        kernels = vectorized_kernel(X[:, np.newaxis], self.X_train_[nearest], self.cov_inv_, self.norm_factor_)
         q0 = np.sum(kernels * (self.y_train_[nearest] == -1), axis=1).sum(axis=1)
         q1 = np.sum(kernels * (self.y_train_[nearest] == 1), axis=1).sum(axis=1)
 
@@ -139,7 +139,7 @@ class KNN_CLAS(KNN):
         pairwise_dists = cdist(X, self.expert_X_, metric='sqeuclidean')
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
         
-        kernels = vectorized_kernel(X[:, np.newaxis], self.expert_X_[nearest], self.cov_, self.cov_inv_, self.cov_det_)
+        kernels = vectorized_kernel(X[:, np.newaxis], self.expert_X_[nearest], self.cov_inv_, self.norm_factor_)
         scores = np.sum(kernels * self.expert_y_[nearest], axis=1).sum(axis=1)
         
         return np.where(scores > 0, 1, -1).astype(np.int64)
@@ -148,7 +148,7 @@ class KNN_CLAS(KNN):
         check_is_fitted(self)
         pairwise_dists = cdist(X, self.expert_X_, metric='sqeuclidean')
         nearest = np.argpartition(pairwise_dists, self.k, axis=1)[:, :self.k]
-        kernels = vectorized_kernel(X[:, np.newaxis], self.expert_X_[nearest], self.cov_, self.cov_inv_, self.cov_det_)
+        kernels = vectorized_kernel(X[:, np.newaxis], self.expert_X_[nearest], self.cov_inv_, self.norm_factor_)
         q0 = np.sum(kernels * (self.expert_y_[nearest] == -1), axis=1).sum(axis=1)
         q1 = np.sum(kernels * (self.expert_y_[nearest] == 1), axis=1).sum(axis=1)
 
