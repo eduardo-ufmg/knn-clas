@@ -38,7 +38,7 @@ def vectorized_kernel(X: NDArray[np.float64], Y: NDArray[np.float64],
                         cov_inv: NDArray[np.float64], norm_factor: NDArray[np.float64]) -> NDArray[np.float64]:
     """Vectorized Gaussian kernel computation."""
     X_diff = X[:, np.newaxis, :] - Y[np.newaxis, :, :]
-    exponent = -0.5 * np.einsum('...i,ij,...j->...', X_diff, cov_inv, X_diff)
+    exponent = -0.5 * np.einsum('...i,ij,...j->...', X_diff, cov_inv, X_diff, optimize='optimal')
     return norm_factor * np.exp(exponent)
 
 def gabriel_graph(dist_matrix: NDArray[np.float64]) -> NDArray[np.int64]:
