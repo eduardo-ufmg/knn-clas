@@ -32,6 +32,7 @@ np.random.seed(0)
 
 # K values for KNN experiments
 K_VALUES: Final[List[int]] = [1, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+H_VALUES: Final[List[int]] = [0.001, 0.01, 0.1, 0.2, 0.5, 1.0, 2.0]
 
 class Adjacency(IntEnum):
     """Enumeration for types of adjacency in graphs."""
@@ -60,14 +61,16 @@ def gaussian_kernel_pairwise(
 def batched_gaussian_kernels(
     X_points: NDArray[np.float64],
     Y_neighbor_sets: NDArray[np.float64],
-    cov_inv: NDArray[np.float64],
+    h: float,
+    cov_inv_scaled: NDArray[np.float64],
     norm_factor: float
 ) -> NDArray[np.float64]:
     """
     Computes Gaussian kernel values between N points and their respective K neighbors.
     X_points: (N, D) array of N points.
     Y_neighbor_sets: (N, K, D) array where Y_neighbor_sets[i] are the K neighbors of X_points[i].
-    cov_inv: Inverse of the covariance matrix (D, D).
+    h: Bandwidth for the Gaussian kernel.
+    cov_inv_scaled: Inverse of the covariance matrix (D, D).
     norm_factor: Normalization factor for the Gaussian.
     Returns: (N, K) array of kernel values, where out[i,j] is K(X_points[i], Y_neighbor_sets[i,j]).
     """
@@ -75,10 +78,10 @@ def batched_gaussian_kernels(
     # Y_neighbor_sets is (N, K, D)
     # Broadcasting X_points_exp (N,1,D) with Y_neighbor_sets (N,K,D)
     # results in X_diff (N,K,D) where X_diff[i,j,:] = X_points[i,:] - Y_neighbor_sets[i,j,:]
-    X_diff = X_points_exp - Y_neighbor_sets  # Shape (N, K, D)
+    X_diff = X_points_exp - Y_neighbor_sets / h  # Shape (N, K, D)
     
     # einsum for batched matrix multiplication: sum_d1 sum_d2 (X_diff[n,k,d1] * cov_inv[d1,d2] * X_diff[n,k,d2])
-    exponent = -0.5 * np.einsum('NKi,ij,NKj->NK', X_diff, cov_inv, X_diff, optimize='optimal')
+    exponent = -0.5 * np.einsum('NKi,ij,NKj->NK', X_diff, cov_inv_scaled, X_diff, optimize='optimal')
     return norm_factor * np.exp(exponent)
 
 def gabriel_graph(dist_matrix_sq: NDArray[np.float64]) -> NDArray[np.int64]:
@@ -127,10 +130,12 @@ class KNN(BaseEstimator, ClassifierMixin):
     X_train_: NDArray[np.float64]
     y_train_: NDArray[np.int64]
     cov_inv_: NDArray[np.float64]
+    cov_inv_scaled_: NDArray[np.float64]
     norm_factor_: float
 
-    def __init__(self, k: int = 3) -> None:
+    def __init__(self, k: int = 3, h: float = 1.0) -> None:
         self.k = k
+        self.h = h
 
     def fit(self, X: NDArray[np.float64], y: NDArray[np.int64]) -> Self:
         X, y = check_X_y(X, y, ensure_2d=True, dtype=[np.float64, np.float32])
@@ -162,10 +167,12 @@ class KNN(BaseEstimator, ClassifierMixin):
             # Fallback: use identity matrix for cov_inv and a simple norm_factor
             self.cov_inv_ = np.eye(n_features) 
             self.norm_factor_ = 1.0
+
+        self.cov_inv_scaled_ = self.cov_inv_ / (self.h ** 2)  # Scale the covariance inverse by h^2
             
         return self
 
-    def predict(self, X: NDArray[np.float64], k: Optional[int] = None) -> NDArray[np.int64]:
+    def predict(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[int] = None) -> NDArray[np.int64]:
         check_is_fitted(self, ['X_train_', 'y_train_', 'cov_inv_', 'norm_factor_'])
         X = check_array(X, ensure_2d=True, dtype=[np.float64, np.float32])
 
@@ -175,6 +182,10 @@ class KNN(BaseEstimator, ClassifierMixin):
         if current_k > self.X_train_.shape[0]:
             logging.warning(f"k ({current_k}) is greater than the number of training samples ({self.X_train_.shape[0]}). Setting k to {self.X_train_.shape[0]}.")
             current_k = self.X_train_.shape[0]
+
+        current_h = h if h is not None else self.h
+        if not isinstance(current_h, (int, float)) or current_h <= 0:
+            raise ValueError(f"Bandwidth h must be a positive number, got {current_h}")
 
         # Pairwise squared Euclidean distances
         pairwise_dists_sq = cdist(X, self.X_train_, metric='sqeuclidean')
@@ -186,7 +197,7 @@ class KNN(BaseEstimator, ClassifierMixin):
         k_nearest_neighbors = self.X_train_[nearest_indices] # Shape (N_X_test, current_k, N_features)
         k_nearest_labels = self.y_train_[nearest_indices]    # Shape (N_X_test, current_k)
 
-        kernels = batched_gaussian_kernels(X, k_nearest_neighbors, self.cov_inv_, self.norm_factor_) # Shape (N_X_test, current_k)
+        kernels = batched_gaussian_kernels(X, k_nearest_neighbors, current_h, self.cov_inv_scaled_, self.norm_factor_) # Shape (N_X_test, current_k)
         
         # Weighted sum of labels of k nearest neighbors
         # scores[i] = sum_{j=0 to k-1} kernels[i,j] * k_nearest_labels[i,j]
@@ -194,7 +205,7 @@ class KNN(BaseEstimator, ClassifierMixin):
         
         return np.where(scores >= 0, 1, -1).astype(np.int64) # Predict class 1 if score is non-negative
 
-    def likelihood_score(self, X: NDArray[np.float64], k: Optional[int] = None) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
+    def likelihood_score(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[int] = None) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
         check_is_fitted(self, ['X_train_', 'y_train_', 'cov_inv_', 'norm_factor_'])
         X = check_array(X, ensure_2d=True, dtype=[np.float64, np.float32])
 
@@ -205,13 +216,17 @@ class KNN(BaseEstimator, ClassifierMixin):
             logging.warning(f"k ({current_k}) in likelihood_score is greater than training samples. Adjusting k.")
             current_k = self.X_train_.shape[0]
             
+        current_h = h if h is not None else self.h
+        if not isinstance(current_h, (int, float)) or current_h <= 0:
+            raise ValueError(f"Bandwidth h must be a positive number, got {current_h}")
+
         pairwise_dists_sq = cdist(X, self.X_train_, metric='sqeuclidean')
         nearest_indices = np.argpartition(pairwise_dists_sq, current_k - 1, axis=1)[:, :current_k]
         
         k_nearest_neighbors = self.X_train_[nearest_indices]
         k_nearest_labels = self.y_train_[nearest_indices]
         
-        kernels = batched_gaussian_kernels(X, k_nearest_neighbors, self.cov_inv_, self.norm_factor_) # (N_X_test, k)
+        kernels = batched_gaussian_kernels(X, k_nearest_neighbors, current_h, self.cov_inv_scaled_, self.norm_factor_) # (N_X_test, k)
 
         q0 = np.sum(kernels * (k_nearest_labels == -1), axis=1) # Sum of kernels for class -1 neighbors
         q1 = np.sum(kernels * (k_nearest_labels == 1), axis=1)  # Sum of kernels for class  1 neighbors
@@ -223,8 +238,8 @@ class KNN_CLAS(KNN):
     expert_X_: NDArray[np.float64]
     expert_y_: NDArray[np.int64]
 
-    def __init__(self, k: int = 3) -> None:
-        super().__init__(k=k)
+    def __init__(self, k: int = 3, h: float = 1.0) -> None:
+        super().__init__(k=k, h=h)
 
     def _get_experts(self, X: NDArray[np.float64], y: NDArray[np.int64]) -> Tuple[NDArray[np.float64], NDArray[np.int64]]:
         """Identifies expert points based on Gabriel graph and support edges."""
@@ -264,13 +279,17 @@ class KNN_CLAS(KNN):
              self.k = 1 # Default k if somehow no experts and no error
         return self
 
-    def predict(self, X: NDArray[np.float64], k: Optional[int] = None) -> NDArray[np.int64]:
+    def predict(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[int] = None) -> NDArray[np.int64]:
         check_is_fitted(self, ['expert_X_', 'expert_y_', 'cov_inv_', 'norm_factor_'])
         X = check_array(X, ensure_2d=True, dtype=[np.float64, np.float32])
 
         current_k = k if k is not None else self.k
         if not isinstance(current_k, int) or current_k <= 0:
             raise ValueError(f"Number of neighbors k must be a positive integer, got {current_k}")
+        
+        current_h = h if h is not None else self.h
+        if not isinstance(current_h, (int, float)) or current_h <= 0:
+            raise ValueError(f"Bandwidth h must be a positive number, got {current_h}")
 
         if self.expert_X_.shape[0] == 0:
              raise RuntimeError("KNN_CLAS has no expert points to predict from. Ensure fit was successful.")
@@ -285,18 +304,22 @@ class KNN_CLAS(KNN):
         k_nearest_expert_labels = self.expert_y_[nearest_indices]
         
         # Use cov_inv_ and norm_factor_ from the original full dataset fit
-        kernels = batched_gaussian_kernels(X, k_nearest_expert_neighbors, self.cov_inv_, self.norm_factor_)
+        kernels = batched_gaussian_kernels(X, k_nearest_expert_neighbors, current_h, self.cov_inv_scaled_, self.norm_factor_)
         scores = np.sum(kernels * k_nearest_expert_labels, axis=1)
         
         return np.where(scores >= 0, 1, -1).astype(np.int64)
     
-    def likelihood_score(self, X: NDArray[np.float64], k: Optional[int] = None) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
+    def likelihood_score(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[int] = None) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
         check_is_fitted(self, ['expert_X_', 'expert_y_', 'cov_inv_', 'norm_factor_'])
         X = check_array(X, ensure_2d=True, dtype=[np.float64, np.float32])
 
         current_k = k if k is not None else self.k
         if not isinstance(current_k, int) or current_k <= 0:
             raise ValueError(f"Number of neighbors k must be a positive integer, got {current_k}")
+        
+        current_h = h if h is not None else self.h
+        if not isinstance(current_h, (int, float)) or current_h <= 0:
+            raise ValueError(f"Bandwidth h must be a positive number, got {current_h}")
 
         if self.expert_X_.shape[0] == 0:
              raise RuntimeError("KNN_CLAS has no expert points for likelihood_score. Ensure fit was successful.")
@@ -310,7 +333,7 @@ class KNN_CLAS(KNN):
         k_nearest_expert_neighbors = self.expert_X_[nearest_indices]
         k_nearest_expert_labels = self.expert_y_[nearest_indices]
 
-        kernels = batched_gaussian_kernels(X, k_nearest_expert_neighbors, self.cov_inv_, self.norm_factor_)
+        kernels = batched_gaussian_kernels(X, k_nearest_expert_neighbors, current_h, self.cov_inv_scaled_, self.norm_factor_)
         
         q0 = np.sum(kernels * (k_nearest_expert_labels == -1), axis=1)
         q1 = np.sum(kernels * (k_nearest_expert_labels == 1), axis=1)
@@ -383,9 +406,8 @@ class DatasetStatisticalResults(TypedDict): # Statistical test results for one d
     ttest_rel: Dict[str, TTestResult]  # Metric name -> T-test result
 
 # Overall structure for statistical results
-# DatasetName -> K_value -> TestName -> MetricName -> ResultValue
-StatisticalResults = Dict[str, Dict[int, DatasetStatisticalResults]]
-
+# DatasetName -> K_value -> h_value -> TestName -> MetricName -> ResultValue
+StatisticalResults = Dict[str, Dict[int, Dict[float, DatasetStatisticalResults]]]
 
 class SpatialMetrics(TypedDict):
     centroid_distance: float
@@ -399,8 +421,8 @@ class SpatialMetrics(TypedDict):
     var_q1: float
 
 # Overall structure for spatial results
-# DatasetName -> K_value -> ModelName -> SpatialMetrics
-SpatialAnalysisResults = Dict[str, Dict[int, Dict[str, SpatialMetrics]]]
+# DatasetName -> K_value -> h_value -> ModelName -> SpatialMetrics
+SpatialAnalysisResults = Dict[str, Dict[int, Dict[float, Dict[str, SpatialMetrics]]]]
 
 
 def load_datasets(data_dir: Path = Path('./sets')) -> Dict[str, Dataset]:
@@ -463,11 +485,13 @@ def run_statistical_validation(datasets: Dict[str, Dataset], output_dir: Path = 
         X, y = dataset_content['X'], dataset_content['y']
 
         # Store metrics from each fold for each k and model
-        # cv_metrics: K_value -> ModelName -> MetricName -> List_of_scores_from_folds
-        cv_metrics_all_k: Dict[int, ModelFoldResults] = {
+        # cv_metrics: K_value -> h_value -> ModelName -> MetricName -> List_of_scores_from_folds
+        cv_metrics_all: Dict[int, ModelFoldResults] = {
             k_val: {
-                'KNN': {metric: [] for metric in metric_names},
-                'KNN_CLAS': {metric: [] for metric in metric_names}
+                h_val: {
+                    'KNN': {metric: [] for metric in metric_names},
+                    'KNN_CLAS': {metric: [] for metric in metric_names}
+                } for h_val in H_VALUES
             } for k_val in K_VALUES
         }
         
@@ -512,91 +536,97 @@ def run_statistical_validation(datasets: Dict[str, Dataset], output_dir: Path = 
                         if actual_k == 0: # No points to predict from
                             logging.warning(f"Model {model_name} with k={k_val} has no points for prediction in {dname}, Fold {fold_idx+1}. Scoring as 0.")
                             for metric in metric_names:
-                                cv_metrics_all_k[k_val][model_name][metric].append(0.0) # type: ignore
+                                cv_metrics_all[k_val][model_name][metric].append(0.0) # type: ignore
                             continue
 
-                        y_pred = model_instance.predict(X_test_processed, k=actual_k)
-                        
-                        # Ensure y_test and y_pred are not empty and have consistent labels for scoring
-                        if len(y_test) == 0 or len(y_pred) == 0:
-                            for metric in metric_names:
-                                cv_metrics_all_k[k_val][model_name][metric].append(0.0) # type: ignore
-                            continue
+                        for h_val in H_VALUES:
 
-                        # Calculate metrics
-                        cv_metrics_all_k[k_val][model_name]['accuracy'].append(float(accuracy_score(y_test, y_pred))) #type: ignore
-                        cv_metrics_all_k[k_val][model_name]['precision'].append(float(precision_score(y_test, y_pred, zero_division=0, labels=np.unique(y_test)))) #type: ignore
-                        cv_metrics_all_k[k_val][model_name]['recall'].append(float(recall_score(y_test, y_pred, zero_division=0, labels=np.unique(y_test)))) #type: ignore
-                        cv_metrics_all_k[k_val][model_name]['f1'].append(float(f1_score(y_test, y_pred, zero_division=0, labels=np.unique(y_test)))) #type: ignore
+                            y_pred = model_instance.predict(X_test_processed, k=actual_k, h=h_val)
+                            
+                            # Ensure y_test and y_pred are not empty and have consistent labels for scoring
+                            if len(y_test) == 0 or len(y_pred) == 0:
+                                for metric in metric_names:
+                                    cv_metrics_all[k_val][h_val][model_name][metric].append(0.0) # type: ignore
+                                continue
+
+                            # Calculate metrics
+                            cv_metrics_all[k_val][h_val][model_name]['accuracy'].append(float(accuracy_score(y_test, y_pred))) #type: ignore
+                            cv_metrics_all[k_val][h_val][model_name]['precision'].append(float(precision_score(y_test, y_pred, zero_division=0, labels=np.unique(y_test)))) #type: ignore
+                            cv_metrics_all[k_val][h_val][model_name]['recall'].append(float(recall_score(y_test, y_pred, zero_division=0, labels=np.unique(y_test)))) #type: ignore
+                            cv_metrics_all[k_val][h_val][model_name]['f1'].append(float(f1_score(y_test, y_pred, zero_division=0, labels=np.unique(y_test)))) #type: ignore
 
                 except ValueError as e: # Catch errors from fit/predict (e.g. no experts)
                     logging.error(f"Error with model {model_name} for {dname}, Fold {fold_idx+1}: {e}. Scoring as 0 for this model in this fold.")
                     for k_val_err in K_VALUES:
-                        for metric in metric_names:
-                             cv_metrics_all_k[k_val_err][model_name][metric].append(0.0) #type: ignore
+                        for h_val_err in H_VALUES:
+                            for metric in metric_names:
+                                cv_metrics_all[k_val_err][h_val_err][model_name][metric].append(0.0) #type: ignore
                     # Continue to next model or fold
                 except Exception as e: # Catch any other unexpected error
                     logging.critical(f"Unexpected error with model {model_name} for {dname}, Fold {fold_idx+1}: {e}")
                     # Decide if to skip fold, dataset, or stop
                     for k_val_err in K_VALUES:
-                        for metric in metric_names:
-                            cv_metrics_all_k[k_val_err][model_name][metric].append(0.0) # type: ignore
+                        for h_val_err in H_VALUES:
+                            for metric in metric_names:
+                                cv_metrics_all[k_val_err][h_val_err][model_name][metric].append(0.0) #type: ignore
 
         # Perform statistical tests for each k
         for k_val in K_VALUES:
-            all_results[dname][k_val] = {'wilcoxon': {}, 'ttest_rel': {}} #type: ignore
-            
-            for metric in metric_names:
-                knn_scores = np.array(cv_metrics_all_k[k_val]['KNN'][metric]) #type: ignore
-                knn_clas_scores = np.array(cv_metrics_all_k[k_val]['KNN_CLAS'][metric]) #type: ignore
+            all_results[dname][k_val] = {}
+            for h_val in H_VALUES:
+                all_results[dname][k_val][h_val] = {'wilcoxon': {}, 'ttest_rel': {}} #type: ignore
+                
+                for metric in metric_names:
+                    knn_scores = np.array(cv_metrics_all[k_val][h_val]['KNN'][metric]) #type: ignore
+                    knn_clas_scores = np.array(cv_metrics_all[k_val][h_val]['KNN_CLAS'][metric]) #type: ignore
 
-                # Ensure there are scores to compare
-                if len(knn_scores) == 0 or len(knn_clas_scores) == 0 or len(knn_scores) != len(knn_clas_scores) :
-                    logging.warning(f"Skipping stat tests for {dname}, k={k_val}, metric={metric} due to insufficient/mismatched fold data.")
-                    all_results[dname][k_val]['wilcoxon'][metric] = {'statistic': np.nan, 'pvalue': np.nan} #type: ignore
-                    all_results[dname][k_val]['ttest_rel'][metric] = {'statistic': np.nan, 'pvalue': np.nan, 'cohen_d': np.nan} #type: ignore
-                    continue
+                    # Ensure there are scores to compare
+                    if len(knn_scores) == 0 or len(knn_clas_scores) == 0 or len(knn_scores) != len(knn_clas_scores) :
+                        logging.warning(f"Skipping stat tests for {dname}, k={k_val}, h={h_val}, metric={metric} due to insufficient/mismatched fold data.")
+                        all_results[dname][k_val][h_val]['wilcoxon'][metric] = {'statistic': np.nan, 'pvalue': np.nan} #type: ignore
+                        all_results[dname][k_val][h_val]['ttest_rel'][metric] = {'statistic': np.nan, 'pvalue': np.nan, 'cohen_d': np.nan} #type: ignore
+                        continue
 
-                # Wilcoxon test
-                diff = knn_scores - knn_clas_scores
-                if np.all(np.abs(diff) < 1e-9): # Effectively all zero differences
-                    wilcoxon_stat, wilcoxon_p = 0.0, 1.0
-                else:
-                    try:
-                        wilcoxon_stat, wilcoxon_p = wilcoxon(knn_scores, knn_clas_scores)
-                    except ValueError as e: # e.g. too few samples, all differences are zero after internal processing
-                         logging.warning(f"Wilcoxon test failed for {dname}, k={k_val}, metric={metric}: {e}. Assigning default values.")
-                         wilcoxon_stat, wilcoxon_p = (0.0, 1.0) if np.all(np.abs(diff) < 1e-9) else (np.nan, np.nan)
-
-                all_results[dname][k_val]['wilcoxon'][metric] = {'statistic': float(wilcoxon_stat), 'pvalue': float(wilcoxon_p)} #type: ignore
-
-                # Paired T-test
-                ttest_stat, ttest_p, cohen_d_val = np.nan, np.nan, np.nan
-                if np.all(np.abs(diff) < 1e-9): # All differences are zero
-                    ttest_stat, ttest_p, cohen_d_val = 0.0, 1.0, 0.0
-                else:
-                    # Check if all differences are identical (std_dev of diff will be 0)
-                    if np.std(diff, ddof=1) < 1e-9: # Effectively zero standard deviation
-                        mean_diff = np.mean(diff)
-                        # If mean_diff is also zero, it's covered above. If non-zero, t-stat is undefined (inf).
-                        ttest_stat = np.inf * np.sign(mean_diff) if mean_diff != 0 else 0.0
-                        ttest_p = 0.0 if mean_diff != 0 else 1.0
-                        cohen_d_val = np.inf * np.sign(mean_diff) if mean_diff != 0 else 0.0
+                    # Wilcoxon test
+                    diff = knn_scores - knn_clas_scores
+                    if np.all(np.abs(diff) < 1e-9): # Effectively all zero differences
+                        wilcoxon_stat, wilcoxon_p = 0.0, 1.0
                     else:
                         try:
-                            ttest_stat, ttest_p = ttest_rel(knn_scores, knn_clas_scores)
-                            mean_diff = np.mean(diff)
-                            std_diff = np.std(diff, ddof=1) # Sample std dev of differences
-                            cohen_d_val = mean_diff / std_diff if std_diff > 1e-9 else (np.inf * np.sign(mean_diff) if mean_diff !=0 else 0.0)
-                        except Exception as e: # Catch any error during t-test
-                            logging.warning(f"Paired t-test failed for {dname}, k={k_val}, metric={metric}: {e}. Assigning NaN.")
-                            # ttest_stat, ttest_p, cohen_d_val remain NaN
+                            wilcoxon_stat, wilcoxon_p = wilcoxon(knn_scores, knn_clas_scores)
+                        except ValueError as e: # e.g. too few samples, all differences are zero after internal processing
+                            logging.warning(f"Wilcoxon test failed for {dname}, k={k_val}, h={h_val}, metric={metric}: {e}. Assigning default values.")
+                            wilcoxon_stat, wilcoxon_p = (0.0, 1.0) if np.all(np.abs(diff) < 1e-9) else (np.nan, np.nan)
 
-                all_results[dname][k_val]['ttest_rel'][metric] = { #type: ignore
-                    'statistic': float(np.nan_to_num(ttest_stat, nan=0.0, posinf=1e12, neginf=-1e12)), # Replace non-finite with large numbers
-                    'pvalue': float(np.nan_to_num(ttest_p, nan=1.0)),
-                    'cohen_d': float(np.nan_to_num(cohen_d_val, nan=0.0, posinf=1e12, neginf=-1e12))
-                }
+                    all_results[dname][k_val][h_val]['wilcoxon'][metric] = {'statistic': float(wilcoxon_stat), 'pvalue': float(wilcoxon_p)} #type: ignore
+
+                    # Paired T-test
+                    ttest_stat, ttest_p, cohen_d_val = np.nan, np.nan, np.nan
+                    if np.all(np.abs(diff) < 1e-9): # All differences are zero
+                        ttest_stat, ttest_p, cohen_d_val = 0.0, 1.0, 0.0
+                    else:
+                        # Check if all differences are identical (std_dev of diff will be 0)
+                        if np.std(diff, ddof=1) < 1e-9: # Effectively zero standard deviation
+                            mean_diff = np.mean(diff)
+                            # If mean_diff is also zero, it's covered above. If non-zero, t-stat is undefined (inf).
+                            ttest_stat = np.inf * np.sign(mean_diff) if mean_diff != 0 else 0.0
+                            ttest_p = 0.0 if mean_diff != 0 else 1.0
+                            cohen_d_val = np.inf * np.sign(mean_diff) if mean_diff != 0 else 0.0
+                        else:
+                            try:
+                                ttest_stat, ttest_p = ttest_rel(knn_scores, knn_clas_scores)
+                                mean_diff = np.mean(diff)
+                                std_diff = np.std(diff, ddof=1) # Sample std dev of differences
+                                cohen_d_val = mean_diff / std_diff if std_diff > 1e-9 else (np.inf * np.sign(mean_diff) if mean_diff !=0 else 0.0)
+                            except Exception as e: # Catch any error during t-test
+                                logging.warning(f"Paired t-test failed for {dname}, k={k_val}, h={h_val}, metric={metric}: {e}. Assigning NaN.")
+                                # ttest_stat, ttest_p, cohen_d_val remain NaN
+
+                    all_results[dname][k_val][h_val]['ttest_rel'][metric] = { #type: ignore
+                        'statistic': float(np.nan_to_num(ttest_stat, nan=0.0, posinf=1e12, neginf=-1e12)), # Replace non-finite with large numbers
+                        'pvalue': float(np.nan_to_num(ttest_p, nan=1.0)),
+                        'cohen_d': float(np.nan_to_num(cohen_d_val, nan=0.0, posinf=1e12, neginf=-1e12))
+                    }
     
     # Save results
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -658,142 +688,127 @@ def run_likelihood_analysis(datasets: Dict[str, Dataset], output_dir: Path = Pat
 
         for k_val in K_VALUES:
             all_spatial_results[dname][k_val] = {} #type: ignore
-            for model_name, model_instance in models_for_likelihood.items():
-                try:
-                    # Adjust k if needed
-                    actual_k = k_val
-                    if model_name == 'KNN':
-                        if k_val > model_instance.X_train_.shape[0] and model_instance.X_train_.shape[0]>0:
-                            actual_k = model_instance.X_train_.shape[0]
-                    elif model_name == 'KNN_CLAS':
-                        if k_val > model_instance.expert_X_.shape[0] and model_instance.expert_X_.shape[0]>0: #type: ignore
-                            actual_k = model_instance.expert_X_.shape[0] #type: ignore
-                    
-                    if actual_k == 0: # No points to get likelihood from
-                        logging.warning(f"Model {model_name} with k={k_val} has no points for likelihood in {dname}. Skipping.")
-                        # Initialize with NaN or default values if you want to record this attempt
-                        all_spatial_results[dname][k_val][model_name] = { # type: ignore
-                            metric: np.nan for metric in SpatialMetrics.__annotations__
-                        }
+
+            for h_val in H_VALUES:
+                all_spatial_results[dname][k_val][h_val] = {model_name: {} for model_name in models_for_likelihood.keys()} # type: ignore
+                for model_name, model_instance in models_for_likelihood.items():
+                    try:
+                        q0, q1 = model_instance.likelihood_score(X_processed, k=k_val, h=h_val)
+                    except RuntimeError as e: # E.g. KNN_CLAS predict called with no experts
+                        logging.error(f"Runtime error during likelihood score for {model_name}, k={k_val}, h={h_val} on {dname}: {e}. Skipping this model.")
+                        all_spatial_results[dname][k_val][h_val][model_name] = { # type: ignore
+                                metric: np.nan for metric in SpatialMetrics.__annotations__
+                            }
                         continue
-                        
-                    q0, q1 = model_instance.likelihood_score(X_processed, k=actual_k)
-                except RuntimeError as e: # E.g. KNN_CLAS predict called with no experts
-                    logging.error(f"Runtime error during likelihood score for {model_name}, k={k_val} on {dname}: {e}")
-                    all_spatial_results[dname][k_val][model_name] = { # type: ignore
-                            metric: np.nan for metric in SpatialMetrics.__annotations__
-                        }
-                    continue
 
 
-                class_0_mask = (y_orig == -1)
-                class_1_mask = (y_orig == 1)
-                
-                # Ensure there are points in each class for q value separation
-                if not (np.any(class_0_mask) and np.any(class_1_mask)):
-                    logging.warning(f"Dataset {dname} does not have samples from both classes. Spatial metrics may be ill-defined.")
-                    # Fill with NaNs or skip, depending on desired behavior
-                    all_spatial_results[dname][k_val][model_name] = { # type: ignore
-                            metric: np.nan for metric in SpatialMetrics.__annotations__
-                        }
-                    continue
-
-
-                q0_c0, q1_c0 = q0[class_0_mask], q1[class_0_mask]
-                q0_c1, q1_c1 = q0[class_1_mask], q1[class_1_mask]
-                
-                # (q0, q1) points for each class
-                points_c0 = np.column_stack((q0_c0, q1_c0)) if q0_c0.size > 0 else np.empty((0,2))
-                points_c1 = np.column_stack((q0_c1, q1_c1)) if q0_c1.size > 0 else np.empty((0,2))
-
-                metrics: SpatialMetrics = {key: np.nan for key in SpatialMetrics.__annotations__} # Initialize with NaN
-
-                # Centroids and their distance
-                if points_c0.shape[0] > 0 and points_c1.shape[0] > 0:
-                    centroid_c0 = np.mean(points_c0, axis=0)
-                    centroid_c1 = np.mean(points_c1, axis=0)
-                    metrics['centroid_distance'] = float(np.linalg.norm(centroid_c0 - centroid_c1))
+                    class_0_mask = (y_orig == -1)
+                    class_1_mask = (y_orig == 1)
                     
-                    # Mean distance between points from opposite classes
-                    metrics['mean_distance_opposite'] = float(np.mean(cdist(points_c0, points_c1, metric='euclidean')))
+                    # Ensure there are points in each class for q value separation
+                    if not (np.any(class_0_mask) and np.any(class_1_mask)):
+                        logging.warning(f"Dataset {dname} does not have samples from both classes. Spatial metrics may be ill-defined.")
+                        # Fill with NaNs or skip, depending on desired behavior
+                        all_spatial_results[dname][k_val][h_val][model_name] = { # type: ignore
+                                metric: np.nan for metric in SpatialMetrics.__annotations__
+                            }
+                        continue
+
+
+                    q0_c0, q1_c0 = q0[class_0_mask], q1[class_0_mask]
+                    q0_c1, q1_c1 = q0[class_1_mask], q1[class_1_mask]
                     
-                    # Bhattacharyya Distance
-                    # Requires >1 point per class to compute covariance
-                    if points_c0.shape[0] > 1 and points_c1.shape[0] > 1:
-                        cov_c0 = np.cov(points_c0, rowvar=False)
-                        cov_c1 = np.cov(points_c1, rowvar=False)
+                    # (q0, q1) points for each class
+                    points_c0 = np.column_stack((q0_c0, q1_c0)) if q0_c0.size > 0 else np.empty((0,2))
+                    points_c1 = np.column_stack((q0_c1, q1_c1)) if q0_c1.size > 0 else np.empty((0,2))
+
+                    metrics: SpatialMetrics = {key: np.nan for key in SpatialMetrics.__annotations__} # Initialize with NaN
+
+                    # Centroids and their distance
+                    if points_c0.shape[0] > 0 and points_c1.shape[0] > 0:
+                        centroid_c0 = np.mean(points_c0, axis=0)
+                        centroid_c1 = np.mean(points_c1, axis=0)
+                        metrics['centroid_distance'] = float(np.linalg.norm(centroid_c0 - centroid_c1))
                         
-                        # Add small epsilon for numerical stability
-                        eps = 1e-9 * np.eye(points_c0.shape[1]) 
-                        cov_c0 = cov_c0 + eps
-                        cov_c1 = cov_c1 + eps
+                        # Mean distance between points from opposite classes
+                        metrics['mean_distance_opposite'] = float(np.mean(cdist(points_c0, points_c1, metric='euclidean')))
                         
-                        cov_avg = (cov_c0 + cov_c1) / 2.0
-                        diff_mu = centroid_c0 - centroid_c1
-                        
-                        try:
-                            inv_cov_avg = np.linalg.inv(cov_avg)
-                            term1 = 0.125 * diff_mu @ inv_cov_avg @ diff_mu.T
+                        # Bhattacharyya Distance
+                        # Requires >1 point per class to compute covariance
+                        if points_c0.shape[0] > 1 and points_c1.shape[0] > 1:
+                            cov_c0 = np.cov(points_c0, rowvar=False)
+                            cov_c1 = np.cov(points_c1, rowvar=False)
                             
-                            slogdet_cov_avg = np.linalg.slogdet(cov_avg)
-                            slogdet_cov_c0 = np.linalg.slogdet(cov_c0)
-                            slogdet_cov_c1 = np.linalg.slogdet(cov_c1)
+                            # Add small epsilon for numerical stability
+                            eps = 1e-9 * np.eye(points_c0.shape[1]) 
+                            cov_c0 = cov_c0 + eps
+                            cov_c1 = cov_c1 + eps
+                            
+                            cov_avg = (cov_c0 + cov_c1) / 2.0
+                            diff_mu = centroid_c0 - centroid_c1
+                            
+                            try:
+                                inv_cov_avg = np.linalg.inv(cov_avg)
+                                term1 = 0.125 * diff_mu @ inv_cov_avg @ diff_mu.T
+                                
+                                slogdet_cov_avg = np.linalg.slogdet(cov_avg)
+                                slogdet_cov_c0 = np.linalg.slogdet(cov_c0)
+                                slogdet_cov_c1 = np.linalg.slogdet(cov_c1)
 
-                            if slogdet_cov_avg[0] > 0 and slogdet_cov_c0[0] > 0 and slogdet_cov_c1[0] > 0: # Valid log-determinants
-                                term2 = 0.5 * (slogdet_cov_avg[1] - 0.5 * (slogdet_cov_c0[1] + slogdet_cov_c1[1]))
-                                metrics['bhattacharyya_distance'] = float(term1 + term2)
+                                if slogdet_cov_avg[0] > 0 and slogdet_cov_c0[0] > 0 and slogdet_cov_c1[0] > 0: # Valid log-determinants
+                                    term2 = 0.5 * (slogdet_cov_avg[1] - 0.5 * (slogdet_cov_c0[1] + slogdet_cov_c1[1]))
+                                    metrics['bhattacharyya_distance'] = float(term1 + term2)
+                                else:
+                                    logging.debug(f"Skipping Bhattacharyya term2 due to non-positive determinant for {dname}, k={k_val}, model={model_name}")
+                                    metrics['bhattacharyya_distance'] = float(term1) # Or NaN if term2 is crucial
+                            except np.linalg.LinAlgError:
+                                logging.warning(f"LinAlgError in Bhattacharyya calculation for {dname}, k={k_val}, model={model_name}.")
+                                # metrics['bhattacharyya_distance'] remains NaN or set to a specific error indicator
+                    
+                    # Mean distance within the same class
+                    same_distances: List[float] = []
+                    if points_c0.shape[0] > 1: same_distances.extend(pdist(points_c0, metric='euclidean'))
+                    if points_c1.shape[0] > 1: same_distances.extend(pdist(points_c1, metric='euclidean'))
+                    if same_distances: 
+                        metrics['mean_distance_same'] = float(np.mean(same_distances))
+                        metrics['var_dist_same'] = float(np.var(same_distances))
+
+                    # Mean distance to centroid & variance
+                    centroid_dists_all: List[float] = []
+                    if points_c0.shape[0] > 0 and 'centroid_c0' in locals():
+                        dists_c0_to_centroid = np.linalg.norm(points_c0 - centroid_c0, axis=1)
+                        if dists_c0_to_centroid.size > 0:
+                            metrics['mean_dist_centroid'] = float(np.mean(dists_c0_to_centroid)) # Overwrites if c1 also computed
+                            metrics['var_dist_centroid'] = float(np.var(dists_c0_to_centroid))
+                            centroid_dists_all.extend(dists_c0_to_centroid)
+                    if points_c1.shape[0] > 0 and 'centroid_c1' in locals():
+                        dists_c1_to_centroid = np.linalg.norm(points_c1 - centroid_c1, axis=1)
+                        if dists_c1_to_centroid.size > 0:
+                            # Average the mean distances if both classes present, or handle as needed
+                            if metrics['mean_dist_centroid'] is not np.nan :
+                                metrics['mean_dist_centroid'] = float(np.mean([metrics['mean_dist_centroid'], np.mean(dists_c1_to_centroid)]))
+                                metrics['var_dist_centroid'] = float(np.mean([metrics['var_dist_centroid'], np.var(dists_c1_to_centroid)]))
                             else:
-                                logging.debug(f"Skipping Bhattacharyya term2 due to non-positive determinant for {dname}, k={k_val}, model={model_name}")
-                                metrics['bhattacharyya_distance'] = float(term1) # Or NaN if term2 is crucial
-                        except np.linalg.LinAlgError:
-                            logging.warning(f"LinAlgError in Bhattacharyya calculation for {dname}, k={k_val}, model={model_name}.")
-                            # metrics['bhattacharyya_distance'] remains NaN or set to a specific error indicator
-                
-                # Mean distance within the same class
-                same_distances: List[float] = []
-                if points_c0.shape[0] > 1: same_distances.extend(pdist(points_c0, metric='euclidean'))
-                if points_c1.shape[0] > 1: same_distances.extend(pdist(points_c1, metric='euclidean'))
-                if same_distances: 
-                    metrics['mean_distance_same'] = float(np.mean(same_distances))
-                    metrics['var_dist_same'] = float(np.var(same_distances))
+                                metrics['mean_dist_centroid'] = float(np.mean(dists_c1_to_centroid))
+                                metrics['var_dist_centroid'] = float(np.var(dists_c1_to_centroid))
+                            centroid_dists_all.extend(dists_c1_to_centroid)
 
-                # Mean distance to centroid & variance
-                centroid_dists_all: List[float] = []
-                if points_c0.shape[0] > 0 and 'centroid_c0' in locals():
-                    dists_c0_to_centroid = np.linalg.norm(points_c0 - centroid_c0, axis=1)
-                    if dists_c0_to_centroid.size > 0:
-                        metrics['mean_dist_centroid'] = float(np.mean(dists_c0_to_centroid)) # Overwrites if c1 also computed
-                        metrics['var_dist_centroid'] = float(np.var(dists_c0_to_centroid))
-                        centroid_dists_all.extend(dists_c0_to_centroid)
-                if points_c1.shape[0] > 0 and 'centroid_c1' in locals():
-                    dists_c1_to_centroid = np.linalg.norm(points_c1 - centroid_c1, axis=1)
-                    if dists_c1_to_centroid.size > 0:
-                        # Average the mean distances if both classes present, or handle as needed
-                        if metrics['mean_dist_centroid'] is not np.nan :
-                             metrics['mean_dist_centroid'] = float(np.mean([metrics['mean_dist_centroid'], np.mean(dists_c1_to_centroid)]))
-                             metrics['var_dist_centroid'] = float(np.mean([metrics['var_dist_centroid'], np.var(dists_c1_to_centroid)]))
-                        else:
-                             metrics['mean_dist_centroid'] = float(np.mean(dists_c1_to_centroid))
-                             metrics['var_dist_centroid'] = float(np.var(dists_c1_to_centroid))
-                        centroid_dists_all.extend(dists_c1_to_centroid)
+                    if centroid_dists_all:
+                        metrics['mean_dist_centroid_overall'] = float(np.mean(centroid_dists_all))
+                        metrics['var_dist_centroid_overall'] = float(np.var(centroid_dists_all))
 
-                if centroid_dists_all:
-                   metrics['mean_dist_centroid_overall'] = float(np.mean(centroid_dists_all))
-                   metrics['var_dist_centroid_overall'] = float(np.var(centroid_dists_all))
+                    # Variance of q0 and q1 scores
+                    q0_vars_list: List[float] = []
+                    if q0_c0.size > 0: q0_vars_list.append(float(np.var(q0_c0)))
+                    if q0_c1.size > 0: q0_vars_list.append(float(np.var(q0_c1)))
+                    if q0_vars_list: metrics['var_q0'] = float(np.mean(q0_vars_list))
+                    
+                    q1_vars_list: List[float] = []
+                    if q1_c0.size > 0: q1_vars_list.append(float(np.var(q1_c0)))
+                    if q1_c1.size > 0: q1_vars_list.append(float(np.var(q1_c1)))
+                    if q1_vars_list: metrics['var_q1'] = float(np.mean(q1_vars_list))
 
-
-                # Variance of q0 and q1 scores
-                q0_vars_list: List[float] = []
-                if q0_c0.size > 0: q0_vars_list.append(float(np.var(q0_c0)))
-                if q0_c1.size > 0: q0_vars_list.append(float(np.var(q0_c1)))
-                if q0_vars_list: metrics['var_q0'] = float(np.mean(q0_vars_list))
-                
-                q1_vars_list: List[float] = []
-                if q1_c0.size > 0: q1_vars_list.append(float(np.var(q1_c0)))
-                if q1_c1.size > 0: q1_vars_list.append(float(np.var(q1_c1)))
-                if q1_vars_list: metrics['var_q1'] = float(np.mean(q1_vars_list))
-
-                all_spatial_results[dname][k_val][model_name] = metrics #type: ignore
+                    all_spatial_results[dname][k_val][h_val][model_name] = metrics #type: ignore
     
     # Save results
     output_dir.mkdir(parents=True, exist_ok=True)
