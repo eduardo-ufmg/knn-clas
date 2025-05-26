@@ -12,17 +12,12 @@ from typing import (
 from numpy.typing import NDArray
 
 from scipy.spatial.distance import cdist, squareform, pdist
-from scipy.stats import wilcoxon, ttest_rel # type: ignore[import-untyped]
 
 from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
 from sklearn.utils.validation import check_X_y, check_is_fitted, check_array # type: ignore[import-untyped]
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
-from sklearn.model_selection import KFold
-from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score, f1_score # type: ignore[import-untyped]
-)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -383,37 +378,9 @@ class CorrelationFilter(BaseEstimator, TransformerMixin):
 
         return np.delete(X, valid_to_drop, axis=1)
 
-# --- TypedDicts for data structures ---
 class Dataset(TypedDict):
     X: NDArray[np.float64]
     y: NDArray[np.int64]
-
-class WilcoxonResult(TypedDict):
-    statistic: float
-    pvalue: float
-
-class TTestResult(TypedDict):
-    statistic: float
-    pvalue: float
-    cohen_d: float
-
-class KFoldMetrics(TypedDict): # Metrics for a specific k value over folds
-    accuracy: List[float]
-    precision: List[float]
-    recall: List[float]
-    f1: List[float]
-
-class ModelFoldResults(TypedDict): # Results for KNN and KNN_CLAS for a given k
-    KNN: KFoldMetrics
-    KNN_CLAS: KFoldMetrics
-
-class DatasetStatisticalResults(TypedDict): # Statistical test results for one dataset and one k
-    wilcoxon: Dict[str, WilcoxonResult] # Metric name -> Wilcoxon result
-    ttest_rel: Dict[str, TTestResult]  # Metric name -> T-test result
-
-# Overall structure for statistical results
-# DatasetName -> K_value -> h_value -> TestName -> MetricName -> ResultValue
-StatisticalResults = Dict[str, Dict[int, Dict[float, DatasetStatisticalResults]]]
 
 class SpatialMetrics(TypedDict):
     centroid_distance: float
@@ -431,7 +398,6 @@ class SpatialMetrics(TypedDict):
 # Overall structure for spatial results
 # DatasetName -> K_value -> h_value -> ModelName -> SpatialMetrics
 SpatialAnalysisResults = Dict[str, Dict[int, Dict[float, Dict[str, SpatialMetrics]]]]
-
 
 def load_datasets(data_dir: Path = Path('./sets')) -> Dict[str, Dataset]:
     """Loads datasets from .npz files in the specified directory."""
@@ -473,186 +439,6 @@ def load_datasets(data_dir: Path = Path('./sets')) -> Dict[str, Dataset]:
             logging.error(f"Error loading {fpath.name}: {e}")
             continue
     return datasets
-
-def run_statistical_validation(datasets: Dict[str, Dataset], output_dir: Path = Path('output')) -> None:
-    """Performs statistical validation of KNN vs KNN_CLAS using cross-validation."""
-    logging.info("\n=== Starting statistical validation ===")
-
-    preprocessor = Pipeline([
-        ('variance_threshold', VarianceThreshold(threshold=1e-3)),
-        ('correlation_filter', CorrelationFilter(threshold=0.9)), # Custom filter
-        ('scaler', StandardScaler())
-    ])
-
-    # Initialize results structure
-    all_results: StatisticalResults = {dname: {} for dname in datasets.keys()}
-    metric_names = ['accuracy', 'precision', 'recall', 'f1']
-
-    for dname, dataset_content in datasets.items():
-        logging.info(f"\nProcessing dataset: {dname}")
-        X, y = dataset_content['X'], dataset_content['y']
-
-        # Store metrics from each fold for each k and model
-        # cv_metrics: K_value -> h_value -> ModelName -> MetricName -> List_of_scores_from_folds
-        cv_metrics_all: Dict[int, ModelFoldResults] = {
-            k_val: {
-                h_val: {
-                    'KNN': {metric: [] for metric in metric_names},
-                    'KNN_CLAS': {metric: [] for metric in metric_names}
-                } for h_val in H_VALUES
-            } for k_val in K_VALUES
-        }
-        
-        if X.shape[0] < 2 : # KFold needs at least 2 samples
-            logging.warning(f"Skipping dataset {dname} for statistical validation: not enough samples ({X.shape[0]}).")
-            continue
-        
-        n_splits = min(30, X.shape[0])
-        if n_splits < 2:
-            logging.warning(f"Skipping dataset {dname} for statistical validation: not enough samples for {n_splits}-Fold CV.")
-            continue
-            
-        kf = KFold(n_splits=n_splits, shuffle=True)
-
-        for fold_idx, (train_idx, test_idx) in enumerate(kf.split(X, y)):
-            logging.info(f"  Processing {dname}, Fold {fold_idx+1}/{n_splits}")
-            X_train, X_test = X[train_idx], X[test_idx]
-            y_train, y_test = y[train_idx], y[test_idx]
-
-            try:
-                X_train_processed = preprocessor.fit_transform(X_train, y_train)
-                X_test_processed = preprocessor.transform(X_test)
-            except ValueError as e:
-                logging.error(f"Error during preprocessing for {dname}, Fold {fold_idx+1}: {e}. Skipping fold.")
-                continue
-
-
-            models_to_test = {'KNN': KNN(), 'KNN_CLAS': KNN_CLAS()}
-            for model_name, model_instance in models_to_test.items():
-                try:
-                    model_instance.fit(X_train_processed, y_train)
-                    for k_val in K_VALUES:
-                        # Adjust k if it's larger than available training/expert points
-                        actual_k = k_val
-                        if model_name == 'KNN':
-                            if k_val > model_instance.X_train_.shape[0] and model_instance.X_train_.shape[0]>0 :
-                                actual_k = model_instance.X_train_.shape[0]
-                        elif model_name == 'KNN_CLAS':
-                             if k_val > model_instance.expert_X_.shape[0] and model_instance.expert_X_.shape[0]>0:
-                                actual_k = model_instance.expert_X_.shape[0]
-                        
-                        if actual_k == 0: # No points to predict from
-                            logging.warning(f"Model {model_name} with k={k_val} has no points for prediction in {dname}, Fold {fold_idx+1}. Scoring as 0.")
-                            for metric in metric_names:
-                                cv_metrics_all[k_val][model_name][metric].append(0.0) # type: ignore
-                            continue
-
-                        for h_val in H_VALUES:
-
-                            y_pred = model_instance.predict(X_test_processed, k=actual_k, h=h_val)
-                            
-                            # Ensure y_test and y_pred are not empty and have consistent labels for scoring
-                            if len(y_test) == 0 or len(y_pred) == 0:
-                                for metric in metric_names:
-                                    cv_metrics_all[k_val][h_val][model_name][metric].append(0.0) # type: ignore
-                                continue
-
-                            # Calculate metrics
-                            cv_metrics_all[k_val][h_val][model_name]['accuracy'].append(float(accuracy_score(y_test, y_pred))) #type: ignore
-                            cv_metrics_all[k_val][h_val][model_name]['precision'].append(float(precision_score(y_test, y_pred, zero_division=0, labels=np.unique(y_test)))) #type: ignore
-                            cv_metrics_all[k_val][h_val][model_name]['recall'].append(float(recall_score(y_test, y_pred, zero_division=0, labels=np.unique(y_test)))) #type: ignore
-                            cv_metrics_all[k_val][h_val][model_name]['f1'].append(float(f1_score(y_test, y_pred, zero_division=0, labels=np.unique(y_test)))) #type: ignore
-
-                except ValueError as e: # Catch errors from fit/predict (e.g. no experts)
-                    logging.error(f"Error with model {model_name} for {dname}, Fold {fold_idx+1}: {e}. Scoring as 0 for this model in this fold.")
-                    for k_val_err in K_VALUES:
-                        for h_val_err in H_VALUES:
-                            for metric in metric_names:
-                                cv_metrics_all[k_val_err][h_val_err][model_name][metric].append(0.0) #type: ignore
-                    # Continue to next model or fold
-                except Exception as e: # Catch any other unexpected error
-                    logging.critical(f"Unexpected error with model {model_name} for {dname}, Fold {fold_idx+1}: {e}")
-                    # Decide if to skip fold, dataset, or stop
-                    for k_val_err in K_VALUES:
-                        for h_val_err in H_VALUES:
-                            for metric in metric_names:
-                                cv_metrics_all[k_val_err][h_val_err][model_name][metric].append(0.0) #type: ignore
-
-        # Perform statistical tests for each k
-        for k_val in K_VALUES:
-            all_results[dname][k_val] = {}
-            for h_val in H_VALUES:
-                all_results[dname][k_val][h_val] = {'wilcoxon': {}, 'ttest_rel': {}} #type: ignore
-                
-                for metric in metric_names:
-                    knn_scores = np.array(cv_metrics_all[k_val][h_val]['KNN'][metric]) #type: ignore
-                    knn_clas_scores = np.array(cv_metrics_all[k_val][h_val]['KNN_CLAS'][metric]) #type: ignore
-
-                    # Ensure there are scores to compare
-                    if len(knn_scores) == 0 or len(knn_clas_scores) == 0 or len(knn_scores) != len(knn_clas_scores) :
-                        logging.warning(f"Skipping stat tests for {dname}, k={k_val}, h={h_val}, metric={metric} due to insufficient/mismatched fold data.")
-                        all_results[dname][k_val][h_val]['wilcoxon'][metric] = {'statistic': np.nan, 'pvalue': np.nan} #type: ignore
-                        all_results[dname][k_val][h_val]['ttest_rel'][metric] = {'statistic': np.nan, 'pvalue': np.nan, 'cohen_d': np.nan} #type: ignore
-                        continue
-
-                    # Wilcoxon test
-                    diff = knn_scores - knn_clas_scores
-                    if np.all(np.abs(diff) < 1e-9): # Effectively all zero differences
-                        wilcoxon_stat, wilcoxon_p = 0.0, 1.0
-                    else:
-                        try:
-                            wilcoxon_stat, wilcoxon_p = wilcoxon(knn_scores, knn_clas_scores)
-                        except ValueError as e: # e.g. too few samples, all differences are zero after internal processing
-                            logging.warning(f"Wilcoxon test failed for {dname}, k={k_val}, h={h_val}, metric={metric}: {e}. Assigning default values.")
-                            wilcoxon_stat, wilcoxon_p = (0.0, 1.0) if np.all(np.abs(diff) < 1e-9) else (np.nan, np.nan)
-
-                    all_results[dname][k_val][h_val]['wilcoxon'][metric] = {'statistic': float(wilcoxon_stat), 'pvalue': float(wilcoxon_p)} #type: ignore
-
-                    # Paired T-test
-                    ttest_stat, ttest_p, cohen_d_val = np.nan, np.nan, np.nan
-                    if np.all(np.abs(diff) < 1e-9): # All differences are zero
-                        ttest_stat, ttest_p, cohen_d_val = 0.0, 1.0, 0.0
-                    else:
-                        # Check if all differences are identical (std_dev of diff will be 0)
-                        if np.std(diff, ddof=1) < 1e-9: # Effectively zero standard deviation
-                            mean_diff = np.mean(diff)
-                            # If mean_diff is also zero, it's covered above. If non-zero, t-stat is undefined (inf).
-                            ttest_stat = np.inf * np.sign(mean_diff) if mean_diff != 0 else 0.0
-                            ttest_p = 0.0 if mean_diff != 0 else 1.0
-                            cohen_d_val = np.inf * np.sign(mean_diff) if mean_diff != 0 else 0.0
-                        else:
-                            try:
-                                ttest_stat, ttest_p = ttest_rel(knn_scores, knn_clas_scores)
-                                mean_diff = np.mean(diff)
-                                std_diff = np.std(diff, ddof=1) # Sample std dev of differences
-                                cohen_d_val = mean_diff / std_diff if std_diff > 1e-9 else (np.inf * np.sign(mean_diff) if mean_diff !=0 else 0.0)
-                            except Exception as e: # Catch any error during t-test
-                                logging.warning(f"Paired t-test failed for {dname}, k={k_val}, h={h_val}, metric={metric}: {e}. Assigning NaN.")
-                                # ttest_stat, ttest_p, cohen_d_val remain NaN
-
-                    all_results[dname][k_val][h_val]['ttest_rel'][metric] = { #type: ignore
-                        'statistic': float(np.nan_to_num(ttest_stat, nan=0.0, posinf=1e12, neginf=-1e12)), # Replace non-finite with large numbers
-                        'pvalue': float(np.nan_to_num(ttest_p, nan=1.0)),
-                        'cohen_d': float(np.nan_to_num(cohen_d_val, nan=0.0, posinf=1e12, neginf=-1e12))
-                    }
-    
-    # Save results
-    output_dir.mkdir(parents=True, exist_ok=True)
-    results_file = output_dir / 'statistical_results.json'
-    try:
-        with open(results_file, 'w') as f:
-            json.dump(all_results, f, indent=2, allow_nan=False) # disallow_nan for strict JSON
-        logging.info(f"✅ Statistical validation completed! Results saved to {results_file}")
-    except TypeError as e: # Handle NaN if allow_nan=False and NaNs are present
-        logging.error(f"Could not serialize statistical results to JSON (possibly due to NaN/inf values not handled by np.nan_to_num as expected): {e}")
-        # Fallback: try saving with allow_nan=True (produces non-standard JSON but saves data)
-        try:
-            with open(output_dir / 'statistical_results_nonstandard.json', 'w') as f:
-                json.dump(all_results, f, indent=2) 
-            logging.warning("Saved statistical results to statistical_results_nonstandard.json with NaNs/Infs.")
-        except Exception as e_fallback:
-            logging.error(f"Fallback saving also failed: {e_fallback}")
-
 
 def run_likelihood_analysis(datasets: Dict[str, Dataset], output_dir: Path = Path('output')) -> None:
     """Performs spatial likelihood analysis on KNN and KNN_CLAS outputs."""
@@ -868,7 +654,6 @@ if __name__ == '__main__':
     if not loaded_datasets:
         logging.warning("No datasets were loaded. Exiting analysis.")
     else:
-        run_statistical_validation(loaded_datasets, output_dir=OUTPUT_DIR)
         run_likelihood_analysis(loaded_datasets, output_dir=OUTPUT_DIR)
         logging.info(f"\n🎉 Analysis complete! Results saved to {OUTPUT_DIR.resolve()}/ directory")
         
