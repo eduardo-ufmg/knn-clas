@@ -1,0 +1,289 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{booktabs} % For better tables
+\usepackage{siunitx} % For aligning numbers in tables
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% BibTeX entries for datasets
+\usepackage{filecontents}
+\begin{filecontents}{\jobname.bib}
+@misc{Dua:2019,
+    author = "Dua, Dheeru and Graff, Casey",
+    year = "2017",
+    title = "{UCI} Machine Learning Repository",
+    url = "http://archive.ics.uci.edu/ml",
+    institution = "University of California, Irvine, School of Information and Computer Sciences"
+}
+@article{torres2016,
+    title={Classificador por arestas de suporte (CLAS): métodos de aprendizado baseados em Grafos de Gabriel},
+    author={Torres, Luiz ACB},
+    journal={Manuscript (PhD thesis)},
+    year={2016},
+    publisher={Universidade Federal de Minas Gerais}
+}
+@inproceedings{souza2019,
+    author={Souza, A. C. and Leite Castro, C. and Garcia, J. A. and Torres, L. C. B. and Acevedo Jaimes, L. J. and Jaimes, B. R. A.},
+    booktitle={2019 XXII Symposium on Image, Signal Processing and Artificial Vision (STSIVA)}, 
+    title={Improving the Efficiency of Gabriel Graph-based Classifiers for Hardware-optimized Implementations}, 
+    year={2019},
+    pages={1-5},
+    doi={10.1109/STSIVA.2019.8730242}
+}
+@article{arias2021,
+    author={Arias-Garcia, J. and Torres, L. C. B. and Castrillon-Franco, M. A. and Osorio, G. and Castellanos-Dominguez, G.},
+    journal={IEEE Transactions on Industrial Informatics}, 
+    title={Enhancing Performance of Gabriel Graph-Based Classifiers by a Hardware Co-Processor for Embedded System Applications}, 
+    year={2021},
+    volume={17},
+    number={2},
+    pages={1265-1275},
+    doi={10.1109/TII.2020.2989285}
+}
+@article{arias2024,
+    author={Arias-Garcia, J. and Torres, L. C. B. and Campo-Muñoz, D. and Castrillón-Franco, M. A. and Castellanos-Dominguez, G.},
+    journal={IEEE Transactions on Neural Networks and Learning Systems}, 
+    title={Improved Design for Hardware Implementation of Graph-Based Large Margin Classifiers for Embedded Edge Computing}, 
+    year={2024},
+    volume={35},
+    number={1},
+    pages={1075-1089},
+    doi={10.1109/TNNLS.2022.3200655}
+}
+@inproceedings{torres2015,
+    author={Torres, L. C. B. and Castro, C. L. and Braga, A. P.},
+    booktitle={2015 International Joint Conference on Neural Networks (IJCNN)}, 
+    title={A parameterless mixture model for large margin classification}, 
+    year={2015},
+    pages={1-8},
+    doi={10.1109/IJCNN.2015.7280648}
+}
+@article{torres2021,
+    author={Torres, L. C. B. and Castro, C. L. and Coelho, F. and Braga, A. P.},
+    journal={IEEE Transactions on Neural Networks and Learning Systems}, 
+    title={Large Margin Gaussian Mixture Classifier With a Gabriel Graph Geometric Representation of Data Set Structure}, 
+    year={2021},
+    volume={32},
+    number={3},
+    pages={1000-1012},
+    doi={10.1109/TNNLS.2020.2986013}
+}
+@techreport{torres2015b,
+    author={Torres, L. C. B. and Castro, C. L. and Coelho, F. and Sill Torres, F. and Braga, A. P.},
+    title={Distance-based large margin classifier suitable for integrated circuit implementation},
+    institution={Universidade Federal de Minas Gerais, Manuscript},
+    year={2015}
+}
+\end{filecontents}
+
+\begin{document}
+
+\title{Comparative Analysis of KNN and KNN\_CLAS: Statistical Performance and Likelihood Space Equivalence}
+
+\author{\IEEEauthorblockN{Eduardo Henrique Basilio de Carvalho}
+\IEEEauthorblockA{\textit{Departamento de Engenharia Eletrônica} \\
+\textit{Universidade Federal de Minas Gerais}\\
+Belo Horizonte, Brasil \\
+eduardohbc@ufmg.br}
+}
+
+\maketitle
+
+\begin{abstract}
+This report presents a comparative analysis of the standard K-Nearest Neighbors (KNN) classifier and a variant, KNN\_CLAS, which utilizes expert support points derived from Gabriel graphs. The comparison is conducted on three publicly available datasets: Spect Heart, Ionosphere, and Haberman's Survival. We evaluate their statistical performance using metrics like accuracy, precision, recall, and F1-score, with significance testing (Wilcoxon signed-rank and paired t-tests) under cross-validation. Furthermore, we analyze the geometry of their likelihood spaces ($q_0, q_1$ scores) using metrics such as centroid distance and Bhattacharyya distance. The experiments consider K values of \{1, 3, 11\} and Gaussian kernel bandwidth H values of \{0.01, 0.1, 1.0\}. Results indicate that KNN\_CLAS is not universally superior but shows comparable or significantly better performance than KNN under specific hyperparameter settings (notably H=1.0 for some datasets), suggesting its potential for computational efficiency via expert point selection. The spatial analysis reveals differences in likelihood space geometries, which do not always directly correlate with cross-validated performance, highlighting the complex interplay between model architecture, hyperparameter settings, and generalization.
+\end{abstract}
+
+\begin{IEEEkeywords}
+pattern recognition, large margin classifiers, Gabriel graph, KNN classifier, statistical analysis, likelihood space, KNN\_CLAS.
+\end{IEEEkeywords}
+
+\section{Introduction}
+The K-Nearest Neighbors (KNN) algorithm is a fundamental non-parametric method used for classification and regression. Its simplicity and intuitive nature make it a popular choice. However, its performance can be sensitive to the choice of K, distance metric, and the presence of noisy or irrelevant data points. Variants of KNN aim to address these limitations. One such approach involves informed selection of training points, akin to support vector concepts in large-margin classifiers.
+
+The Classifier by Support Edges (CLAS) methodology, often leveraging Gabriel graphs, aims to identify critical "expert" points that define the decision boundary \cite{torres2016, souza2019, arias2021, arias2024}. KNN\_CLAS, the focus of this study, is a KNN variant that uses such expert points, derived from Gabriel graph edges connecting samples of different classes (support edges). This study investigates the equivalence between a standard KNN (using a Gaussian kernel with Mahalanobis distance) and KNN\_CLAS. The comparison is twofold: 1) statistical analysis of classification performance metrics, and 2) analysis of the spatial characteristics of their respective likelihood ($q_0, q_1$) probability spaces. The goal is to understand if KNN\_CLAS provides comparable or improved performance, potentially with computational advantages due to its reliance on a reduced set of "expert" points, and how their decision-making mechanisms differ in likelihood space. The underlying research draws from concepts of large margin classifiers and geometric data representation \cite{torres2015, torres2021, torres2015b}.
+
+\section{Methodology}
+\subsection{Classifiers}
+Two classifiers were compared:
+\begin{itemize}
+    \item \textbf{KNN}: A K-Nearest Neighbors classifier using a Gaussian kernel with Mahalanobis distance. The covariance matrix for the Mahalanobis distance is computed from the training data.
+    \item \textbf{KNN\_CLAS}: This variant first fits a standard KNN model to derive the covariance structure. It then identifies "expert" points by constructing a Gabriel graph on the training data and selecting points that form "support edges" (Gabriel edges connecting points of different classes). Predictions are then made using a KNN approach considering only these expert points, also with a Gaussian kernel and the previously computed Mahalanobis distance.
+\end{itemize}
+Both classifiers utilize hyperparameters K (number of neighbors) and H (bandwidth for the Gaussian kernel). The values tested were $K \in \{1, 3, 11\}$ and $H \in \{0.01, 0.1, 1.0\}$.
+
+\subsection{Datasets}
+The analysis was performed on three datasets obtained from the UCI Machine Learning Repository \cite{Dua:2019}:
+\begin{enumerate}
+    \item Spect Heart
+    \item Ionosphere
+    \item Haberman's Survival
+\end{enumerate}
+
+\subsection{Preprocessing}
+A standard preprocessing pipeline was applied to each training set within the cross-validation folds:
+\begin{enumerate}
+    \item \textbf{VarianceThreshold}: Removal of features with variance below $1 \times 10^{-3}$.
+    \item \textbf{CorrelationFilter}: Removal of features with an absolute correlation coefficient greater than 0.9 with a preceding feature.
+    \item \textbf{StandardScaler}: Standardization of features by removing the mean and scaling to unit variance.
+\end{enumerate}
+
+\subsection{Statistical Performance Analysis}
+A K-Fold cross-validation strategy was employed, with $N_{splits} = \min(30, N_{samples})$, where $N_{samples}$ is the number of samples in the dataset. For each fold, models were trained on the training partition and evaluated on the test partition. Performance was measured using:
+\begin{itemize}
+    \item \texttt{Accuracy}
+        \item \texttt{Precision} (with \texttt{zero\_division=0})
+        \item \texttt{Recall} (with \texttt{zero\_division=0})
+        \item \texttt{F1-score} (with \texttt{zero\_division=0})
+\end{itemize}
+The scores from each fold were collected, and then, for each (Dataset, K, H) combination, the performance of KNN was compared against KNN\_CLAS using:
+\begin{itemize}
+    \item \textbf{Wilcoxon signed-rank test}: A non-parametric test for paired samples.
+    \item \textbf{Paired t-test}: A parametric test for paired samples. Cohen's d was calculated as an effect size for significant t-test results, where the difference was taken as (KNN scores - KNN\_CLAS scores).
+\end{itemize}
+A p-value less than 0.05 was considered statistically significant.
+
+\subsection{Spatial Likelihood Analysis}
+For each (Dataset, K, H) combination, the classifiers were trained on the entire preprocessed dataset. Then, likelihood scores $q_0$ (sum of kernels for class -1 neighbors) and $q_1$ (sum of kernels for class +1 neighbors) were computed for all training samples. Based on these $(q_0, q_1)$ points, the following spatial metrics were calculated to characterize the geometry of the likelihood space:
+\begin{itemize}
+    \item \textbf{Centroid Distance}: Euclidean distance between the centroids of $(q_0, q_1)$ points belonging to class 0 and class 1.
+    \item \textbf{Mean Distance Opposite}: Mean Euclidean distance between $(q_0, q_1)$ points from opposite classes.
+    \item \textbf{Mean Distance Same}: Mean Euclidean distance between $(q_0, q_1)$ points from the same class.
+    \item \textbf{Bhattacharyya Distance}: A measure of similarity between the two distributions of $(q_0, q_1)$ points for class 0 and class 1.
+    \item Variance of $q_0$ and $q_1$ scores for each class.
+\end{itemize}
+It is important to note that this spatial analysis was conducted on the entire training dataset, not within a cross-validation scheme.
+
+\section{Results}
+The analysis generated extensive results for statistical performance and spatial likelihood metrics across all datasets and hyperparameter combinations. Due to space constraints, we summarize key findings and present illustrative examples.
+
+\subsection{Statistical Performance}
+Table \ref{tab:stat_summary_spect} and Table \ref{tab:stat_summary_haberman} summarize notable statistical comparisons for the Spect Heart and Haberman Survival datasets. P-values indicate the significance of the difference between KNN and KNN\_CLAS (KNN - KNN\_CLAS scores).
+
+Generally, for $H=0.01$ and $H=0.1$, KNN and KNN\_CLAS showed few statistically significant differences in performance across most metrics and datasets (p-values often $>$ 0.05). However, for $H=1.0$, more distinct differences emerged.
+
+\begin{table}[H]
+\centering
+\caption{Selected Statistical Test Results for Spect Heart (p-values). Negative Cohen's d indicates KNN\_CLAS performed better.}
+\label{tab:stat_summary_spect}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Metric & K & H & Wilcoxon p & t-test p & Cohen's d & Sig. Diff. \\ \midrule
+Accuracy & 1 & 1.0 & \num{0.0014} & \num{0.0007} & \num{-0.695} & Yes (CLAS $>$ KNN) \\
+Recall   & 1 & 1.0 & \num{0.0014} & \num{0.0002} & \num{-0.789} & Yes (CLAS $>$ KNN) \\
+F1-score & 1 & 1.0 & \num{0.0017} & \num{0.0007} & \num{-0.689} & Yes (CLAS $>$ KNN) \\
+\midrule
+Accuracy & 3 & 1.0 & \num{0.0045} & \num{0.0064} & \num{-0.536} & Yes (CLAS $>$ KNN) \\
+Recall   & 3 & 1.0 & \num{0.0006} & \num{0.0001} & \num{-0.813} & Yes (CLAS $>$ KNN) \\
+F1-score & 3 & 1.0 & \num{0.0027} & \num{0.0040} & \num{-0.570} & Yes (CLAS $>$ KNN) \\
+\midrule
+Accuracy & 11 & 1.0 & \num{0.0025} & \num{0.0006} & \num{-0.705} & Yes (CLAS $>$ KNN) \\
+Recall   & 11 & 1.0 & \num{<0.0001} & \num{<0.0001} & \num{-1.061} & Yes (CLAS $>$ KNN) \\
+F1-score & 11 & 1.0 & \num{0.0002} & \num{0.0001} & \num{-0.796} & Yes (CLAS $>$ KNN) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+For the \textbf{Spect Heart} dataset (Table \ref{tab:stat_summary_spect}), when $H=1.0$, KNN\_CLAS consistently and significantly outperformed KNN across accuracy, recall, and F1-score for all tested K values. For $H=0.01$ and $H=0.1$, no significant differences were observed (p-values $\approx 1.0$).
+
+For the \textbf{Ionosphere} dataset with $H=1.0$:
+\begin{itemize}
+    \item For K=1, no significant differences were found (e.g., accuracy Wilcoxon p $\approx 0.317$).
+    \item For K=3, KNN showed marginally better accuracy (Wilcoxon p $\approx 0.040$, t-test p $\approx 0.056$, Cohen's d $\approx 0.363$).
+    \item For K=11, no significant strong differences were observed (e.g. accuracy Wilcoxon p $\approx 0.197$).
+\end{itemize}
+For $H=0.01$ and $H=0.1$ on Ionosphere, no significant differences were found.
+
+\begin{table}[H]
+\centering
+\caption{Selected Statistical Test Results for Haberman Survival (p-values). Positive Cohen's d indicates KNN performed better.}
+\label{tab:stat_summary_haberman}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Metric & K & H & Wilcoxon p & t-test p & Cohen's d & Sig. Diff. \\ \midrule
+Accuracy & 1 & 0.01 & \num{0.0031} & \num{0.0007} & \num{0.690} & Yes (KNN $>$ CLAS) \\
+Recall   & 1 & 0.01 & \num{0.0656} & \num{0.0998} & \num{-0.310} & No (Trend CLAS $>$ KNN) \\
+\midrule
+Accuracy & 1 & 0.1 & \num{0.0335} & \num{0.0314} & \num{0.413} & Yes (KNN $>$ CLAS) \\
+Accuracy & 1 & 1.0 & \num{0.0335} & \num{0.0314} & \num{0.413} & Yes (KNN $>$ CLAS) \\
+\midrule
+Accuracy & 3 & 0.01 & \num{0.0031} & \num{0.0008} & \num{0.683} & Yes (KNN $>$ CLAS) \\
+\midrule
+Accuracy & 11 & 0.01 & \num{0.0030} & \num{0.0008} & \num{0.683} & Yes (KNN $>$ CLAS) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+For the \textbf{Haberman Survival} dataset (Table \ref{tab:stat_summary_haberman}), KNN often performed significantly better or equivalently. For instance, with $H=0.01$, KNN showed significantly better accuracy for all K values. For $H=0.1$ and $H=1.0$ with K=1, KNN also had better accuracy.
+
+\subsection{Spatial Likelihood Analysis}
+The spatial analysis provided insights into the geometry of the $(q_0, q_1)$ likelihood space on the full training set. Table \ref{tab:spatial_summary_spect_k1_h1} shows an example for Spect Heart (K=1, H=1.0).
+
+\begin{table}[H]
+\centering
+\caption{Spatial Likelihood Metrics for Spect Heart (K=1, H=1.0)}
+\label{tab:spatial_summary_spect_k1_h1}
+\begin{tabular}{@{}lS[table-format=1.2e-1]S[table-format=1.2e-1]@{}}
+\toprule
+Metric & {KNN} & {KNN\_CLAS} \\ \midrule
+Centroid Distance      & \num{1.29e-07} & \num{5.40e-08} \\
+Bhattacharyya Dist.  & \num{2.07e-06} & \num{3.64e-07} \\
+Mean Dist. Opposite  & \num{1.29e-07} & \num{6.16e-08} \\
+Mean Dist. Same      & \num{0.0}      & \num{4.23e-08} \\
+Var $q_0$ (avg)        & \num{3.50e-46} & \num{5.52e-16} \\
+Var $q_1$ (avg)        & \num{8.76e-47} & \num{1.02e-15} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For Spect Heart with K=1 and H=1.0 (Table \ref{tab:spatial_summary_spect_k1_h1}), where KNN\_CLAS demonstrated superior statistical performance (Table \ref{tab:stat_summary_spect}), KNN exhibited larger centroid and Bhattacharyya distances in the likelihood space computed on the full training set. This is a counter-intuitive finding if one assumes larger separation in likelihood space directly implies better generalization.
+
+For very small H values (e.g., H=0.01), some spatial metrics for both classifiers, particularly on Spect Heart and Ionosphere, showed extremely large magnitudes (e.g., $10^{24}$ to $10^{37}$). This may suggest numerical sensitivity or extreme localization of the Gaussian kernel with very small bandwidths, potentially making these specific spatial metrics less interpretable in those regimes. For example, for Spect Heart (K=1, H=0.01), KNN had a centroid distance of $\approx \num{1.29e+37}$, while KNN\_CLAS had $\approx \num{5.40e+36}$.
+
+Across datasets and other K, H combinations, the relationship between the magnitudes of these spatial metrics and cross-validated statistical performance was not always direct or consistent. For instance, on the Ionosphere dataset (K=3, H=1.0), where KNN had slightly better accuracy, its Bhattacharyya distance was $\approx 1.72 \times 10^{-8}$ compared to $\approx 1.29 \times 10^{-8}$ for KNN\_CLAS.
+
+\section{Discussion}
+The comparative analysis of KNN and KNN\_CLAS reveals a nuanced relationship regarding their performance and likelihood space characteristics.
+
+\textbf{Statistical Performance Equivalence}:
+The two methods are not universally equivalent in performance. For smaller Gaussian kernel bandwidths ($H=0.01, H=0.1$), KNN and KNN\_CLAS generally exhibit statistically similar performance across the tested metrics and datasets. This suggests that in regimes where the kernel has a very localized influence, the expert selection mechanism of KNN\_CLAS does not significantly alter performance compared to standard KNN. In such cases, KNN\_CLAS might be preferable due to potential computational savings from using fewer points for prediction.
+
+However, with a larger bandwidth ($H=1.0$), significant performance differences emerged. On the \textbf{Spect Heart} dataset, KNN\_CLAS demonstrated clear superiority over KNN. This implies that for this dataset and bandwidth, the "expert" points selected by KNN\_CLAS are more effective for generalization than relying on all training points as KNN does. Conversely, on the \textbf{Haberman Survival} dataset, KNN often outperformed KNN\_CLAS, particularly for $H=0.01$ and also for $H=0.1, H=1.0$ at K=1. For the \textbf{Ionosphere} dataset, results were mixed, with KNN sometimes showing marginal advantages or no significant difference.
+
+These results suggest that the effectiveness of KNN\_CLAS's expert selection strategy is dataset-dependent and highly influenced by the kernel bandwidth $H$. A larger $H$ allows for broader influence of neighboring points; in this scenario, the quality of selected "expert" points by KNN\_CLAS becomes crucial and can lead to either improved or degraded performance compared to KNN.
+
+\textbf{Spatial Likelihood Analysis Insights}:
+The analysis of the $(q_0, q_1)$ likelihood space provides a view into how the classifiers represent class separability based on the training data. A key observation is that superior spatial separation metrics (like centroid distance or Bhattacharyya distance) on the \textit{entire training set} do not always translate to superior \textit{cross-validated statistical performance}. For example, in the Spect Heart case (K=1, H=1.0), KNN showed larger spatial separation metrics but was outperformed by KNN\_CLAS in cross-validation.
+
+This discrepancy highlights an important distinction: the spatial likelihood analysis was performed on the full training set after model fitting, while statistical performance was assessed via cross-validation on unseen test folds. The global geometry of the likelihood space on training data might not fully capture the model's generalization capabilities. KNN\_CLAS, by focusing on "expert" points near the presumed decision boundary, might achieve better generalization even if its global likelihood space on training data appears less separated by some metrics.
+
+The extremely large values for some spatial metrics at $H=0.01$ are a concern, possibly indicating that the Gaussian kernel normalization combined with very small bandwidth and the dataset's covariance structure leads to values that are numerically unstable or dominate the calculations, making comparisons difficult in this specific regime.
+
+\textbf{Overall Equivalence and Implications}:
+KNN and KNN\_CLAS are not equivalent under all conditions. KNN\_CLAS appears to be a promising alternative, particularly when computational efficiency is a concern, as it often performs comparably to KNN (especially for smaller H values). Its potential to outperform KNN (as seen with Spect Heart for H=1.0) suggests that its mechanism of selecting support points can be beneficial. However, it can also underperform, indicating that the expert selection is not a universally optimal strategy.
+
+The KNN\_CLAS model's behavior of adjusting K if the number of expert points is less than the specified K is a factor that could influence comparisons, especially if very few experts are found.
+
+Future work could explore adaptive methods for choosing H or more robust spatial metrics, particularly for scenarios with very small bandwidths. Investigating the characteristics of the "expert" points selected by KNN\_CLAS across different datasets and H values could also provide deeper insights.
+
+In conclusion, KNN\_CLAS offers a valuable modification to the standard KNN by incorporating concepts from Gabriel graphs and support-based learning. Its performance is competitive and sometimes superior, but its advantages are context-dependent, relying on the dataset characteristics and hyperparameter choices, particularly the kernel bandwidth H. The spatial likelihood analysis, while informative, should be interpreted cautiously as a direct predictor of generalization performance.
+
+\section*{Acknowledgment}
+This work utilizes datasets from the UCI Machine Learning Repository \cite{Dua:2019}.
+
+\bibliographystyle{IEEEtran}
+\bibliography{\jobname}
+
+\end{document}

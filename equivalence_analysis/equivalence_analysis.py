@@ -31,8 +31,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 np.random.seed(0)
 
 # K values for KNN experiments
-K_VALUES: Final[List[int]] = [1, 3, 5, 7, 11, 13, 17, 19, 23, 29]
-H_VALUES: Final[List[int]] = [0.001, 0.01, 0.1, 0.2, 0.5, 1.0, 2.0]
+K_VALUES: Final[List[int]] = [1, 3, 11]
+H_VALUES: Final[List[int]] = [0.01, 0.1, 1.0]
 
 class Adjacency(IntEnum):
     """Enumeration for types of adjacency in graphs."""
@@ -61,7 +61,6 @@ def gaussian_kernel_pairwise(
 def batched_gaussian_kernels(
     X_points: NDArray[np.float64],
     Y_neighbor_sets: NDArray[np.float64],
-    h: float,
     cov_inv_scaled: NDArray[np.float64],
     norm_factor: float
 ) -> NDArray[np.float64]:
@@ -69,7 +68,6 @@ def batched_gaussian_kernels(
     Computes Gaussian kernel values between N points and their respective K neighbors.
     X_points: (N, D) array of N points.
     Y_neighbor_sets: (N, K, D) array where Y_neighbor_sets[i] are the K neighbors of X_points[i].
-    h: Bandwidth for the Gaussian kernel.
     cov_inv_scaled: Inverse of the covariance matrix (D, D).
     norm_factor: Normalization factor for the Gaussian.
     Returns: (N, K) array of kernel values, where out[i,j] is K(X_points[i], Y_neighbor_sets[i,j]).
@@ -78,7 +76,7 @@ def batched_gaussian_kernels(
     # Y_neighbor_sets is (N, K, D)
     # Broadcasting X_points_exp (N,1,D) with Y_neighbor_sets (N,K,D)
     # results in X_diff (N,K,D) where X_diff[i,j,:] = X_points[i,:] - Y_neighbor_sets[i,j,:]
-    X_diff = X_points_exp - Y_neighbor_sets / h  # Shape (N, K, D)
+    X_diff = X_points_exp - Y_neighbor_sets # Shape (N, K, D)
     
     # einsum for batched matrix multiplication: sum_d1 sum_d2 (X_diff[n,k,d1] * cov_inv[d1,d2] * X_diff[n,k,d2])
     exponent = -0.5 * np.einsum('NKi,ij,NKj->NK', X_diff, cov_inv_scaled, X_diff, optimize='optimal')
@@ -129,9 +127,9 @@ class KNN(BaseEstimator, ClassifierMixin):
     """K-Nearest Neighbors classifier with Gaussian kernel using Mahalanobis distance."""
     X_train_: NDArray[np.float64]
     y_train_: NDArray[np.int64]
+    n_features_: int
     cov_inv_: NDArray[np.float64]
-    cov_inv_scaled_: NDArray[np.float64]
-    norm_factor_: float
+    cov_det_: float
 
     def __init__(self, k: int = 3, h: float = 1.0) -> None:
         self.k = k
@@ -142,38 +140,30 @@ class KNN(BaseEstimator, ClassifierMixin):
         self.X_train_ = X
         self.y_train_ = y
         
-        n_features = X.shape[1]
-        if n_features == 0:
+        self.n_features_ = X.shape[1]
+        if self.n_features_ == 0:
             raise ValueError("Cannot fit KNN on 0 features.")
 
         # Add regularization to covariance matrix for stability
-        I_reg = 1e-6 * np.eye(n_features)
+        I_reg = 1e-6 * np.eye(self.n_features_)
         # Note: np.cov assumes rows are observations by default if rowvar=True (default)
         # If X samples are rows (N,D), then rowvar=False
         cov = np.cov(X, rowvar=False) + I_reg
         
         try:
             self.cov_inv_ = np.linalg.pinv(cov) # Use pseudo-inverse for robustness
-            cov_det = np.linalg.det(cov)
-            if cov_det <= 0: # Check for non-positive determinant
-                logging.warning(f"Covariance matrix determinant is non-positive ({cov_det}). Using a fallback norm_factor.")
-                # Fallback if determinant is problematic, though pinv might still work
-                self.norm_factor_ = 1.0 
-            else:
-                self.norm_factor_ = 1.0 / np.sqrt((2 * np.pi) ** n_features * cov_det)
+            self.cov_det_ = np.linalg.det(cov)
 
         except np.linalg.LinAlgError as e:
             logging.error(f"Failed to compute inverse or determinant of covariance matrix: {e}")
-            # Fallback: use identity matrix for cov_inv and a simple norm_factor
-            self.cov_inv_ = np.eye(n_features) 
-            self.norm_factor_ = 1.0
-
-        self.cov_inv_scaled_ = self.cov_inv_ / (self.h ** 2)  # Scale the covariance inverse by h^2
+            # Fallback: use identity matrix for cov_inv and a determinant of 1
+            self.cov_inv_ = np.eye(self.n_features_) 
+            self.cov_det_ = 1.0
             
         return self
 
-    def predict(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[int] = None) -> NDArray[np.int64]:
-        check_is_fitted(self, ['X_train_', 'y_train_', 'cov_inv_', 'norm_factor_'])
+    def predict(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[float] = None) -> NDArray[np.int64]:
+        check_is_fitted(self, ['X_train_', 'y_train_', 'cov_inv_', 'n_features_', 'cov_inv_', 'cov_det_'])
         X = check_array(X, ensure_2d=True, dtype=[np.float64, np.float32])
 
         current_k = k if k is not None else self.k
@@ -197,7 +187,11 @@ class KNN(BaseEstimator, ClassifierMixin):
         k_nearest_neighbors = self.X_train_[nearest_indices] # Shape (N_X_test, current_k, N_features)
         k_nearest_labels = self.y_train_[nearest_indices]    # Shape (N_X_test, current_k)
 
-        kernels = batched_gaussian_kernels(X, k_nearest_neighbors, current_h, self.cov_inv_scaled_, self.norm_factor_) # Shape (N_X_test, current_k)
+        cov_inv_scaled = self.cov_inv_ / (current_h ** 2)  # Scale the covariance inverse by h^2
+
+        norm_factor = 1.0 / np.sqrt((2 * np.pi) ** self.n_features_ * self.cov_det_ * current_h ** self.n_features_)  # Normalization factor for Gaussian kernel
+
+        kernels = batched_gaussian_kernels(X, k_nearest_neighbors, cov_inv_scaled, norm_factor) # Shape (N_X_test, current_k)
         
         # Weighted sum of labels of k nearest neighbors
         # scores[i] = sum_{j=0 to k-1} kernels[i,j] * k_nearest_labels[i,j]
@@ -205,8 +199,8 @@ class KNN(BaseEstimator, ClassifierMixin):
         
         return np.where(scores >= 0, 1, -1).astype(np.int64) # Predict class 1 if score is non-negative
 
-    def likelihood_score(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[int] = None) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
-        check_is_fitted(self, ['X_train_', 'y_train_', 'cov_inv_', 'norm_factor_'])
+    def likelihood_score(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[float] = None) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
+        check_is_fitted(self, ['X_train_', 'y_train_', 'cov_inv_', 'n_features_', 'cov_inv_', 'cov_det_'])
         X = check_array(X, ensure_2d=True, dtype=[np.float64, np.float32])
 
         current_k = k if k is not None else self.k
@@ -226,7 +220,11 @@ class KNN(BaseEstimator, ClassifierMixin):
         k_nearest_neighbors = self.X_train_[nearest_indices]
         k_nearest_labels = self.y_train_[nearest_indices]
         
-        kernels = batched_gaussian_kernels(X, k_nearest_neighbors, current_h, self.cov_inv_scaled_, self.norm_factor_) # (N_X_test, k)
+        cov_inv_scaled = self.cov_inv_ / (current_h ** 2)  # Scale the covariance inverse by h^2
+
+        norm_factor = 1.0 / np.sqrt((2 * np.pi) ** self.n_features_ * self.cov_det_ * current_h ** self.n_features_)  # Normalization factor for Gaussian kernel
+
+        kernels = batched_gaussian_kernels(X, k_nearest_neighbors, cov_inv_scaled, norm_factor) # Shape (N_X_test, current_k)
 
         q0 = np.sum(kernels * (k_nearest_labels == -1), axis=1) # Sum of kernels for class -1 neighbors
         q1 = np.sum(kernels * (k_nearest_labels == 1), axis=1)  # Sum of kernels for class  1 neighbors
@@ -279,8 +277,8 @@ class KNN_CLAS(KNN):
              self.k = 1 # Default k if somehow no experts and no error
         return self
 
-    def predict(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[int] = None) -> NDArray[np.int64]:
-        check_is_fitted(self, ['expert_X_', 'expert_y_', 'cov_inv_', 'norm_factor_'])
+    def predict(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[float] = None) -> NDArray[np.int64]:
+        check_is_fitted(self, ['expert_X_', 'expert_y_', 'cov_inv_', 'n_features_', 'cov_inv_', 'cov_det_'])
         X = check_array(X, ensure_2d=True, dtype=[np.float64, np.float32])
 
         current_k = k if k is not None else self.k
@@ -303,14 +301,18 @@ class KNN_CLAS(KNN):
         k_nearest_expert_neighbors = self.expert_X_[nearest_indices]
         k_nearest_expert_labels = self.expert_y_[nearest_indices]
         
-        # Use cov_inv_ and norm_factor_ from the original full dataset fit
-        kernels = batched_gaussian_kernels(X, k_nearest_expert_neighbors, current_h, self.cov_inv_scaled_, self.norm_factor_)
+        cov_inv_scaled = self.cov_inv_ / (current_h ** 2)  # Scale the covariance inverse by h^2
+
+        norm_factor = 1.0 / np.sqrt((2 * np.pi) ** self.n_features_ * self.cov_det_ * current_h ** self.n_features_)  # Normalization factor for Gaussian kernel
+
+        kernels = batched_gaussian_kernels(X, k_nearest_expert_neighbors, cov_inv_scaled, norm_factor) # Shape (N_X_test, current_k)
+        
         scores = np.sum(kernels * k_nearest_expert_labels, axis=1)
         
         return np.where(scores >= 0, 1, -1).astype(np.int64)
     
-    def likelihood_score(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[int] = None) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
-        check_is_fitted(self, ['expert_X_', 'expert_y_', 'cov_inv_', 'norm_factor_'])
+    def likelihood_score(self, X: NDArray[np.float64], k: Optional[int] = None, h: Optional[float] = None) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
+        check_is_fitted(self, ['expert_X_', 'expert_y_', 'cov_inv_', 'n_features_', 'cov_inv_', 'cov_det_'])
         X = check_array(X, ensure_2d=True, dtype=[np.float64, np.float32])
 
         current_k = k if k is not None else self.k
@@ -333,7 +335,11 @@ class KNN_CLAS(KNN):
         k_nearest_expert_neighbors = self.expert_X_[nearest_indices]
         k_nearest_expert_labels = self.expert_y_[nearest_indices]
 
-        kernels = batched_gaussian_kernels(X, k_nearest_expert_neighbors, current_h, self.cov_inv_scaled_, self.norm_factor_)
+        cov_inv_scaled = self.cov_inv_ / (current_h ** 2)  # Scale the covariance inverse by h^2
+
+        norm_factor = 1.0 / np.sqrt((2 * np.pi) ** self.n_features_ * self.cov_det_ * current_h ** self.n_features_)  # Normalization factor for Gaussian kernel
+
+        kernels = batched_gaussian_kernels(X, k_nearest_expert_neighbors, cov_inv_scaled, norm_factor) # Shape (N_X_test, current_k)
         
         q0 = np.sum(kernels * (k_nearest_expert_labels == -1), axis=1)
         q1 = np.sum(kernels * (k_nearest_expert_labels == 1), axis=1)
@@ -417,6 +423,8 @@ class SpatialMetrics(TypedDict):
     bhattacharyya_distance: float
     var_dist_same: float
     var_dist_centroid: float
+    mean_dist_centroid_overall: float
+    var_dist_centroid_overall: float
     var_q0: float
     var_q1: float
 
@@ -499,7 +507,7 @@ def run_statistical_validation(datasets: Dict[str, Dataset], output_dir: Path = 
             logging.warning(f"Skipping dataset {dname} for statistical validation: not enough samples ({X.shape[0]}).")
             continue
         
-        n_splits = min(10, X.shape[0]) # Adjust n_splits if fewer samples than 10
+        n_splits = min(30, X.shape[0])
         if n_splits < 2:
             logging.warning(f"Skipping dataset {dname} for statistical validation: not enough samples for {n_splits}-Fold CV.")
             continue
